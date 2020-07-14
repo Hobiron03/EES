@@ -1,20 +1,21 @@
+//座標部分のCanvas
 const CoordinateCanvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('coordinate');
 const cctx:CanvasRenderingContext2D | null = CoordinateCanvas.getContext('2d');
 
+//顔部分のCanvas
 const FaceCanvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('emotion-face');
 const fctx:CanvasRenderingContext2D | null = FaceCanvas.getContext('2d');
 
 // ドラッグ可能な座標の背景画像を描画
 const DrawCoordinateImage = ():void => {
     let background: HTMLImageElement = new Image();
-    const canvas_width: number = 400;
-    const canvas_hegiht: number = 400;
     const imageURL: string = "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/Cordinate.png";
-
     background.src = imageURL;
+
+    //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
     background.onload = () => {
         if (cctx != null){
-            cctx.drawImage(background,0,0,canvas_width, background.height * canvas_width / background.width);
+            cctx.drawImage(background,0,0,CoordinateCanvas.width, background.height * CoordinateCanvas.width / background.width);
         }
     }
 };
@@ -22,18 +23,26 @@ const DrawCoordinateImage = ():void => {
 // ドラッグで作成する顔の輪郭部分を表示
 const DrowBaseFaceImage = ():void => {
     let background: HTMLImageElement = new Image();
-    const canvas_width: number = 200;
-    const canvas_hegiht: number = 200;
     const imageURL: string = "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
-
     background.src = imageURL;
+
+    //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
     background.onload = () => {
         if (fctx != null){
-            fctx.drawImage(background,0,0,canvas_width, background.height * canvas_width / background.width);
+            fctx.drawImage(background,0,0,FaceCanvas.width, background.height * FaceCanvas.width / background.width);
         }
     }
 };
 
+CoordinateCanvas.addEventListener('mousedown', e => {
+    const x: number = e.offsetX;
+    const y: number = e.offsetY;
+
+    console.log("X座標は: " + x);
+    console.log("Y座標は: " + y);
+});
+
+//初期設定
 const Init = ():void => {
     DrowBaseFaceImage();
     DrawCoordinateImage();
@@ -43,7 +52,6 @@ const main = (() => {
     Init();
 })();
 
-// ページ読み込み後に走る
 window.onload = () => {
     console.log("Read page!!");
 };
