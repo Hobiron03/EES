@@ -36,22 +36,23 @@ const DrawBaseFaceImage = ():void => {
 
 //ドラッグ開始
 let isMouseDrag:boolean = false;
+//前フレームの点を保持する
 let preMousePosX: number;
 let preMousePosY: number;
 CoordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
     isMouseDrag = true;
 
-    //座標の原点は画像の左上
+    //canvasの原点は左上
     preMousePosX = e.offsetX;
     preMousePosY = e.offsetY;
 });
 
 //ドラッグ中
 CoordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
-    //座標の原点は画像の左上
     if(isMouseDrag){
-        const x: number = e.offsetX;
-        const y: number = e.offsetY;
+        //canvasの原点は左上
+        const mousePosX: number = e.offsetX;
+        const mousePosY: number = e.offsetY;
 
         if (cctx){
             //パスの開始
@@ -63,25 +64,20 @@ CoordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
             //線端の形状セット
             cctx.lineCap = "round";
             cctx.globalCompositeOperation = 'source-over';
-            cctx.moveTo(x, y);
+            cctx.moveTo(mousePosX, mousePosY);
+            //全フレームの点と結ぶ
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
         }
 
-        preMousePosX = x;
-        preMousePosY = y;
+        preMousePosX = mousePosX;
+        preMousePosY = mousePosY;
     }
 });
 
 //ドラッグ終わり！
 CoordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
     isMouseDrag = false;
-    //座標の原点は画像の左上
-    const x: number = e.offsetX;
-    const y: number = e.offsetY;
-
-    console.log("upX座標は: " + x);
-    console.log("upY座標は: " + y);
 });
 
 //初期設定
@@ -93,8 +89,6 @@ const Init = ():void => {
 
 const main = (() => {
     Init();
-
-
 })();
 
 
