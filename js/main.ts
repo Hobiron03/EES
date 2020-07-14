@@ -1,10 +1,10 @@
 //座標部分のCanvas
-const CoordinateCanvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('coordinate');
-const cctx:CanvasRenderingContext2D | null = CoordinateCanvas.getContext('2d');
+const coordinateCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('coordinate');
+const cctx: CanvasRenderingContext2D | null = coordinateCanvas.getContext('2d');
 
 //顔部分のCanvas
-const FaceCanvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('emotion-face');
-const fctx:CanvasRenderingContext2D | null = FaceCanvas.getContext('2d');
+const faceCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('emotion-face');
+const fctx: CanvasRenderingContext2D | null = faceCanvas.getContext('2d');
 
 // 顔アイコン作成Canvasの背景画像を描画
 const DrawCoordinateImage = (): void => {
@@ -15,7 +15,7 @@ const DrawCoordinateImage = (): void => {
     //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
     background.onload = () => {
         if (cctx){
-            cctx.drawImage(background,0,0,CoordinateCanvas.width, background.height * CoordinateCanvas.width / background.width);
+            cctx.drawImage(background,0,0,coordinateCanvas.width, background.height * coordinateCanvas.width / background.width);
         }
     }
 };
@@ -29,7 +29,7 @@ const DrawBaseFaceImage = (): void => {
     //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
     background.onload = () => {
         if (fctx){
-            fctx.drawImage(background,0,0,FaceCanvas.width, background.height * FaceCanvas.width / background.width);
+            fctx.drawImage(background,0,0,faceCanvas.width, background.height * faceCanvas.width / background.width);
         }
     }
     //顔パーツを描画
@@ -38,11 +38,31 @@ const DrawBaseFaceImage = (): void => {
 
 //顔アイコンのパーツ(眉, 目, 口)の初期設定
 const InitFacialParts = (): void => {
+    //中心の座標
+    const centerPosX: number = faceCanvas.width;
+    const centerPosY: number = faceCanvas.height;
+
+    console.log("中心x: " + centerPosX);
+    console.log("中心y: " + centerPosY);
+    
+    //口の描画
+    if (fctx){
+        fctx.beginPath();
+        fctx.strokeStyle = "black";
+        fctx.lineWidth = 2;
+        //線端の形状セット
+        fctx.lineCap = "round";
+        fctx.globalCompositeOperation = 'source-over';
+        fctx.moveTo(centerPosX, centerPosY);
+        //前フレームの点と結ぶ
+        fctx.lineTo(0, 0);
+        fctx.stroke();
+    }
 
 };
 
 
-const resetCoordinate = (): void => {
+const ResetCoordinate = (): void => {
     if(cctx){
         cctx.clearRect(0, 0, cctx.canvas.clientWidth, cctx.canvas.clientHeight);
         DrawCoordinateImage();
@@ -55,9 +75,9 @@ let isMouseDrag: boolean = false;
 let preMousePosX: number;
 let preMousePosY: number;
 //ドラッグ開始
-CoordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {    
+coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {    
     //前の軌跡を消去する
-    resetCoordinate();
+    ResetCoordinate();
 
     isMouseDrag = true;
     //canvasの原点は左上
@@ -79,7 +99,7 @@ CoordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
 });
 
 //ドラッグ中
-CoordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
+coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
     if(isMouseDrag){
         //canvasの原点は左上
         const mousePosX: number = e.offsetX;
@@ -103,7 +123,7 @@ CoordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
 });
 
 //ドラッグ終わり！
-CoordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
+coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
     isMouseDrag = false;
 
     //終点の描画
