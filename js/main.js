@@ -28,11 +28,31 @@ var DrowBaseFaceImage = function () {
         }
     };
 };
+var isMouseDrag = false;
 CoordinateCanvas.addEventListener('mousedown', function (e) {
+    isMouseDrag = true;
+    //座標の原点は画像の左上
     var x = e.offsetX;
     var y = e.offsetY;
     console.log("X座標は: " + x);
     console.log("Y座標は: " + y);
+});
+CoordinateCanvas.addEventListener('mousemove', function (e) {
+    //座標の原点は画像の左上
+    if (isMouseDrag) {
+        var x = e.offsetX;
+        var y = e.offsetY;
+        console.log("moveX座標は: " + x);
+        console.log("moveY座標は: " + y);
+    }
+});
+CoordinateCanvas.addEventListener('mouseup', function (e) {
+    isMouseDrag = false;
+    //座標の原点は画像の左上
+    var x = e.offsetX;
+    var y = e.offsetY;
+    console.log("upX座標は: " + x);
+    console.log("upY座標は: " + y);
 });
 //初期設定
 var Init = function () {
