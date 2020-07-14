@@ -50,18 +50,31 @@ const resetCoordinate = (): void => {
 
 
 let isMouseDrag: boolean = false;
-//前フレームの点を保持する
+//前フレームの点を保持する変数
 let preMousePosX: number;
 let preMousePosY: number;
 //ドラッグ開始
-CoordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
+CoordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {    
+    //前の軌跡を消去する
+    resetCoordinate();
+
     isMouseDrag = true;
     //canvasの原点は左上
     preMousePosX = e.offsetX;
     preMousePosY = e.offsetY;
 
-    //前の軌跡を消去する
-    resetCoordinate();
+    if (cctx){
+        //パスの開始
+        cctx.beginPath();
+        cctx.strokeStyle = "blue";
+        cctx.lineWidth = 20;
+        //線端の形状セット
+        cctx.lineCap = "round";
+        cctx.globalCompositeOperation = 'source-over';
+        //全フレームの点と結ぶ
+        cctx.lineTo(preMousePosX, preMousePosY);
+        cctx.stroke();
+    }
 });
 
 //ドラッグ中
@@ -92,6 +105,19 @@ CoordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
 //ドラッグ終わり！
 CoordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
     isMouseDrag = false;
+
+    if (cctx){
+        //パスの開始
+        cctx.beginPath();
+        cctx.strokeStyle = "red";
+        cctx.lineWidth = 20;
+        //線端の形状セット
+        cctx.lineCap = "round";
+        cctx.globalCompositeOperation = 'source-over';
+        //全フレームの点と結ぶ
+        cctx.lineTo(e.offsetX, e.offsetY);
+        cctx.stroke();
+    }
 });
 
 //初期設定
