@@ -41,6 +41,7 @@ const InitFacialParts = (): void => {
 
 };
 
+
 const resetCoordinate = (): void => {
     if(cctx){
         cctx.clearRect(0, 0, cctx.canvas.clientWidth, cctx.canvas.clientHeight);
@@ -63,8 +64,8 @@ CoordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
     preMousePosX = e.offsetX;
     preMousePosY = e.offsetY;
 
+    //始点の描画
     if (cctx){
-        //パスの開始
         cctx.beginPath();
         cctx.strokeStyle = "blue";
         cctx.lineWidth = 20;
@@ -85,7 +86,6 @@ CoordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
         const mousePosY: number = e.offsetY;
 
         if (cctx){
-            //パスの開始
             cctx.beginPath();
             cctx.strokeStyle = "black";
             cctx.lineWidth = 2;
@@ -93,7 +93,7 @@ CoordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
             cctx.lineCap = "round";
             cctx.globalCompositeOperation = 'source-over';
             cctx.moveTo(mousePosX, mousePosY);
-            //全フレームの点と結ぶ
+            //前フレームの点と結ぶ
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
         }
@@ -106,8 +106,8 @@ CoordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
 CoordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
     isMouseDrag = false;
 
+    //終点の描画
     if (cctx){
-        //パスの開始
         cctx.beginPath();
         cctx.strokeStyle = "red";
         cctx.lineWidth = 20;
