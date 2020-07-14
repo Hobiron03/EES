@@ -27,49 +27,65 @@ var DrawBaseFaceImage = function () {
             fctx.drawImage(background, 0, 0, FaceCanvas.width, background.height * FaceCanvas.width / background.width);
         }
     };
+    //顔パーツを描画
+    InitFacialParts();
 };
-//ドラッグ開始
+//顔アイコンのパーツ(眉, 目, 口)の初期設定
+var InitFacialParts = function () {
+    // if (fctx){
+    //     //パスの開始
+    //     fctx.beginPath();
+    //     fctx.strokeStyle = "black";
+    //     fctx.lineWidth = 5;
+    //     //線端の形状セット
+    //     fctx.lineCap = "round";
+    //     fctx.globalCompositeOperation = 'source-over';
+    //     //全フレームの点と結ぶ
+    //     fctx.lineTo(preMousePosX, preMousePosY);
+    //     fctx.stroke();
+    // }
+};
 var isMouseDrag = false;
+//前フレームの点を保持する
 var preMousePosX;
 var preMousePosY;
+//ドラッグ開始
 CoordinateCanvas.addEventListener('mousedown', function (e) {
     isMouseDrag = true;
-    //座標の原点は画像の左上
+    //canvasの原点は左上
     preMousePosX = e.offsetX;
     preMousePosY = e.offsetY;
+    if (cctx) {
+        cctx.clearRect(0, 0, cctx.canvas.clientWidth, cctx.canvas.clientHeight);
+        DrawCoordinateImage();
+    }
 });
 //ドラッグ中
 CoordinateCanvas.addEventListener('mousemove', function (e) {
-    //座標の原点は画像の左上
     if (isMouseDrag) {
-        var x = e.offsetX;
-        var y = e.offsetY;
+        //canvasの原点は左上
+        var mousePosX = e.offsetX;
+        var mousePosY = e.offsetY;
         if (cctx) {
             //パスの開始
             cctx.beginPath();
-            //線の色セット
             cctx.strokeStyle = "black";
-            //線の太さセット
-            cctx.lineWidth = 5;
+            cctx.lineWidth = 2;
             //線端の形状セット
             cctx.lineCap = "round";
             cctx.globalCompositeOperation = 'source-over';
-            cctx.moveTo(x, y);
+            cctx.moveTo(mousePosX, mousePosY);
+            //全フレームの点と結ぶ
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
         }
-        preMousePosX = x;
-        preMousePosY = y;
+        preMousePosX = mousePosX;
+        preMousePosY = mousePosY;
     }
 });
 //ドラッグ終わり！
 CoordinateCanvas.addEventListener('mouseup', function (e) {
     isMouseDrag = false;
-    //座標の原点は画像の左上
-    var x = e.offsetX;
-    var y = e.offsetY;
-    console.log("upX座標は: " + x);
-    console.log("upY座標は: " + y);
 });
 //初期設定
 var Init = function () {
