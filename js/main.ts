@@ -1,15 +1,26 @@
 interface Mouse {
-    startPos: number
+    startPosX: number
+    startPosY: number
     //ベジエ曲線の制御点
-    bezierControlPos: number,
-    endPos: number,
+    bezierControlPos: number
+    endPosX: number
+    endPosY: number
+};
+let mouse: Mouse = {
+    startPosX: 0,
+    startPosY: 0,
+    bezierControlPos: 0,
+    endPosX: 0,
+    endPosY: 0,
 };
 
-interface EyeBrows{
-    startPos: number
-    endPos: number,
-}
 
+interface EyeBrows{
+    startPosX: number
+    startPosY: number
+    endPosX: number
+    endPosY: number
+}
 
 //座標部分のCanvas
 const coordinateCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('coordinate');
@@ -33,37 +44,21 @@ const DrawCoordinateImage = (): void => {
     }
 };
 
-
-let mouseCurveDegree = 60;
-let mouseInfo: Mouse = {
-    startPos: 0,
-    bezierControlPos: 0,
-    endPos: 0,
-};
 //顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
-const RenderMouth = (): void => {
-    const emotionFaceDiv: HTMLElement | null = document.getElementById('emotion-face');
-    if(!emotionFaceDiv){
-        return;
-    }
-    const centerPosX: number = emotionFaceDiv.clientWidth / 2;
-    const centerPosY: number = emotionFaceDiv.clientHeight / 2;
+const RenderMouth = (x: number): void => {
 
-    const offsetMouseWidth: number = emotionFaceDiv.clientWidth / 4;
-    const offsetMouseHeight: number = emotionFaceDiv.clientHeight / 5;
+    //x座標から口の傾きを計算する
 
-    console.log("offMouseis: " + offsetMouseWidth);
     //口の描画
     if (fpctx){
         ResetFacialParts();
         fpctx.beginPath();
         fpctx.strokeStyle = "black";
         fpctx.lineWidth = 4;
-        //線端の形状セット
         fpctx.lineCap = "round";
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(centerPosX-offsetMouseWidth, centerPosY + offsetMouseHeight);
-        fpctx.quadraticCurveTo(centerPosX, centerPosY+mouseCurveDegree, centerPosX+offsetMouseWidth, centerPosY + offsetMouseHeight);
+        fpctx.moveTo(mouse.startPosX, mouse.endPosY);
+        fpctx.quadraticCurveTo(mouse.bezierControlPos, mouse.bezierControlPos+x, mouse.endPosX, mouse.endPosY);
         fpctx.stroke();
     }
 
@@ -132,11 +127,8 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
 
-            //////
             //口の描画（仮）
-            mouseCurveDegree = e.offsetY;
-            RenderMouth();
-            //////
+            RenderMouth(0);
         }
         preMousePosX = mousePosX;
         preMousePosY = mousePosY;
@@ -161,16 +153,36 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
     }
 });
 
+
+const InitMouse = (): void => {
+    const emotionFaceDiv: HTMLElement | null = document.getElementById('emotion-face');
+    if(!emotionFaceDiv){
+        console.log("ERR! emotion-face div does not exit");
+        return;
+    }
+    const centerPosX: number = emotionFaceDiv.clientWidth / 2;
+    const centerPosY: number = emotionFaceDiv.clientHeight / 2;
+    const offsetMouseWidth: number = emotionFaceDiv.clientWidth / 4;
+    const offsetMouseHeight: number = emotionFaceDiv.clientHeight / 5;
+
+    mouse.startPosX = centerPosX - offsetMouseWidth;
+    mouse.startPosY = centerPosY + offsetMouseHeight;
+    mouse.bezierControlPos = centerPosY;
+    mouse.endPosX = centerPosX + offsetMouseWidth;
+    mouse.endPosY = centerPosY + offsetMouseHeight;
+
+    RenderMouth(0);
+};
+
 //初期設定
 const Init = ():void => {
     DrawCoordinateImage();
-    RenderMouth();
+    InitMouse();
 };
 
 
 const main = (() => {
     Init();
-
 })();
 
 

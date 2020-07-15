@@ -1,9 +1,14 @@
+;
+var mouse = {
+    startPosX: 0,
+    startPosY: 0,
+    bezierControlPos: 0,
+    endPosX: 0,
+    endPosY: 0
+};
 //座標部分のCanvas
 var coordinateCanvas = document.getElementById('coordinate');
 var cctx = coordinateCanvas.getContext('2d');
-//顔輪郭部分のCanvas
-// const faceCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('emotion-face');
-// const fctx: CanvasRenderingContext2D | null = faceCanvas.getContext('2d');
 // facial-parts
 var facialPartsCanvas = document.getElementById('facial-parts');
 var fpctx = facialPartsCanvas.getContext('2d');
@@ -19,43 +24,19 @@ var DrawCoordinateImage = function () {
         }
     };
 };
-// // ドラッグで作成する顔の輪郭部分を表示
-// const DrawBaseFaceImage = (): void => {
-//     let background: HTMLImageElement = new Image();
-//     const imageURL: string = "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
-//     background.src = imageURL;
-//     //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
-//     background.onload = () => {
-//         if (fctx){
-//             fctx.drawImage(background,0,0,faceCanvas.width, background.height * faceCanvas.width / background.width);
-//         }
-//     }
-//     //顔パーツを描画
-//     InitFacialParts();
-// };
-var mouseCurveDegree = 60;
 //顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
-var RenderMouth = function () {
-    var emotionFaceDiv = document.getElementById('emotion-face');
-    if (!emotionFaceDiv) {
-        return;
-    }
-    var centerPosX = emotionFaceDiv.clientWidth / 2;
-    var centerPosY = emotionFaceDiv.clientHeight / 2;
-    var offsetMouseWidth = emotionFaceDiv.clientWidth / 4;
-    var offsetMouseHeight = emotionFaceDiv.clientHeight / 5;
-    console.log("offMouseis: " + offsetMouseWidth);
+var RenderMouth = function (x) {
+    //x座標から口の傾きを計算する
     //口の描画
     if (fpctx) {
         ResetFacialParts();
         fpctx.beginPath();
         fpctx.strokeStyle = "black";
         fpctx.lineWidth = 4;
-        //線端の形状セット
         fpctx.lineCap = "round";
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(centerPosX - offsetMouseWidth, centerPosY + offsetMouseHeight);
-        fpctx.quadraticCurveTo(centerPosX, centerPosY + mouseCurveDegree, centerPosX + offsetMouseWidth, centerPosY + offsetMouseHeight);
+        fpctx.moveTo(mouse.startPosX, mouse.endPosY);
+        fpctx.quadraticCurveTo(mouse.bezierControlPos, mouse.bezierControlPos + x, mouse.endPosX, mouse.endPosY);
         fpctx.stroke();
     }
 };
@@ -112,11 +93,8 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
             //前フレームの点と結ぶ
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
-            //////
             //口の描画（仮）
-            mouseCurveDegree = e.offsetY;
-            RenderMouth();
-            //////
+            RenderMouth(0);
         }
         preMousePosX = mousePosX;
         preMousePosY = mousePosY;
@@ -138,10 +116,27 @@ coordinateCanvas.addEventListener('mouseup', function (e) {
         cctx.stroke();
     }
 });
+var InitMouse = function () {
+    var emotionFaceDiv = document.getElementById('emotion-face');
+    if (!emotionFaceDiv) {
+        console.log("ERR! emotion-face div does not exit");
+        return;
+    }
+    var centerPosX = emotionFaceDiv.clientWidth / 2;
+    var centerPosY = emotionFaceDiv.clientHeight / 2;
+    var offsetMouseWidth = emotionFaceDiv.clientWidth / 4;
+    var offsetMouseHeight = emotionFaceDiv.clientHeight / 5;
+    mouse.startPosX = centerPosX - offsetMouseWidth;
+    mouse.startPosY = centerPosY + offsetMouseHeight;
+    mouse.bezierControlPos = centerPosY;
+    mouse.endPosX = centerPosX + offsetMouseWidth;
+    mouse.endPosY = centerPosY + offsetMouseHeight;
+    RenderMouth(0);
+};
 //初期設定
 var Init = function () {
     DrawCoordinateImage();
-    RenderMouth();
+    InitMouse();
 };
 var main = (function () {
     Init();
