@@ -33,12 +33,18 @@ var DrawCoordinateImage = function () {
 //     //顔パーツを描画
 //     InitFacialParts();
 // };
-var mouseCurveDegree = 0;
-//顔アイコンのパーツ(眉, 目, 口)の初期設定
-var InitFacialParts = function () {
-    //中心の座標
-    var centerPosX = 100;
-    var centerPosY = 100;
+var mouseCurveDegree = 60;
+//顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
+var RenderMouth = function () {
+    var emotionFaceDiv = document.getElementById('emotion-face');
+    if (!emotionFaceDiv) {
+        return;
+    }
+    var centerPosX = emotionFaceDiv.clientWidth / 2;
+    var centerPosY = emotionFaceDiv.clientHeight / 2;
+    var offsetMouseWidth = emotionFaceDiv.clientWidth / 4;
+    var offsetMouseHeight = emotionFaceDiv.clientHeight / 5;
+    console.log("offMouseis: " + offsetMouseWidth);
     //口の描画
     if (fpctx) {
         ResetFacialParts();
@@ -48,8 +54,8 @@ var InitFacialParts = function () {
         //線端の形状セット
         fpctx.lineCap = "round";
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(centerPosX - 100, centerPosY);
-        fpctx.quadraticCurveTo(centerPosX, centerPosY + mouseCurveDegree, centerPosX + 100, centerPosY);
+        fpctx.moveTo(centerPosX - offsetMouseWidth, centerPosY + offsetMouseHeight);
+        fpctx.quadraticCurveTo(centerPosX, centerPosY + mouseCurveDegree, centerPosX + offsetMouseWidth, centerPosY + offsetMouseHeight);
         fpctx.stroke();
     }
 };
@@ -89,7 +95,6 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
         cctx.stroke();
     }
 });
-var count = 0;
 //ドラッグ中
 coordinateCanvas.addEventListener('mousemove', function (e) {
     if (isMouseDrag) {
@@ -100,18 +105,19 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
         if (cctx) {
             cctx.beginPath();
             cctx.strokeStyle = "black";
-            cctx.lineWidth = 2;
+            cctx.lineWidth = 4;
             cctx.lineCap = "round";
             cctx.globalCompositeOperation = 'source-over';
             cctx.moveTo(mousePosX, mousePosY);
             //前フレームの点と結ぶ
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
+            //////
+            //口の描画（仮）
             mouseCurveDegree = e.offsetY;
-            InitFacialParts();
+            RenderMouth();
+            //////
         }
-        console.log("count=" + count);
-        count += 1;
         preMousePosX = mousePosX;
         preMousePosY = mousePosY;
     }
@@ -135,6 +141,7 @@ coordinateCanvas.addEventListener('mouseup', function (e) {
 //初期設定
 var Init = function () {
     DrawCoordinateImage();
+    RenderMouth();
 };
 var main = (function () {
     Init();

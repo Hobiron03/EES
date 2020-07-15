@@ -1,10 +1,19 @@
+interface Mouse {
+    startPos: number
+    //ベジエ曲線の制御点
+    bezierControlPos: number,
+    endPos: number,
+};
+
+interface EyeBrows{
+    startPos: number
+    endPos: number,
+}
+
+
 //座標部分のCanvas
 const coordinateCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('coordinate');
 const cctx: CanvasRenderingContext2D | null = coordinateCanvas.getContext('2d');
-
-//顔輪郭部分のCanvas
-// const faceCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('emotion-face');
-// const fctx: CanvasRenderingContext2D | null = faceCanvas.getContext('2d');
 
 // facial-parts
 const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('facial-parts');
@@ -24,29 +33,26 @@ const DrawCoordinateImage = (): void => {
     }
 };
 
-// // ドラッグで作成する顔の輪郭部分を表示
-// const DrawBaseFaceImage = (): void => {
-//     let background: HTMLImageElement = new Image();
-//     const imageURL: string = "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
-    
-//     background.src = imageURL;
-//     //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
-//     background.onload = () => {
-//         if (fctx){
-//             fctx.drawImage(background,0,0,faceCanvas.width, background.height * faceCanvas.width / background.width);
-//         }
-//     }
-//     //顔パーツを描画
-//     InitFacialParts();
-// };
 
-let mouseCurveDegree = 0;
-//顔アイコンのパーツ(眉, 目, 口)の初期設定
-const InitFacialParts = (): void => {
-    //中心の座標
-    const centerPosX: number = 100;
-    const centerPosY: number = 100;
-    
+let mouseCurveDegree = 60;
+let mouseInfo: Mouse = {
+    startPos: 0,
+    bezierControlPos: 0,
+    endPos: 0,
+};
+//顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
+const RenderMouth = (): void => {
+    const emotionFaceDiv: HTMLElement | null = document.getElementById('emotion-face');
+    if(!emotionFaceDiv){
+        return;
+    }
+    const centerPosX: number = emotionFaceDiv.clientWidth / 2;
+    const centerPosY: number = emotionFaceDiv.clientHeight / 2;
+
+    const offsetMouseWidth: number = emotionFaceDiv.clientWidth / 4;
+    const offsetMouseHeight: number = emotionFaceDiv.clientHeight / 5;
+
+    console.log("offMouseis: " + offsetMouseWidth);
     //口の描画
     if (fpctx){
         ResetFacialParts();
@@ -56,8 +62,8 @@ const InitFacialParts = (): void => {
         //線端の形状セット
         fpctx.lineCap = "round";
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(centerPosX-100,centerPosY);
-        fpctx.quadraticCurveTo(centerPosX,centerPosY+mouseCurveDegree,centerPosX+100,centerPosY);
+        fpctx.moveTo(centerPosX-offsetMouseWidth, centerPosY + offsetMouseHeight);
+        fpctx.quadraticCurveTo(centerPosX, centerPosY+mouseCurveDegree, centerPosX+offsetMouseWidth, centerPosY + offsetMouseHeight);
         fpctx.stroke();
     }
 
@@ -107,7 +113,6 @@ coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
     }
 });
 
-let count: number = 0;
 //ドラッグ中
 coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
     if(isMouseDrag){
@@ -119,7 +124,7 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
         if (cctx){
             cctx.beginPath();
             cctx.strokeStyle = "black";
-            cctx.lineWidth = 2;
+            cctx.lineWidth = 4;
             cctx.lineCap = "round";
             cctx.globalCompositeOperation = 'source-over';
             cctx.moveTo(mousePosX, mousePosY);
@@ -127,11 +132,12 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
 
+            //////
+            //口の描画（仮）
             mouseCurveDegree = e.offsetY;
-            InitFacialParts();
+            RenderMouth();
+            //////
         }
-        console.log("count=" + count);
-        count += 1;
         preMousePosX = mousePosX;
         preMousePosY = mousePosY;
     }
@@ -158,11 +164,13 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
 //初期設定
 const Init = ():void => {
     DrawCoordinateImage();
+    RenderMouth();
 };
 
 
 const main = (() => {
     Init();
+
 })();
 
 

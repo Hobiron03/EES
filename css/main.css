@@ -2,10 +2,9 @@ body{
     margin: 20px;
 }
 
-.face{
+#emotion-face{
     width: 200px;
     height: 200px;
-    background-color: red;
     background-image: url("../Images/BaseFace.png");
     background-size: cover;
 }
