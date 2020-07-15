@@ -2,16 +2,20 @@ interface Mouse {
     startPosX: number
     startPosY: number
     //ベジエ曲線の制御点
-    bezierControlPos: number
+    bezierControlPosX: number
+    bezierControlPosY: number
     endPosX: number
     endPosY: number
+    maxUShapePos: number
 };
 let mouse: Mouse = {
     startPosX: 0,
     startPosY: 0,
-    bezierControlPos: 0,
+    bezierControlPosX: 0,
+    bezierControlPosY: 0,
     endPosX: 0,
     endPosY: 0,
+    maxUShapePos: 0,
 };
 
 
@@ -20,15 +24,18 @@ interface EyeBrows{
     startPosY: number
     endPosX: number
     endPosY: number
-}
+};
 
 //座標部分のCanvas
 const coordinateCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('coordinate');
 const cctx: CanvasRenderingContext2D | null = coordinateCanvas.getContext('2d');
+let coordinateWidth: number;
+let coordinateHeight: number;
 
 // facial-parts
 const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('facial-parts');
 const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext('2d');
+
 
 // 顔アイコン作成Canvasの背景画像を描画
 const DrawCoordinateImage = (): void => {
@@ -46,9 +53,15 @@ const DrawCoordinateImage = (): void => {
 
 //顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
 const RenderMouth = (x: number): void => {
-
-    //x座標から口の傾きを計算する
-
+    //x座標から口の傾きを計算する width400で-66から66くらい
+    //xの値を最大mouse.maxUshapePosに正規化
+    let curveDegree = (x * (mouse.maxUShapePos*2)) / coordinateWidth;
+    if(curveDegree > mouse.maxUShapePos){
+        curveDegree = curveDegree-mouse.maxUShapePos;
+    }
+    else if (x < coordinateHeight / 2){
+        curveDegree = curveDegree-mouse.maxUShapePos;
+    }
     //口の描画
     if (fpctx){
         ResetFacialParts();
@@ -58,10 +71,9 @@ const RenderMouth = (x: number): void => {
         fpctx.lineCap = "round";
         fpctx.globalCompositeOperation = 'source-over';
         fpctx.moveTo(mouse.startPosX, mouse.endPosY);
-        fpctx.quadraticCurveTo(mouse.bezierControlPos, mouse.bezierControlPos+x, mouse.endPosX, mouse.endPosY);
+        fpctx.quadraticCurveTo(mouse.bezierControlPosX, mouse.bezierControlPosY + curveDegree, mouse.endPosX, mouse.endPosY);
         fpctx.stroke();
     }
-
 };
 
 
@@ -88,6 +100,7 @@ let preMousePosY: number;
 coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {    
     //前の軌跡を消去する
     ResetCoordinate();
+    RenderMouth(e.offsetX);
 
     isMouseDrag = true;
     //canvasの原点は左上
@@ -119,7 +132,7 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
         if (cctx){
             cctx.beginPath();
             cctx.strokeStyle = "black";
-            cctx.lineWidth = 4;
+            cctx.lineWidth = 2;
             cctx.lineCap = "round";
             cctx.globalCompositeOperation = 'source-over';
             cctx.moveTo(mousePosX, mousePosY);
@@ -128,7 +141,7 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
             cctx.stroke();
 
             //口の描画（仮）
-            RenderMouth(0);
+            RenderMouth(mousePosX);
         }
         preMousePosX = mousePosX;
         preMousePosY = mousePosY;
@@ -156,20 +169,36 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
 
 const InitMouse = (): void => {
     const emotionFaceDiv: HTMLElement | null = document.getElementById('emotion-face');
+    const coordinateDiv: HTMLElement | null = document.getElementById('coordinate');
     if(!emotionFaceDiv){
         console.log("ERR! emotion-face div does not exit");
         return;
     }
-    const centerPosX: number = emotionFaceDiv.clientWidth / 2;
-    const centerPosY: number = emotionFaceDiv.clientHeight / 2;
-    const offsetMouseWidth: number = emotionFaceDiv.clientWidth / 4;
-    const offsetMouseHeight: number = emotionFaceDiv.clientHeight / 5;
+    if(!coordinateDiv){
+        console.log("ERR! emotion-face div does not exit");
+        return;
+    }
+
+    coordinateWidth = coordinateDiv.clientWidth;
+    coordinateHeight = coordinateDiv.clientHeight;
+
+    console.log("coordinateWidth: " + coordinateWidth);
+
+    const faceWidth = emotionFaceDiv.clientWidth;
+    const faceHeight = emotionFaceDiv.clientWidth;
+
+    const centerPosX: number = faceWidth / 2;
+    const centerPosY: number = faceHeight / 2;
+    const offsetMouseWidth: number = faceWidth / 4;
+    const offsetMouseHeight: number = faceHeight / 5;
 
     mouse.startPosX = centerPosX - offsetMouseWidth;
     mouse.startPosY = centerPosY + offsetMouseHeight;
-    mouse.bezierControlPos = centerPosY;
+    mouse.bezierControlPosX = centerPosX;
+    mouse.bezierControlPosY = centerPosY + offsetMouseHeight;
     mouse.endPosX = centerPosX + offsetMouseWidth;
     mouse.endPosY = centerPosY + offsetMouseHeight;
+    mouse.maxUShapePos = faceWidth / 3;
 
     RenderMouth(0);
 };
