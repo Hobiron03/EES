@@ -70,9 +70,9 @@ const RenderMouth = (x: number): void => {
     if (fpctx){
         ResetFacialParts();
         fpctx.beginPath();
-        fpctx.strokeStyle = "black";
+        fpctx.strokeStyle = 'black';
         fpctx.lineWidth = 4;
-        fpctx.lineCap = "round";
+        fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
         fpctx.moveTo(mouse.startPosX, mouse.endPosY);
         fpctx.quadraticCurveTo(mouse.bezierControlPosX, mouse.bezierControlPosY + curveDegree, mouse.endPosX, mouse.endPosY);
@@ -102,7 +102,7 @@ let preMousePosX: number;
 let preMousePosY: number;
 //ドラッグ開始
 coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {    
-    //前の軌跡を消去する
+    //前の軌跡を消去
     ResetCoordinate();
     RenderMouth(e.offsetX);
 
@@ -116,7 +116,6 @@ coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
         cctx.beginPath();
         cctx.strokeStyle = "blue";
         cctx.lineWidth = 20;
-        //線端の形状セット
         cctx.lineCap = "round";
         cctx.globalCompositeOperation = 'source-over';
         //全フレームの点と結ぶ
@@ -144,7 +143,6 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
 
-            //口の描画（仮）
             RenderMouth(mousePosX);
         }
         preMousePosX = mousePosX;
@@ -218,5 +216,4 @@ const main = (() => {
 
 
 window.onload = () => {
-    console.log("Read page!!");
 };

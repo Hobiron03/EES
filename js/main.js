@@ -73,7 +73,7 @@ var preMousePosX;
 var preMousePosY;
 //ドラッグ開始
 coordinateCanvas.addEventListener('mousedown', function (e) {
-    //前の軌跡を消去する
+    //前の軌跡を消去
     ResetCoordinate();
     RenderMouth(e.offsetX);
     isMouseDrag = true;
@@ -85,7 +85,6 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
         cctx.beginPath();
         cctx.strokeStyle = "blue";
         cctx.lineWidth = 20;
-        //線端の形状セット
         cctx.lineCap = "round";
         cctx.globalCompositeOperation = 'source-over';
         //全フレームの点と結ぶ
@@ -110,7 +109,6 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
             //前フレームの点と結ぶ
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
-            //口の描画（仮）
             RenderMouth(mousePosX);
         }
         preMousePosX = mousePosX;
