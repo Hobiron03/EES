@@ -62,6 +62,10 @@ const RenderMouth = (x: number): void => {
     else if (x < coordinateHeight / 2){
         curveDegree = curveDegree-mouse.maxUShapePos;
     }
+    else{
+        curveDegree = 0;
+    }
+
     //口の描画
     if (fpctx){
         ResetFacialParts();
@@ -182,8 +186,6 @@ const InitMouse = (): void => {
     coordinateWidth = coordinateDiv.clientWidth;
     coordinateHeight = coordinateDiv.clientHeight;
 
-    console.log("coordinateWidth: " + coordinateWidth);
-
     const faceWidth = emotionFaceDiv.clientWidth;
     const faceHeight = emotionFaceDiv.clientWidth;
 
@@ -200,7 +202,7 @@ const InitMouse = (): void => {
     mouse.endPosY = centerPosY + offsetMouseHeight;
     mouse.maxUShapePos = faceWidth / 3;
 
-    RenderMouth(0);
+    RenderMouth(coordinateHeight/2);
 };
 
 //初期設定

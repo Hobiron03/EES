@@ -31,21 +31,18 @@ var DrawCoordinateImage = function () {
 };
 //顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
 var RenderMouth = function (x) {
-    //x座標から口の傾きを計算する width400で-60から60くらい
+    //x座標から口の傾きを計算する width400で-66から66くらい
     //xの値を最大mouse.maxUshapePosに正規化
     var curveDegree = (x * (mouse.maxUShapePos * 2)) / coordinateWidth;
     if (curveDegree > mouse.maxUShapePos) {
-        console.log(curveDegree - mouse.maxUShapePos);
         curveDegree = curveDegree - mouse.maxUShapePos;
     }
     else if (x < coordinateHeight / 2) {
-        console.log(curveDegree - mouse.maxUShapePos);
-        console.log("マイナス");
         curveDegree = curveDegree - mouse.maxUShapePos;
     }
-    // console.log("facewidth/2: " + coordinateWidth / 2);
-    // console.log("x: " + x);
-    // console.log("curveDegree: " + curveDegree);
+    else {
+        curveDegree = 0;
+    }
     //口の描画
     if (fpctx) {
         ResetFacialParts();
@@ -149,7 +146,6 @@ var InitMouse = function () {
     }
     coordinateWidth = coordinateDiv.clientWidth;
     coordinateHeight = coordinateDiv.clientHeight;
-    console.log("coordinateWidth: " + coordinateWidth);
     var faceWidth = emotionFaceDiv.clientWidth;
     var faceHeight = emotionFaceDiv.clientWidth;
     var centerPosX = faceWidth / 2;
@@ -163,8 +159,7 @@ var InitMouse = function () {
     mouse.endPosX = centerPosX + offsetMouseWidth;
     mouse.endPosY = centerPosY + offsetMouseHeight;
     mouse.maxUShapePos = faceWidth / 3;
-    mouse.maxUShapePos = 60;
-    RenderMouth(0);
+    RenderMouth(coordinateHeight / 2);
 };
 //初期設定
 var Init = function () {
