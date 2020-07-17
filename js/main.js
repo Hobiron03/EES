@@ -29,8 +29,11 @@ var leftEye = {
 //座標部分のCanvas
 var coordinateCanvas = document.getElementById('coordinate');
 var cctx = coordinateCanvas.getContext('2d');
-var coordinateWidth;
-var coordinateHeight;
+;
+var corrdinate = {
+    width: 0,
+    height: 0
+};
 // 顔アイコンの口を描画のCanvas
 var facialPartsCanvas = document.getElementById('facial-parts');
 var fpctx = facialPartsCanvas.getContext('2d');
@@ -50,11 +53,11 @@ var DrawCoordinateImage = function () {
 var RenderMouth = function (x) {
     //x座標から口の傾きを計算する width400で-66から66くらい
     //xの値を0 ~ mouse.maxUShapePos*2の範囲に正規化
-    var curveDegree = (x * (mouse.maxUShapePos * 2)) / coordinateWidth;
+    var curveDegree = (x * (mouse.maxUShapePos * 2)) / corrdinate.width;
     if (curveDegree > mouse.maxUShapePos) {
         curveDegree = curveDegree - mouse.maxUShapePos;
     }
-    else if (x < coordinateHeight / 2) {
+    else if (x < corrdinate.height / 2) {
         curveDegree = curveDegree - mouse.maxUShapePos;
     }
     else {
@@ -90,12 +93,21 @@ var RenderEyebrows = function (y) {
 };
 var RenderEye = function () {
     if (fpctx) {
+        //左目
         fpctx.beginPath();
         fpctx.strokeStyle = 'black';
-        fpctx.lineWidth = 30;
+        fpctx.lineWidth = leftEye.size;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.lineTo(100, 100);
+        fpctx.lineTo(facialPartsCanvas.clientWidth / 2 - 35, facialPartsCanvas.clientHeight / 2);
+        fpctx.stroke();
+        //右目
+        fpctx.beginPath();
+        fpctx.strokeStyle = 'black';
+        fpctx.lineWidth = rightEye.size;
+        fpctx.lineCap = 'round';
+        fpctx.globalCompositeOperation = 'source-over';
+        fpctx.lineTo(facialPartsCanvas.clientWidth / 2 + 35, facialPartsCanvas.clientHeight / 2);
         fpctx.stroke();
     }
 };
@@ -135,7 +147,8 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
         cctx.stroke();
         if (fpctx) {
             RenderMouth(e.offsetX);
-            RenderEyebrows(e.offsetY);
+            RenderEye();
+            // RenderEyebrows(e.offsetY);
         }
     }
 });
@@ -150,7 +163,7 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
         if (cctx) {
             cctx.beginPath();
             cctx.strokeStyle = "black";
-            cctx.lineWidth = 2;
+            cctx.lineWidth = 1;
             cctx.lineCap = "round";
             cctx.globalCompositeOperation = 'source-over';
             cctx.moveTo(mousePosX, mousePosY);
@@ -160,7 +173,8 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
             if (fpctx) {
                 ResetFacialParts();
                 RenderMouth(mousePosX);
-                RenderEyebrows(mousePosY);
+                RenderEye();
+                // RenderEyebrows(mousePosY);
             }
         }
         preMousePosX = mousePosX;
@@ -193,16 +207,16 @@ var InitFacialParts = function () {
         console.log("ERR! coordinate div does not exit");
         return;
     }
-    coordinateWidth = coordinateDiv.clientWidth;
-    coordinateHeight = coordinateDiv.clientHeight;
+    corrdinate.width = coordinateDiv.clientWidth;
+    corrdinate.height = coordinateDiv.clientHeight;
     var faceWidth = emotionFaceDiv.clientWidth;
     var faceHeight = emotionFaceDiv.clientWidth;
     //顔画像の中心座標
     var centerPosX = faceWidth / 2;
     var centerPosY = faceHeight / 2;
     //口の相対的な位置（中心からの距離）
-    var offsetMouseWidth = faceWidth / 4;
-    var offsetMouseHeight = faceHeight / 5;
+    var offsetMouseWidth = faceWidth / 5;
+    var offsetMouseHeight = faceHeight / 4;
     //顔アイコンにおける口の相対的な場所を求める
     //顔アイコンの大きさに変化があっても良いように
     mouse.startPosX = centerPosX - offsetMouseWidth;
@@ -215,8 +229,11 @@ var InitFacialParts = function () {
     mouse.lineWidth = 4;
     //眉の相対的な場所を求める
     eyebrows.lineWidth = 4;
-    RenderMouth(coordinateHeight / 2);
-    RenderEyebrows(coordinateHeight / 2);
+    //目の設定
+    rightEye.size = 27;
+    leftEye.size = 27;
+    RenderMouth(corrdinate.height / 2);
+    // RenderEyebrows(corrdinate.height/2);
     RenderEye();
 };
 //初期設定
