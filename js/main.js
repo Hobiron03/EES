@@ -6,14 +6,25 @@ var mouse = {
     bezierControlPosY: 0,
     endPosX: 0,
     endPosY: 0,
-    maxUShapePos: 0
+    maxUShapePos: 0,
+    lineWidth: 0
 };
 ;
 var eyebrows = {
     startPosX: 0,
     startPosY: 0,
     endPosX: 0,
-    endPosY: 0
+    endPosY: 0,
+    lineWidth: 0
+};
+;
+var rightEye = {
+    pos: 0,
+    size: 0
+};
+var leftEye = {
+    pos: 0,
+    size: 0
 };
 //座標部分のCanvas
 var coordinateCanvas = document.getElementById('coordinate');
@@ -54,7 +65,7 @@ var RenderMouth = function (x) {
     if (fpctx) {
         fpctx.beginPath();
         fpctx.strokeStyle = 'black';
-        fpctx.lineWidth = 4;
+        fpctx.lineWidth = mouse.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
         fpctx.moveTo(mouse.startPosX, mouse.endPosY);
@@ -69,10 +80,21 @@ var RenderEyebrows = function (y) {
     if (fpctx) {
         fpctx.beginPath();
         fpctx.strokeStyle = 'black';
-        fpctx.lineWidth = 4;
+        fpctx.lineWidth = eyebrows.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
         fpctx.moveTo(mouse.startPosX, mouse.endPosY);
+        fpctx.lineTo(100, 100);
+        fpctx.stroke();
+    }
+};
+var RenderEye = function () {
+    if (fpctx) {
+        fpctx.beginPath();
+        fpctx.strokeStyle = 'black';
+        fpctx.lineWidth = 30;
+        fpctx.lineCap = 'round';
+        fpctx.globalCompositeOperation = 'source-over';
         fpctx.lineTo(100, 100);
         fpctx.stroke();
     }
@@ -96,7 +118,7 @@ var preMousePosY;
 coordinateCanvas.addEventListener('mousedown', function (e) {
     //前の軌跡を消去
     ResetCoordinate();
-    RenderMouth(e.offsetX);
+    ResetFacialParts();
     isMouseDrag = true;
     //canvasの原点は左上
     preMousePosX = e.offsetX;
@@ -111,6 +133,10 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
         //全フレームの点と結ぶ
         cctx.lineTo(preMousePosX, preMousePosY);
         cctx.stroke();
+        if (fpctx) {
+            RenderMouth(e.offsetX);
+            RenderEyebrows(e.offsetY);
+        }
     }
 });
 //ドラッグ中
@@ -119,6 +145,7 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
         //canvasの原点は左上
         var mousePosX = e.offsetX;
         var mousePosY = e.offsetY;
+        console.log("mousemove!!!");
         //軌跡の描画
         if (cctx) {
             cctx.beginPath();
@@ -148,7 +175,6 @@ coordinateCanvas.addEventListener('mouseup', function (e) {
         cctx.beginPath();
         cctx.strokeStyle = "red";
         cctx.lineWidth = 20;
-        //線端の形状セット
         cctx.lineCap = "round";
         cctx.globalCompositeOperation = 'source-over';
         //全フレームの点と結ぶ
@@ -186,8 +212,12 @@ var InitFacialParts = function () {
     mouse.endPosX = centerPosX + offsetMouseWidth;
     mouse.endPosY = centerPosY + offsetMouseHeight;
     mouse.maxUShapePos = faceWidth / 3;
+    mouse.lineWidth = 4;
+    //眉の相対的な場所を求める
+    eyebrows.lineWidth = 4;
     RenderMouth(coordinateHeight / 2);
-    RenderEyebrows(0);
+    RenderEyebrows(coordinateHeight / 2);
+    RenderEye();
 };
 //初期設定
 var Init = function () {

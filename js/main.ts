@@ -7,6 +7,7 @@ interface Mouse {
     endPosX: number
     endPosY: number
     maxUShapePos: number
+    lineWidth: number
 };
 let mouse: Mouse = {
     startPosX: 0,
@@ -16,6 +17,7 @@ let mouse: Mouse = {
     endPosX: 0,
     endPosY: 0,
     maxUShapePos: 0,
+    lineWidth: 0,
 };
 
 
@@ -24,12 +26,28 @@ interface Eyebrows{
     startPosY: number
     endPosX: number
     endPosY: number
+    lineWidth: number
 };
 let eyebrows: Eyebrows =  {
     startPosX: 0,
     startPosY: 0,
     endPosX: 0,
     endPosY: 0,
+    lineWidth: 0,
+};
+
+
+interface Eyes{
+    pos: number
+    size: number
+};
+let rightEye: Eyes = {
+    pos: 0,
+    size: 0,
+};
+let leftEye: Eyes = {
+    pos: 0,
+    size: 0,
 };
 
 //座標部分のCanvas
@@ -41,7 +59,6 @@ let coordinateHeight: number;
 // 顔アイコンの口を描画のCanvas
 const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('facial-parts');
 const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext('2d');
-
 
 // 顔アイコン作成Canvasの背景画像を描画
 const DrawCoordinateImage = (): void => {
@@ -76,7 +93,7 @@ const RenderMouth = (x: number): void => {
     if (fpctx){
         fpctx.beginPath();
         fpctx.strokeStyle = 'black';
-        fpctx.lineWidth = 4;
+        fpctx.lineWidth = mouse.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
         fpctx.moveTo(mouse.startPosX, mouse.endPosY);
@@ -93,7 +110,7 @@ const RenderEyebrows = (y: number): void => {
     if (fpctx){
         fpctx.beginPath();
         fpctx.strokeStyle = 'black';
-        fpctx.lineWidth = 4;
+        fpctx.lineWidth = eyebrows.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
         fpctx.moveTo(mouse.startPosX, mouse.endPosY);
@@ -101,6 +118,19 @@ const RenderEyebrows = (y: number): void => {
         fpctx.stroke();
     }
 };
+
+
+const RenderEye = ():void => {
+    if (fpctx){
+        fpctx.beginPath();
+        fpctx.strokeStyle = 'black';
+        fpctx.lineWidth = 30;
+        fpctx.lineCap = 'round';
+        fpctx.globalCompositeOperation = 'source-over';
+        fpctx.lineTo(100, 100);
+        fpctx.stroke();
+    }
+}
 
 const ResetCoordinate = (): void => {
     if(cctx){
@@ -124,8 +154,8 @@ let preMousePosY: number;
 //ドラッグ開始
 coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {    
     //前の軌跡を消去
-    ResetCoordinate();
-    RenderMouth(e.offsetX);
+    ResetCoordinate();   
+    ResetFacialParts(); 
 
     isMouseDrag = true;
     //canvasの原点は左上
@@ -142,6 +172,11 @@ coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
         //全フレームの点と結ぶ
         cctx.lineTo(preMousePosX, preMousePosY);
         cctx.stroke();
+
+        if(fpctx){
+            RenderMouth(e.offsetX);
+            RenderEyebrows(e.offsetY);
+        }
     }
 });
 
@@ -151,6 +186,7 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
         //canvasの原点は左上
         const mousePosX: number = e.offsetX;
         const mousePosY: number = e.offsetY;
+        console.log("mousemove!!!");
 
         //軌跡の描画
         if (cctx){
@@ -183,7 +219,6 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
         cctx.beginPath();
         cctx.strokeStyle = "red";
         cctx.lineWidth = 20;
-        //線端の形状セット
         cctx.lineCap = "round";
         cctx.globalCompositeOperation = 'source-over';
         //全フレームの点と結ぶ
@@ -228,11 +263,14 @@ const InitFacialParts = (): void => {
     mouse.endPosX = centerPosX + offsetMouseWidth;
     mouse.endPosY = centerPosY + offsetMouseHeight;
     mouse.maxUShapePos = faceWidth / 3;
+    mouse.lineWidth = 4;
 
-    
+    //眉の相対的な場所を求める
+    eyebrows.lineWidth = 4;
 
     RenderMouth(coordinateHeight/2);
     RenderEyebrows(coordinateHeight/2);
+    RenderEye();
 };
 
 //初期設定
