@@ -9,12 +9,18 @@ var mouse = {
     maxUShapePos: 0
 };
 ;
+var eyebrows = {
+    startPosX: 0,
+    startPosY: 0,
+    endPosX: 0,
+    endPosY: 0
+};
 //座標部分のCanvas
 var coordinateCanvas = document.getElementById('coordinate');
 var cctx = coordinateCanvas.getContext('2d');
 var coordinateWidth;
 var coordinateHeight;
-// facial-parts
+// 顔アイコンの口を描画のCanvas
 var facialPartsCanvas = document.getElementById('facial-parts');
 var fpctx = facialPartsCanvas.getContext('2d');
 // 顔アイコン作成Canvasの背景画像を描画
@@ -32,7 +38,7 @@ var DrawCoordinateImage = function () {
 //顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
 var RenderMouth = function (x) {
     //x座標から口の傾きを計算する width400で-66から66くらい
-    //xの値を最大mouse.maxUshapePosに正規化
+    //xの値を0 ~ mouse.maxUShapePos*2の範囲に正規化
     var curveDegree = (x * (mouse.maxUShapePos * 2)) / coordinateWidth;
     if (curveDegree > mouse.maxUShapePos) {
         curveDegree = curveDegree - mouse.maxUShapePos;
@@ -41,18 +47,33 @@ var RenderMouth = function (x) {
         curveDegree = curveDegree - mouse.maxUShapePos;
     }
     else {
+        //x座標が0のとき
         curveDegree = 0;
     }
     //口の描画
     if (fpctx) {
-        ResetFacialParts();
         fpctx.beginPath();
-        fpctx.strokeStyle = "black";
+        fpctx.strokeStyle = 'black';
         fpctx.lineWidth = 4;
-        fpctx.lineCap = "round";
+        fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
         fpctx.moveTo(mouse.startPosX, mouse.endPosY);
         fpctx.quadraticCurveTo(mouse.bezierControlPosX, mouse.bezierControlPosY + curveDegree, mouse.endPosX, mouse.endPosY);
+        fpctx.stroke();
+    }
+};
+//顔アイコンの眉パーツを描画する。Y座標の大きさによって眉の傾き具合が変わる
+var RenderEyebrows = function (y) {
+    var endOfEyebrowsHeight;
+    //眉の描画
+    if (fpctx) {
+        fpctx.beginPath();
+        fpctx.strokeStyle = 'black';
+        fpctx.lineWidth = 4;
+        fpctx.lineCap = 'round';
+        fpctx.globalCompositeOperation = 'source-over';
+        fpctx.moveTo(mouse.startPosX, mouse.endPosY);
+        fpctx.lineTo(100, 100);
         fpctx.stroke();
     }
 };
@@ -109,7 +130,11 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
             //前フレームの点と結ぶ
             cctx.lineTo(preMousePosX, preMousePosY);
             cctx.stroke();
-            RenderMouth(mousePosX);
+            if (fpctx) {
+                ResetFacialParts();
+                RenderMouth(mousePosX);
+                RenderEyebrows(mousePosY);
+            }
         }
         preMousePosX = mousePosX;
         preMousePosY = mousePosY;
@@ -131,7 +156,7 @@ coordinateCanvas.addEventListener('mouseup', function (e) {
         cctx.stroke();
     }
 });
-var InitMouse = function () {
+var InitFacialParts = function () {
     var emotionFaceDiv = document.getElementById('emotion-face');
     var coordinateDiv = document.getElementById('coordinate');
     if (!emotionFaceDiv) {
@@ -139,17 +164,21 @@ var InitMouse = function () {
         return;
     }
     if (!coordinateDiv) {
-        console.log("ERR! emotion-face div does not exit");
+        console.log("ERR! coordinate div does not exit");
         return;
     }
     coordinateWidth = coordinateDiv.clientWidth;
     coordinateHeight = coordinateDiv.clientHeight;
     var faceWidth = emotionFaceDiv.clientWidth;
     var faceHeight = emotionFaceDiv.clientWidth;
+    //顔画像の中心座標
     var centerPosX = faceWidth / 2;
     var centerPosY = faceHeight / 2;
+    //口の相対的な位置（中心からの距離）
     var offsetMouseWidth = faceWidth / 4;
     var offsetMouseHeight = faceHeight / 5;
+    //顔アイコンにおける口の相対的な場所を求める
+    //顔アイコンの大きさに変化があっても良いように
     mouse.startPosX = centerPosX - offsetMouseWidth;
     mouse.startPosY = centerPosY + offsetMouseHeight;
     mouse.bezierControlPosX = centerPosX;
@@ -158,15 +187,15 @@ var InitMouse = function () {
     mouse.endPosY = centerPosY + offsetMouseHeight;
     mouse.maxUShapePos = faceWidth / 3;
     RenderMouth(coordinateHeight / 2);
+    RenderEyebrows(0);
 };
 //初期設定
 var Init = function () {
     DrawCoordinateImage();
-    InitMouse();
+    InitFacialParts();
 };
 var main = (function () {
     Init();
 })();
 window.onload = function () {
-    console.log("Read page!!");
 };
