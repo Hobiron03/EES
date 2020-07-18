@@ -86,7 +86,7 @@ var RenderEyebrows = function (y) {
         fpctx.lineWidth = eyebrows.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(mouse.startPosX, mouse.endPosY);
+        fpctx.moveTo(0, 0);
         fpctx.lineTo(100, 100);
         fpctx.stroke();
     }
@@ -99,7 +99,7 @@ var RenderEye = function () {
         fpctx.lineWidth = leftEye.size;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.lineTo(facialPartsCanvas.clientWidth / 2 - 35, facialPartsCanvas.clientHeight / 2);
+        fpctx.lineTo(facialPartsCanvas.clientWidth / 2 - leftEye.pos, facialPartsCanvas.clientHeight / 2);
         fpctx.stroke();
         //右目
         fpctx.beginPath();
@@ -107,7 +107,7 @@ var RenderEye = function () {
         fpctx.lineWidth = rightEye.size;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.lineTo(facialPartsCanvas.clientWidth / 2 + 35, facialPartsCanvas.clientHeight / 2);
+        fpctx.lineTo(facialPartsCanvas.clientWidth / 2 + rightEye.pos, facialPartsCanvas.clientHeight / 2);
         fpctx.stroke();
     }
 };
@@ -232,8 +232,10 @@ var InitFacialParts = function () {
     //目の設定
     rightEye.size = 27;
     leftEye.size = 27;
+    rightEye.pos = 35;
+    leftEye.pos = 35;
     RenderMouth(corrdinate.height / 2);
-    // RenderEyebrows(corrdinate.height/2);
+    RenderEyebrows(corrdinate.height / 2);
     RenderEye();
 };
 //初期設定

@@ -119,7 +119,7 @@ const RenderEyebrows = (y: number): void => {
         fpctx.lineWidth = eyebrows.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(mouse.startPosX, mouse.endPosY);
+        fpctx.moveTo(0, 0);
         fpctx.lineTo(100, 100);
         fpctx.stroke();
     }
@@ -134,7 +134,7 @@ const RenderEye = ():void => {
         fpctx.lineWidth = leftEye.size;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.lineTo(facialPartsCanvas.clientWidth/2-35, facialPartsCanvas.clientHeight/2);
+        fpctx.lineTo(facialPartsCanvas.clientWidth/2-leftEye.pos, facialPartsCanvas.clientHeight/2);
         fpctx.stroke();
 
         //右目
@@ -143,7 +143,7 @@ const RenderEye = ():void => {
         fpctx.lineWidth = rightEye.size;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.lineTo(facialPartsCanvas.clientWidth/2+35, facialPartsCanvas.clientHeight/2);
+        fpctx.lineTo(facialPartsCanvas.clientWidth/2+rightEye.pos, facialPartsCanvas.clientHeight/2);
         fpctx.stroke();
     }
 }
@@ -271,7 +271,6 @@ const InitFacialParts = (): void => {
     //口の相対的な位置（中心からの距離）
     const offsetMouseWidth: number = faceWidth / 5;
     const offsetMouseHeight: number = faceHeight / 4;
-
     //顔アイコンにおける口の相対的な場所を求める
     //顔アイコンの大きさに変化があっても良いように
     mouse.startPosX = centerPosX - offsetMouseWidth;
@@ -290,9 +289,11 @@ const InitFacialParts = (): void => {
     //目の設定
     rightEye.size = 27;
     leftEye.size = 27;
+    rightEye.pos = 35;
+    leftEye.pos = 35;
 
     RenderMouth(corrdinate.height/2);
-   // RenderEyebrows(corrdinate.height/2);
+    RenderEyebrows(corrdinate.height/2);
     RenderEye();
 };
 
