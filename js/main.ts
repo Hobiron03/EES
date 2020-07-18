@@ -148,6 +148,7 @@ const RenderEye = ():void => {
     }
 }
 
+
 const ResetCoordinate = (): void => {
     if(cctx){
         cctx.clearRect(0, 0, cctx.canvas.clientWidth, cctx.canvas.clientHeight);
