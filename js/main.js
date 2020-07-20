@@ -10,7 +10,14 @@ var mouse = {
     lineWidth: 0
 };
 ;
-var eyebrows = {
+var leftEyebrow = {
+    startPosX: 0,
+    startPosY: 0,
+    endPosX: 0,
+    endPosY: 0,
+    lineWidth: 0
+};
+var rightEyebrow = {
     startPosX: 0,
     startPosY: 0,
     endPosX: 0,
@@ -78,16 +85,16 @@ var RenderMouth = function (x) {
 };
 //顔アイコンの眉パーツを描画する。Y座標の大きさによって眉の傾き具合が変わる
 var RenderEyebrows = function (y) {
-    var endOfEyebrowsHeight;
+    var endOfEyebrowsHeight = 50;
     //眉の描画
     if (fpctx) {
         fpctx.beginPath();
         fpctx.strokeStyle = 'black';
-        fpctx.lineWidth = eyebrows.lineWidth;
+        fpctx.lineWidth = leftEyebrow.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(0, 0);
-        fpctx.lineTo(100, 100);
+        fpctx.moveTo(leftEyebrow.startPosX, leftEyebrow.startPosY);
+        fpctx.lineTo(leftEyebrow.endPosX, leftEyebrow.endPosY);
         fpctx.stroke();
     }
 };
@@ -228,10 +235,14 @@ var InitFacialParts = function () {
     mouse.maxUShapePos = faceWidth / 3;
     mouse.lineWidth = 4;
     //眉の相対的な場所を求める
-    eyebrows.lineWidth = 4;
+    leftEyebrow.lineWidth = 4;
+    leftEyebrow.startPosX = centerPosX - 50;
+    leftEyebrow.startPosY = centerPosY - 30;
+    leftEyebrow.endPosX = centerPosX - 20;
+    leftEyebrow.endPosY = centerPosY - 30;
     //目の設定
-    rightEye.size = 27;
-    leftEye.size = 27;
+    rightEye.size = 25;
+    leftEye.size = 25;
     rightEye.pos = 35;
     leftEye.pos = 35;
     RenderMouth(corrdinate.height / 2);
