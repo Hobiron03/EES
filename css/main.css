@@ -12,3 +12,19 @@ body{
 .make-face-field{
     width: 30%;
 }
+
+#decide-button{
+    cursor: pointer;
+    margin: 20px;
+    padding: 20px 150px;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    background-color: #5B71F5;
+    border: none;
+    transition: all 0.2s;
+}
+
+#decide-button:hover{
+    background-color: #213fe9;
+}

@@ -354,3 +354,11 @@ const main = (() => {
 
 window.onload = () => {
 };
+
+
+const okButton = document.getElementById("decide-button");
+if(okButton){
+    okButton.onclick = function() {
+        console.log("Clicked!!");
+    };
+}

@@ -288,3 +288,9 @@ var main = (function () {
 })();
 window.onload = function () {
 };
+var okButton = document.getElementById("decide-button");
+if (okButton) {
+    okButton.onclick = function () {
+        console.log("Clicked!!");
+    };
+}
