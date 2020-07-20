@@ -15,14 +15,16 @@ var leftEyebrow = {
     startPosY: 0,
     endPosX: 0,
     endPosY: 0,
-    lineWidth: 0
+    lineWidth: 0,
+    maxEndHeight: 0
 };
 var rightEyebrow = {
     startPosX: 0,
     startPosY: 0,
     endPosX: 0,
     endPosY: 0,
-    lineWidth: 0
+    lineWidth: 0,
+    maxEndHeight: 0
 };
 ;
 var rightEye = {
@@ -85,7 +87,18 @@ var RenderMouth = function (x) {
 };
 //顔アイコンの眉パーツを描画する。Y座標の大きさによって眉の傾き具合が変わる
 var RenderEyebrows = function (y) {
-    var endOfEyebrowsHeight = 10;
+    // y座標から眉尻の高さを計算する height:0~400で 眉:-15~15くらい
+    var endOfEyebrowsHeight = (y * (rightEyebrow.maxEndHeight * 2)) / corrdinate.height;
+    if (endOfEyebrowsHeight > rightEyebrow.maxEndHeight) {
+        endOfEyebrowsHeight = endOfEyebrowsHeight - rightEyebrow.maxEndHeight;
+    }
+    else if (y < corrdinate.height / 2) {
+        endOfEyebrowsHeight = endOfEyebrowsHeight - rightEyebrow.maxEndHeight;
+    }
+    else {
+        //y座標が0のとき
+        endOfEyebrowsHeight = 0;
+    }
     //眉の描画
     if (fpctx) {
         //left
@@ -94,7 +107,7 @@ var RenderEyebrows = function (y) {
         fpctx.lineWidth = leftEyebrow.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(leftEyebrow.startPosX, leftEyebrow.startPosY - endOfEyebrowsHeight); //眉尻
+        fpctx.moveTo(leftEyebrow.startPosX, leftEyebrow.startPosY + endOfEyebrowsHeight); //眉尻
         fpctx.lineTo(leftEyebrow.endPosX, leftEyebrow.endPosY);
         fpctx.stroke();
         //right
@@ -103,7 +116,7 @@ var RenderEyebrows = function (y) {
         fpctx.lineWidth = rightEyebrow.lineWidth;
         fpctx.lineCap = 'round';
         fpctx.globalCompositeOperation = 'source-over';
-        fpctx.moveTo(rightEyebrow.startPosX, rightEyebrow.startPosY - endOfEyebrowsHeight); //眉尻
+        fpctx.moveTo(rightEyebrow.startPosX, rightEyebrow.startPosY + endOfEyebrowsHeight); //眉尻
         fpctx.lineTo(rightEyebrow.endPosX, rightEyebrow.endPosY);
         fpctx.stroke();
     }
@@ -165,7 +178,7 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
         if (fpctx) {
             RenderMouth(e.offsetX);
             RenderEye();
-            // RenderEyebrows(e.offsetY);
+            RenderEyebrows(e.offsetY);
         }
     }
 });
@@ -175,7 +188,6 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
         //canvasの原点は左上
         var mousePosX = e.offsetX;
         var mousePosY = e.offsetY;
-        console.log("mousemove!!!");
         //軌跡の描画
         if (cctx) {
             cctx.beginPath();
@@ -191,7 +203,7 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
                 ResetFacialParts();
                 RenderMouth(mousePosX);
                 RenderEye();
-                // RenderEyebrows(mousePosY);
+                RenderEyebrows(mousePosY);
             }
         }
         preMousePosX = mousePosX;
@@ -217,11 +229,11 @@ var InitFacialParts = function () {
     var emotionFaceDiv = document.getElementById('emotion-face');
     var coordinateDiv = document.getElementById('coordinate');
     if (!emotionFaceDiv) {
-        console.log("ERR! emotion-face div does not exit");
+        console.log("ERR! emotion-face div-element does not exit");
         return;
     }
     if (!coordinateDiv) {
-        console.log("ERR! coordinate div does not exit");
+        console.log("ERR! coordinate div-element does not exit");
         return;
     }
     corrdinate.width = coordinateDiv.clientWidth;
@@ -246,15 +258,17 @@ var InitFacialParts = function () {
     mouse.lineWidth = 4;
     //眉の相対的な場所を求める
     leftEyebrow.lineWidth = 4;
-    leftEyebrow.startPosX = centerPosX - 50;
-    leftEyebrow.startPosY = centerPosY - 27;
+    leftEyebrow.startPosX = centerPosX - 45;
+    leftEyebrow.startPosY = centerPosY - 33;
     leftEyebrow.endPosX = centerPosX - 20;
-    leftEyebrow.endPosY = centerPosY - 27;
+    leftEyebrow.endPosY = centerPosY - 33;
+    leftEyebrow.maxEndHeight = faceHeight / 13;
     rightEyebrow.lineWidth = 4;
-    rightEyebrow.startPosX = centerPosX + 50;
-    rightEyebrow.startPosY = centerPosY - 27;
+    rightEyebrow.startPosX = centerPosX + 45;
+    rightEyebrow.startPosY = centerPosY - 33;
     rightEyebrow.endPosX = centerPosX + 20;
-    rightEyebrow.endPosY = centerPosY - 27;
+    rightEyebrow.endPosY = centerPosY - 33;
+    rightEyebrow.maxEndHeight = faceHeight / 13;
     //目の設定
     rightEye.size = 25;
     rightEye.pos = 35;
