@@ -207,6 +207,8 @@ const ResetFacialParts = (): void => {
     }
 };
 
+
+
 let dataX: number[] = [];
 let dataY: number[] = [];
 let isMouseDrag: boolean = false;
@@ -216,9 +218,7 @@ let preMousePosY: number;
 //ドラッグ開始
 coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {    
     //前の軌跡を消去
-    ResetCoordinate();   
-    ResetFacialParts(); 
-
+    ResetCoordinate();
     isMouseDrag = true;
     //canvasの原点は左上
     preMousePosX = e.offsetX;
@@ -236,46 +236,53 @@ coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
         cctx.stroke();
 
         if(fpctx){
-            RenderMouth(e.offsetX);
-            RenderEye();
-            RenderEyebrows(e.offsetY);
+            DrawFace(e.offsetX, e.offsetY);
         }
     }
+
 });
 
+
 //ドラッグ中
+let pre:any = 0;
+let cur:any = 0;
+let elapsedTime: number = 0;
+const fpsInterval: number = (1.0/60) * 1000;//60fps
 coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
+
+    //時刻の引き算をたす
+    //60fpsにしたい
     if(isMouseDrag){
-        //canvasの原点は左上
-        const mousePosX: number = e.offsetX;
-        const mousePosY: number = e.offsetY;
+        cur = Date.now();
+        elapsedTime += cur - pre;
+        if(elapsedTime > fpsInterval){
+            //canvasの原点は左上
+            const mousePosX: number = e.offsetX;
+            const mousePosY: number = e.offsetY;
 
-        //軌跡の描画
-        if (cctx){
-            let color: Color = Color.BLUE;
-            if(Math.abs(mousePosX - preMousePosX) > 5){
-                color = Color.RED;
+            //軌跡の描画
+            if (cctx){
+                cctx.beginPath();
+                cctx.strokeStyle = Color.BLACK;
+                cctx.lineWidth = 2;
+                cctx.lineCap = "round";
+                cctx.globalCompositeOperation = 'source-over';
+                cctx.moveTo(mousePosX, mousePosY);
+                //前フレームの点と結ぶ
+                cctx.lineTo(preMousePosX, preMousePosY);
+                cctx.stroke();
+
+                if(fpctx){
+                    DrawFace(mousePosX, mousePosY)
+                    dataX.push(mousePosX);
+                    dataY.push(mousePosY);
+                }
             }
-            console.log(Color.BLUE)
-
-            cctx.beginPath();
-            cctx.strokeStyle = color;
-            cctx.lineWidth = 2;
-            cctx.lineCap = "round";
-            cctx.globalCompositeOperation = 'source-over';
-            cctx.moveTo(mousePosX, mousePosY);
-            //前フレームの点と結ぶ
-            cctx.lineTo(preMousePosX, preMousePosY);
-            cctx.stroke();
-
-            if(fpctx){
-                DrawFace(mousePosX, mousePosY)
-                dataX.push(mousePosX);
-                dataY.push(mousePosY);
-            }
+            preMousePosX = mousePosX;
+            preMousePosY = mousePosY;
+            elapsedTime = 0;
         }
-        preMousePosX = mousePosX;
-        preMousePosY = mousePosY;
+        pre = Date.now();
     }
 });
 
@@ -292,9 +299,9 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
         //全フレームの点と結ぶ
         cctx.lineTo(e.offsetX, e.offsetY);
         cctx.stroke();
-        console.log(dataX);
-        console.log("num: ", dataX.length);
     }
+
+    console.log(dataX.length);
 });
 
 
@@ -342,7 +349,7 @@ const InitFacialParts = (): void => {
     leftEyebrow.endPosX = centerPosX - 20;
     leftEyebrow.endPosY = centerPosY - 33;
     leftEyebrow.maxEndHeight = faceHeight / 13;
-
+    //右眉
     rightEyebrow.lineWidth = 4;
     rightEyebrow.startPosX = centerPosX + 45;
     rightEyebrow.startPosY = centerPosY - 33;
@@ -360,7 +367,6 @@ const InitFacialParts = (): void => {
 };
 
 
-
 //初期設定
 const Init = ():void => {
     DrawCoordinateImage();
@@ -375,18 +381,17 @@ const main = (() => {
 window.onload = () => {
 };
 
-let myReq: any;
-function step(timestamp: number) {
-    console.log("Animation");
+let faceAnimation: any;
+const faceAnimationStep = ():void => {
+
     let progress:any = dataX.shift();
     let progressY:any = dataY.shift();
-    console.log(dataX.length)
     DrawFace(progress, progressY);
+
     if (dataX.length != 0 || dataY.length != 0) {
-       myReq = requestAnimationFrame(step);
+       faceAnimation = requestAnimationFrame(faceAnimationStep);
     }else{
-        console.log("end");
-        cancelAnimationFrame(myReq);
+        cancelAnimationFrame(faceAnimation);
     }
   }
   
@@ -395,6 +400,6 @@ if(okButton){
     okButton.onclick = function() {
         console.log("Clicked!!");
         //大体60fps
-        requestAnimationFrame(step);
+        faceAnimation = requestAnimationFrame(faceAnimationStep);
     };
 }

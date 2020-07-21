@@ -174,7 +174,6 @@ var preMousePosY;
 coordinateCanvas.addEventListener('mousedown', function (e) {
     //前の軌跡を消去
     ResetCoordinate();
-    ResetFacialParts();
     isMouseDrag = true;
     //canvasの原点は左上
     preMousePosX = e.offsetX;
@@ -190,42 +189,47 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
         cctx.lineTo(preMousePosX, preMousePosY);
         cctx.stroke();
         if (fpctx) {
-            RenderMouth(e.offsetX);
-            RenderEye();
-            RenderEyebrows(e.offsetY);
+            DrawFace(e.offsetX, e.offsetY);
         }
     }
 });
 //ドラッグ中
+var pre = 0;
+var cur = 0;
+var elapsedTime = 0;
+var fpsInterval = (1.0 / 60) * 1000; //60fps
 coordinateCanvas.addEventListener('mousemove', function (e) {
+    //時刻の引き算をたす
+    //60fpsにしたい
     if (isMouseDrag) {
-        //canvasの原点は左上
-        var mousePosX = e.offsetX;
-        var mousePosY = e.offsetY;
-        //軌跡の描画
-        if (cctx) {
-            var color = Color.BLUE;
-            if (Math.abs(mousePosX - preMousePosX) > 5) {
-                color = Color.RED;
+        cur = Date.now();
+        elapsedTime += cur - pre;
+        if (elapsedTime > fpsInterval) {
+            //canvasの原点は左上
+            var mousePosX = e.offsetX;
+            var mousePosY = e.offsetY;
+            //軌跡の描画
+            if (cctx) {
+                cctx.beginPath();
+                cctx.strokeStyle = Color.BLACK;
+                cctx.lineWidth = 2;
+                cctx.lineCap = "round";
+                cctx.globalCompositeOperation = 'source-over';
+                cctx.moveTo(mousePosX, mousePosY);
+                //前フレームの点と結ぶ
+                cctx.lineTo(preMousePosX, preMousePosY);
+                cctx.stroke();
+                if (fpctx) {
+                    DrawFace(mousePosX, mousePosY);
+                    dataX.push(mousePosX);
+                    dataY.push(mousePosY);
+                }
             }
-            console.log(Color.BLUE);
-            cctx.beginPath();
-            cctx.strokeStyle = color;
-            cctx.lineWidth = 2;
-            cctx.lineCap = "round";
-            cctx.globalCompositeOperation = 'source-over';
-            cctx.moveTo(mousePosX, mousePosY);
-            //前フレームの点と結ぶ
-            cctx.lineTo(preMousePosX, preMousePosY);
-            cctx.stroke();
-            if (fpctx) {
-                DrawFace(mousePosX, mousePosY);
-                dataX.push(mousePosX);
-                dataY.push(mousePosY);
-            }
+            preMousePosX = mousePosX;
+            preMousePosY = mousePosY;
+            elapsedTime = 0;
         }
-        preMousePosX = mousePosX;
-        preMousePosY = mousePosY;
+        pre = Date.now();
     }
 });
 //ドラッグ終わり！
@@ -241,9 +245,8 @@ coordinateCanvas.addEventListener('mouseup', function (e) {
         //全フレームの点と結ぶ
         cctx.lineTo(e.offsetX, e.offsetY);
         cctx.stroke();
-        console.log(dataX);
-        console.log("num: ", dataX.length);
     }
+    console.log(dataX.length);
 });
 var InitFacialParts = function () {
     var emotionFaceDiv = document.getElementById('emotion-face');
@@ -283,6 +286,7 @@ var InitFacialParts = function () {
     leftEyebrow.endPosX = centerPosX - 20;
     leftEyebrow.endPosY = centerPosY - 33;
     leftEyebrow.maxEndHeight = faceHeight / 13;
+    //右眉
     rightEyebrow.lineWidth = 4;
     rightEyebrow.startPosX = centerPosX + 45;
     rightEyebrow.startPosY = centerPosY - 33;
@@ -306,26 +310,23 @@ var main = (function () {
 })();
 window.onload = function () {
 };
-var myReq;
-function step(timestamp) {
-    console.log("Animation");
+var faceAnimation;
+var faceAnimationStep = function () {
     var progress = dataX.shift();
     var progressY = dataY.shift();
-    console.log(dataX.length);
     DrawFace(progress, progressY);
     if (dataX.length != 0 || dataY.length != 0) {
-        myReq = requestAnimationFrame(step);
+        faceAnimation = requestAnimationFrame(faceAnimationStep);
     }
     else {
-        console.log("end");
-        cancelAnimationFrame(myReq);
+        cancelAnimationFrame(faceAnimation);
     }
-}
+};
 var okButton = document.getElementById("decide-button");
 if (okButton) {
     okButton.onclick = function () {
         console.log("Clicked!!");
         //大体60fps
-        requestAnimationFrame(step);
+        faceAnimation = requestAnimationFrame(faceAnimationStep);
     };
 }
