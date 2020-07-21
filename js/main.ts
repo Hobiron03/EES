@@ -1,3 +1,9 @@
+enum Color{
+    BLACK = "black",
+    BLUE = "#629BEAa",
+    RED = "#FF5823",
+}
+
 interface Mouse {
     startPosX: number
     startPosY: number
@@ -180,6 +186,12 @@ const RenderEye = ():void => {
     }
 }
 
+const DrawFace = (x:number, y:number):void => {
+    ResetFacialParts();
+    RenderMouth(x);
+    RenderEye();
+    RenderEyebrows(y);
+}
 
 const ResetCoordinate = (): void => {
     if(cctx){
@@ -195,7 +207,8 @@ const ResetFacialParts = (): void => {
     }
 };
 
-
+let dataX: number[] = [];
+let dataY: number[] = [];
 let isMouseDrag: boolean = false;
 //前フレームの点を保持する変数
 let preMousePosX: number;
@@ -239,9 +252,15 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
 
         //軌跡の描画
         if (cctx){
+            let color: Color = Color.BLUE;
+            if(Math.abs(mousePosX - preMousePosX) > 5){
+                color = Color.RED;
+            }
+            console.log(Color.BLUE)
+
             cctx.beginPath();
-            cctx.strokeStyle = "black";
-            cctx.lineWidth = 1;
+            cctx.strokeStyle = color;
+            cctx.lineWidth = 2;
             cctx.lineCap = "round";
             cctx.globalCompositeOperation = 'source-over';
             cctx.moveTo(mousePosX, mousePosY);
@@ -250,10 +269,9 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
             cctx.stroke();
 
             if(fpctx){
-                ResetFacialParts();
-                RenderMouth(mousePosX);
-                RenderEye();
-                RenderEyebrows(mousePosY);
+                DrawFace(mousePosX, mousePosY)
+                dataX.push(mousePosX);
+                dataY.push(mousePosY);
             }
         }
         preMousePosX = mousePosX;
@@ -274,6 +292,8 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
         //全フレームの点と結ぶ
         cctx.lineTo(e.offsetX, e.offsetY);
         cctx.stroke();
+        console.log(dataX);
+        console.log("num: ", dataX.length);
     }
 });
 
@@ -336,10 +356,10 @@ const InitFacialParts = (): void => {
     leftEye.size = 25;
     leftEye.pos = 35;
 
-    RenderMouth(corrdinate.height/2);
-    RenderEyebrows(corrdinate.height/2);
-    RenderEye();
+    DrawFace(corrdinate.height/2, corrdinate.height/2);
 };
+
+
 
 //初期設定
 const Init = ():void => {
@@ -355,10 +375,26 @@ const main = (() => {
 window.onload = () => {
 };
 
-
+let myReq: any;
+function step(timestamp: number) {
+    console.log("Animation");
+    let progress:any = dataX.shift();
+    let progressY:any = dataY.shift();
+    console.log(dataX.length)
+    DrawFace(progress, progressY);
+    if (dataX.length != 0 || dataY.length != 0) {
+       myReq = requestAnimationFrame(step);
+    }else{
+        console.log("end");
+        cancelAnimationFrame(myReq);
+    }
+  }
+  
 const okButton = document.getElementById("decide-button");
 if(okButton){
     okButton.onclick = function() {
         console.log("Clicked!!");
+        //大体60fps
+        requestAnimationFrame(step);
     };
 }
