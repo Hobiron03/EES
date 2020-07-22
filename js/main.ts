@@ -78,6 +78,10 @@ let corrdinate: coordinate = {
     height: 0,
 };
 
+//顔の変化のデータを格納しておく。大体60fpsくらいで入る
+let dataX: number[] = [];
+let dataY: number[] = [];
+
 // 顔アイコンの口を描画のCanvas
 const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('facial-parts');
 const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext('2d');
@@ -196,6 +200,9 @@ const DrawFace = (x:number, y:number):void => {
 const ResetCoordinate = (): void => {
     if(cctx){
         cctx.clearRect(0, 0, cctx.canvas.clientWidth, cctx.canvas.clientHeight);
+        dataX.splice(0);
+        dataY.splice(0);
+
         DrawCoordinateImage();
     }
 };
@@ -208,9 +215,6 @@ const ResetFacialParts = (): void => {
 };
 
 
-
-let dataX: number[] = [];
-let dataY: number[] = [];
 let isMouseDrag: boolean = false;
 //前フレームの点を保持する変数
 let preMousePosX: number;
@@ -247,7 +251,7 @@ coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
 let pre:any = 0;
 let cur:any = 0;
 let elapsedTime: number = 0;
-const fpsInterval: number = (1.0/60) * 1000;//60fps
+const fpsInterval: number = (1.0/70) * 1000;//60fps
 coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
 
     //時刻の引き算をたす
@@ -300,8 +304,6 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
         cctx.lineTo(e.offsetX, e.offsetY);
         cctx.stroke();
     }
-
-    console.log(dataX.length);
 });
 
 
@@ -382,13 +384,17 @@ window.onload = () => {
 };
 
 let faceAnimation: any;
+let pullDataX: number[] = [];
+let pullDataY: number[] = [];
 const faceAnimationStep = ():void => {
 
-    let progress:any = dataX.shift();
-    let progressY:any = dataY.shift();
+    let progress:any = pullDataX.shift();
+    let progressY:any = pullDataY.shift();
+    console.log(pullDataX);
+    console.log(pullDataY);
     DrawFace(progress, progressY);
 
-    if (dataX.length != 0 || dataY.length != 0) {
+    if (pullDataX.length != 0 || pullDataY.length != 0) {
        faceAnimation = requestAnimationFrame(faceAnimationStep);
     }else{
         cancelAnimationFrame(faceAnimation);
@@ -400,6 +406,8 @@ if(okButton){
     okButton.onclick = function() {
         console.log("Clicked!!");
         //大体60fps
+        pullDataX = dataX.concat();
+        pullDataY = dataY.concat();
         faceAnimation = requestAnimationFrame(faceAnimationStep);
     };
 }
