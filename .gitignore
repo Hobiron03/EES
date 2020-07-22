@@ -1,0 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/emotion-expression/node_modules
+/emotion-expression/.pnp
+/emotion-expression/.pnp.js
+
+# testing
+/emotion-expression/coverage
+
+# production
+/emotion-expression/build
+
+# misc
+/emotion-expression.DS_Store
+/emotion-expression.env.local
+/emotion-expression.env.development.local
+/emotion-expression.env.test.local
+/emotion-expression.env.production.local
+
+/emotion-expressionnpm-debug.log*
+/emotion-expressionyarn-debug.log*
+/emotion-expressionyarn-error.log*
