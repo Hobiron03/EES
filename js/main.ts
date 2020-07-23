@@ -82,6 +82,9 @@ let corrdinate: coordinate = {
 let dataX: number[] = [];
 let dataY: number[] = [];
 
+//顔画像のBase64のデータ
+let base64Images: string[] = [];
+
 // 顔アイコンの口を描画のCanvas
 const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('facial-parts');
 const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext('2d');
@@ -285,7 +288,9 @@ coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
                 cctx.stroke();
 
                 if(fpctx){
-                    DrawFace(mousePosX, mousePosY)
+                    DrawFace(mousePosX, mousePosY);
+                    //画像の64進数のデータにする
+                    base64Images.push(facialPartsCanvas.toDataURL());
                     dataX.push(mousePosX);
                     dataY.push(mousePosY);
                 }
@@ -313,8 +318,7 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
         cctx.stroke();
     }
 
-    const imageData: string = coordinateCanvas.toDataURL('image/jpeg', 1.0);
-    console.log(imageData);
+    console.log(base64Images[0]);
 });
 
 

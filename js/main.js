@@ -52,6 +52,8 @@ var corrdinate = {
 //顔の変化のデータを格納しておく。大体60fpsくらいで入る
 var dataX = [];
 var dataY = [];
+//顔画像のBase64のデータ
+var base64Images = [];
 // 顔アイコンの口を描画のCanvas
 var facialPartsCanvas = document.getElementById('facial-parts');
 var fpctx = facialPartsCanvas.getContext('2d');
@@ -169,6 +171,13 @@ var ResetFacialParts = function () {
         fpctx.clearRect(0, 0, fpctx.canvas.clientWidth, fpctx.canvas.clientHeight);
     }
 };
+//x座標とy座標から喜怒哀楽のいずれかを返す
+var ReturnEmotion = function (x, y) {
+    // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
+    // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
+    // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
+    // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
+};
 var isMouseDrag = false;
 //前フレームの点を保持する変数
 var preMousePosX;
@@ -224,6 +233,7 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
                 cctx.stroke();
                 if (fpctx) {
                     DrawFace(mousePosX, mousePosY);
+                    base64Images.push(facialPartsCanvas.toDataURL());
                     dataX.push(mousePosX);
                     dataY.push(mousePosY);
                 }
@@ -249,6 +259,7 @@ coordinateCanvas.addEventListener('mouseup', function (e) {
         cctx.lineTo(e.offsetX, e.offsetY);
         cctx.stroke();
     }
+    console.log(base64Images[0]);
 });
 var InitFacialParts = function () {
     var emotionFaceDiv = document.getElementById('emotion-face');
