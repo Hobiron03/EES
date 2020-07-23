@@ -214,6 +214,14 @@ const ResetFacialParts = (): void => {
     }
 };
 
+//x座標とy座標から喜怒哀楽のいずれかを返す
+const ReturnEmotion = (x: number, y: number):void => {
+    // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
+    // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
+    // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
+    // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
+
+};
 
 let isMouseDrag: boolean = false;
 //前フレームの点を保持する変数
@@ -304,6 +312,9 @@ coordinateCanvas.addEventListener('mouseup', (e: MouseEvent) => {
         cctx.lineTo(e.offsetX, e.offsetY);
         cctx.stroke();
     }
+
+    const imageData: string = coordinateCanvas.toDataURL('image/jpeg', 1.0);
+    console.log(imageData);
 });
 
 

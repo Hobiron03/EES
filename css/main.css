@@ -13,6 +13,10 @@ body{
     width: 30%;
 }
 
+.Top{
+    display: flex;
+}
+
 #decide-button{
     cursor: pointer;
     margin: 20px;
