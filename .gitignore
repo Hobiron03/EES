@@ -21,3 +21,5 @@
 /emotion-expressionnpm-debug.log*
 /emotion-expressionyarn-debug.log*
 /emotion-expressionyarn-error.log*
+
+/node_modules

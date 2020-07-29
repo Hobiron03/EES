@@ -1,3 +1,5 @@
+import 'axios';
+
 enum Color{
     BLACK = "black",
     BLUE = "#629BEAa",
@@ -262,7 +264,7 @@ coordinateCanvas.addEventListener('mousedown', (e: MouseEvent) => {
 let pre:any = 0;
 let cur:any = 0;
 let elapsedTime: number = 0;
-const fpsInterval: number = (1.0/70) * 1000;//60fps
+const fpsInterval: number = (1.0/60) * 1000;//60fps
 coordinateCanvas.addEventListener('mousemove', (e: MouseEvent) => {
 
     //時刻の引き算をたす

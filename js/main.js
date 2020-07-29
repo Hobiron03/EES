@@ -1,3 +1,6 @@
+"use strict";
+exports.__esModule = true;
+require("axios");
 var Color;
 (function (Color) {
     Color["BLACK"] = "black";
@@ -209,7 +212,7 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
 var pre = 0;
 var cur = 0;
 var elapsedTime = 0;
-var fpsInterval = (1.0 / 70) * 1000; //60fps
+var fpsInterval = (1.0 / 60) * 1000; //60fps
 coordinateCanvas.addEventListener('mousemove', function (e) {
     //時刻の引き算をたす
     //60fpsにしたい
@@ -233,6 +236,7 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
                 cctx.stroke();
                 if (fpctx) {
                     DrawFace(mousePosX, mousePosY);
+                    //画像の64進数のデータにする
                     base64Images.push(facialPartsCanvas.toDataURL());
                     dataX.push(mousePosX);
                     dataY.push(mousePosY);
