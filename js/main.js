@@ -1,13 +1,9 @@
-"use strict";
-exports.__esModule = true;
-require("axios");
 var Color;
 (function (Color) {
     Color["BLACK"] = "black";
     Color["BLUE"] = "#629BEAa";
     Color["RED"] = "#FF5823";
 })(Color || (Color = {}));
-;
 var mouse = {
     startPosX: 0,
     startPosY: 0,
@@ -18,7 +14,6 @@ var mouse = {
     maxUShapePos: 0,
     lineWidth: 0
 };
-;
 var leftEyebrow = {
     startPosX: 0,
     startPosY: 0,
@@ -35,7 +30,6 @@ var rightEyebrow = {
     lineWidth: 0,
     maxEndHeight: 0
 };
-;
 var rightEye = {
     pos: 0,
     size: 0
@@ -45,9 +39,8 @@ var leftEye = {
     size: 0
 };
 //座標部分のCanvas
-var coordinateCanvas = document.getElementById('coordinate');
-var cctx = coordinateCanvas.getContext('2d');
-;
+var coordinateCanvas = (document.getElementById("coordinate"));
+var cctx = coordinateCanvas.getContext("2d");
 var corrdinate = {
     width: 0,
     height: 0
@@ -58,8 +51,8 @@ var dataY = [];
 //顔画像のBase64のデータ
 var base64Images = [];
 // 顔アイコンの口を描画のCanvas
-var facialPartsCanvas = document.getElementById('facial-parts');
-var fpctx = facialPartsCanvas.getContext('2d');
+var facialPartsCanvas = (document.getElementById("facial-parts"));
+var fpctx = facialPartsCanvas.getContext("2d");
 // 顔アイコン作成Canvasの背景画像を描画
 var DrawCoordinateImage = function () {
     var background = new Image();
@@ -68,7 +61,7 @@ var DrawCoordinateImage = function () {
     //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
     background.onload = function () {
         if (cctx) {
-            cctx.drawImage(background, 0, 0, coordinateCanvas.width, background.height * coordinateCanvas.width / background.width);
+            cctx.drawImage(background, 0, 0, coordinateCanvas.width, (background.height * coordinateCanvas.width) / background.width);
         }
     };
 };
@@ -90,10 +83,10 @@ var RenderMouth = function (x) {
     //口の描画
     if (fpctx) {
         fpctx.beginPath();
-        fpctx.strokeStyle = 'black';
+        fpctx.strokeStyle = "black";
         fpctx.lineWidth = mouse.lineWidth;
-        fpctx.lineCap = 'round';
-        fpctx.globalCompositeOperation = 'source-over';
+        fpctx.lineCap = "round";
+        fpctx.globalCompositeOperation = "source-over";
         fpctx.moveTo(mouse.startPosX, mouse.endPosY);
         fpctx.quadraticCurveTo(mouse.bezierControlPosX, mouse.bezierControlPosY + curveDegree, mouse.endPosX, mouse.endPosY);
         fpctx.stroke();
@@ -117,19 +110,19 @@ var RenderEyebrows = function (y) {
     if (fpctx) {
         //left
         fpctx.beginPath();
-        fpctx.strokeStyle = 'black';
+        fpctx.strokeStyle = "black";
         fpctx.lineWidth = leftEyebrow.lineWidth;
-        fpctx.lineCap = 'round';
-        fpctx.globalCompositeOperation = 'source-over';
+        fpctx.lineCap = "round";
+        fpctx.globalCompositeOperation = "source-over";
         fpctx.moveTo(leftEyebrow.startPosX, leftEyebrow.startPosY + endOfEyebrowsHeight); //眉尻
         fpctx.lineTo(leftEyebrow.endPosX, leftEyebrow.endPosY);
         fpctx.stroke();
         //right
         fpctx.beginPath();
-        fpctx.strokeStyle = 'black';
+        fpctx.strokeStyle = "black";
         fpctx.lineWidth = rightEyebrow.lineWidth;
-        fpctx.lineCap = 'round';
-        fpctx.globalCompositeOperation = 'source-over';
+        fpctx.lineCap = "round";
+        fpctx.globalCompositeOperation = "source-over";
         fpctx.moveTo(rightEyebrow.startPosX, rightEyebrow.startPosY + endOfEyebrowsHeight); //眉尻
         fpctx.lineTo(rightEyebrow.endPosX, rightEyebrow.endPosY);
         fpctx.stroke();
@@ -139,18 +132,18 @@ var RenderEye = function () {
     if (fpctx) {
         //左目
         fpctx.beginPath();
-        fpctx.strokeStyle = 'black';
+        fpctx.strokeStyle = "black";
         fpctx.lineWidth = leftEye.size;
-        fpctx.lineCap = 'round';
-        fpctx.globalCompositeOperation = 'source-over';
+        fpctx.lineCap = "round";
+        fpctx.globalCompositeOperation = "source-over";
         fpctx.lineTo(facialPartsCanvas.clientWidth / 2 - leftEye.pos, facialPartsCanvas.clientHeight / 2);
         fpctx.stroke();
         //右目
         fpctx.beginPath();
-        fpctx.strokeStyle = 'black';
+        fpctx.strokeStyle = "black";
         fpctx.lineWidth = rightEye.size;
-        fpctx.lineCap = 'round';
-        fpctx.globalCompositeOperation = 'source-over';
+        fpctx.lineCap = "round";
+        fpctx.globalCompositeOperation = "source-over";
         fpctx.lineTo(facialPartsCanvas.clientWidth / 2 + rightEye.pos, facialPartsCanvas.clientHeight / 2);
         fpctx.stroke();
     }
@@ -186,7 +179,7 @@ var isMouseDrag = false;
 var preMousePosX;
 var preMousePosY;
 //ドラッグ開始
-coordinateCanvas.addEventListener('mousedown', function (e) {
+coordinateCanvas.addEventListener("mousedown", function (e) {
     //前の軌跡を消去
     ResetCoordinate();
     isMouseDrag = true;
@@ -199,7 +192,7 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
         cctx.strokeStyle = "blue";
         cctx.lineWidth = 20;
         cctx.lineCap = "round";
-        cctx.globalCompositeOperation = 'source-over';
+        cctx.globalCompositeOperation = "source-over";
         //全フレームの点と結ぶ
         cctx.lineTo(preMousePosX, preMousePosY);
         cctx.stroke();
@@ -212,8 +205,8 @@ coordinateCanvas.addEventListener('mousedown', function (e) {
 var pre = 0;
 var cur = 0;
 var elapsedTime = 0;
-var fpsInterval = (1.0 / 60) * 1000; //60fps
-coordinateCanvas.addEventListener('mousemove', function (e) {
+var fpsInterval = (1.0 / 50) * 1000; //60fps
+coordinateCanvas.addEventListener("mousemove", function (e) {
     //時刻の引き算をたす
     //60fpsにしたい
     if (isMouseDrag) {
@@ -229,7 +222,7 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
                 cctx.strokeStyle = Color.BLACK;
                 cctx.lineWidth = 2;
                 cctx.lineCap = "round";
-                cctx.globalCompositeOperation = 'source-over';
+                cctx.globalCompositeOperation = "source-over";
                 cctx.moveTo(mousePosX, mousePosY);
                 //前フレームの点と結ぶ
                 cctx.lineTo(preMousePosX, preMousePosY);
@@ -250,7 +243,7 @@ coordinateCanvas.addEventListener('mousemove', function (e) {
     }
 });
 //ドラッグ終わり！
-coordinateCanvas.addEventListener('mouseup', function (e) {
+coordinateCanvas.addEventListener("mouseup", function (e) {
     isMouseDrag = false;
     //終点の描画
     if (cctx) {
@@ -258,16 +251,15 @@ coordinateCanvas.addEventListener('mouseup', function (e) {
         cctx.strokeStyle = "red";
         cctx.lineWidth = 20;
         cctx.lineCap = "round";
-        cctx.globalCompositeOperation = 'source-over';
+        cctx.globalCompositeOperation = "source-over";
         //全フレームの点と結ぶ
         cctx.lineTo(e.offsetX, e.offsetY);
         cctx.stroke();
     }
-    console.log(base64Images[0]);
 });
 var InitFacialParts = function () {
-    var emotionFaceDiv = document.getElementById('emotion-face');
-    var coordinateDiv = document.getElementById('coordinate');
+    var emotionFaceDiv = document.getElementById("emotion-face");
+    var coordinateDiv = document.getElementById("coordinate");
     if (!emotionFaceDiv) {
         console.log("ERR! emotion-face div-element does not exit");
         return;
@@ -325,16 +317,13 @@ var Init = function () {
 var main = (function () {
     Init();
 })();
-window.onload = function () {
-};
+window.onload = function () { };
 var faceAnimation;
 var pullDataX = [];
 var pullDataY = [];
 var faceAnimationStep = function () {
     var progress = pullDataX.shift();
     var progressY = pullDataY.shift();
-    console.log(pullDataX);
-    console.log(pullDataY);
     DrawFace(progress, progressY);
     if (pullDataX.length != 0 || pullDataY.length != 0) {
         faceAnimation = requestAnimationFrame(faceAnimationStep);
@@ -343,13 +332,40 @@ var faceAnimationStep = function () {
         cancelAnimationFrame(faceAnimation);
     }
 };
+//画像データをpostように１行の文字列に変換する
+var FormatImageData = function (base64Images) {
+    var images = base64Images.map(function (imageWithInfo) {
+        return imageWithInfo.split(",")[1] + ",";
+    });
+    var imageDataLine = images.reduce(function (str1, str2) { return str1 + str2; });
+    return imageDataLine;
+};
+var PostImageData = function (imageLine) {
+    $.ajax({
+        //POST通信
+        crossDomain: true,
+        type: "POST",
+        //ここでデータの送信先URLを指定します。
+        url: "http://localhost:8080/returnGIF",
+        data: { base64Images: imageLine },
+        //処理が成功したら
+        success: function (data, dataType) {
+            //HTMLファイル内の該当箇所にレスポンスデータを追加する場合
+            console.log("成功！！");
+        },
+        //処理がエラーであれば
+        error: function () {
+            alert("通信エラー");
+        }
+    });
+};
 var okButton = document.getElementById("decide-button");
 if (okButton) {
     okButton.onclick = function () {
-        console.log("Clicked!!");
         //大体60fps
         pullDataX = dataX.concat();
         pullDataY = dataY.concat();
         faceAnimation = requestAnimationFrame(faceAnimationStep);
+        PostImageData(FormatImageData(base64Images));
     };
 }
