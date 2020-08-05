@@ -65,6 +65,24 @@ var DrawCoordinateImage = function () {
         }
     };
 };
+// const DrawBaseFaceImage = (): void => {
+//   let background: HTMLImageElement = new Image();
+//   const imageURL: string =
+//     "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
+//   background.src = imageURL;
+//   //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
+//   background.onload = () => {
+//     if (fpctx) {
+//       fpctx.drawImage(
+//         background,
+//         0,
+//         0,
+//         facialPartsCanvas.width,
+//         (background.height * facialPartsCanvas.width) / background.width
+//       );
+//     }
+//   };
+// };
 //顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
 var RenderMouth = function (x) {
     //x座標から口の傾きを計算する width400で-66から66くらい
@@ -83,7 +101,7 @@ var RenderMouth = function (x) {
     //口の描画
     if (fpctx) {
         fpctx.beginPath();
-        fpctx.strokeStyle = "black";
+        fpctx.strokeStyle = Color.BLACK;
         fpctx.lineWidth = mouse.lineWidth;
         fpctx.lineCap = "round";
         fpctx.globalCompositeOperation = "source-over";
@@ -351,7 +369,8 @@ var PostImageData = function (imageLine) {
         //処理が成功したら
         success: function (data, dataType) {
             //HTMLファイル内の該当箇所にレスポンスデータを追加する場合
-            console.log("成功！！");
+            console.log(data);
+            console.log(dataType);
         },
         //処理がエラーであれば
         error: function () {
