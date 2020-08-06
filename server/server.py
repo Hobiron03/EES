@@ -27,7 +27,7 @@ def returnGIF():
     imagesBase64.pop()
 
     im = []
-    # os.mkdir("./FaceIcon")
+    os.mkdir("./FaceIcon")
     for i, im64 in enumerate(imagesBase64):
         im_b = base64.b64decode(im64)
         inst = io.BytesIO(im_b)
@@ -48,7 +48,7 @@ def returnGIF():
                    loop=0
                    )
 
-    # shutil.rmtree("./FaceIcon/")
+    shutil.rmtree("./FaceIcon/")
     result = {'result': '200'}
     return make_response(jsonify(result))
 
