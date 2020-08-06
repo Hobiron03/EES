@@ -462,20 +462,16 @@ const FormatImageData = (base64Images: string[]): string => {
 
 const PostImageData = (imageLine: string): void => {
   $.ajax({
-    //POST通信
     crossDomain: true,
     type: "POST",
-    //ここでデータの送信先URLを指定します。
     url: "http://localhost:8080/returnGIF",
     data: { base64Images: imageLine },
     success: (data, dataType) => {
-      //HTMLファイル内の該当箇所にレスポンスデータを追加する場合
       console.log(data);
       console.log(dataType);
     },
-    //処理がエラーであれば
     error: () => {
-      alert("通信エラー");
+      console.log("Err");
     },
   });
 };

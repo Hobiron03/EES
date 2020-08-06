@@ -6,6 +6,9 @@ import json
 import base64
 import io
 import glob
+import os
+import shutil
+
 
 api = Flask(__name__)
 CORS(api)
@@ -24,6 +27,7 @@ def returnGIF():
     imagesBase64.pop()
 
     im = []
+    # os.mkdir("./FaceIcon")
     for i, im64 in enumerate(imagesBase64):
         im_b = base64.b64decode(im64)
         inst = io.BytesIO(im_b)
@@ -34,7 +38,6 @@ def returnGIF():
 
         background.save("./FaceIcon/{}.png".format(i), format="PNG")
         im.append(background)
-        print(img.size)
 
     files = natsorted(glob.glob('./FaceIcon/*.png'))
     images = list(map(lambda file: Image.open(file), files))
@@ -45,7 +48,8 @@ def returnGIF():
                    loop=0
                    )
 
-    result = {'result': 'Success!!'}
+    # shutil.rmtree("./FaceIcon/")
+    result = {'result': '200'}
     return make_response(jsonify(result))
 
 
