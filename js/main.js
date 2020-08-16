@@ -358,12 +358,32 @@ var FormatImageData = function (base64Images) {
     var imageDataLine = images.reduce(function (str1, str2) { return str1 + str2; });
     return imageDataLine;
 };
+var devUrl = "https://8080-dot-13572060-dot-devshell.appspot.com/createGif";
+var productionURL = "https://august-jigsaw-286205.df.r.appspot.com/createGif";
 var PostImageData = function (imageLine) {
     $.ajax({
         crossDomain: true,
         type: "POST",
-        url: "http://localhost:8080/returnGIF",
+        // url: "http://localhost:8080/returnGIF",
+        // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
+        url: devUrl,
         data: { base64Images: imageLine },
+        success: function (data, dataType) {
+            console.log(data);
+            console.log(dataType);
+        },
+        error: function () {
+            console.log("Err");
+        }
+    });
+};
+var PostImageDataToFirebaseStorage = function () {
+    $.ajax({
+        crossDomain: true,
+        // type: "POST",
+        type: "GET",
+        url: "https://8080-dot-13572060-dot-devshell.appspot.com/?authuser=0&environment_name=default",
+        // data: { base64Images: imageLine },
         success: function (data, dataType) {
             console.log(data);
             console.log(dataType);
@@ -381,5 +401,6 @@ if (okButton) {
         pullDataY = dataY.concat();
         faceAnimation = requestAnimationFrame(faceAnimationStep);
         PostImageData(FormatImageData(base64Images));
+        // PostImageDataToFirebaseStorage();
     };
 }
