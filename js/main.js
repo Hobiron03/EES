@@ -223,7 +223,7 @@ coordinateCanvas.addEventListener("mousedown", function (e) {
 var pre = 0;
 var cur = 0;
 var elapsedTime = 0;
-var fpsInterval = (1.0 / 50) * 1000; //60fps
+var fpsInterval = (1.0 / 60) * 1000; //60fps
 coordinateCanvas.addEventListener("mousemove", function (e) {
     //時刻の引き算をたす
     //60fpsにしたい
@@ -360,15 +360,21 @@ var FormatImageData = function (base64Images) {
 };
 var devUrl = "https://8080-dot-13572060-dot-devshell.appspot.com/createGif";
 var productionURL = "https://august-jigsaw-286205.df.r.appspot.com/createGif";
+var localURL = "http://0.0.0.0:5000/returnGIF";
+var imgElement = document.getElementById("gif");
+var gifImage = imgElement;
 var PostImageData = function (imageLine) {
     $.ajax({
         crossDomain: true,
         type: "POST",
         // url: "http://localhost:8080/returnGIF",
         // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
-        url: devUrl,
+        url: localURL,
         data: { base64Images: imageLine },
         success: function (data, dataType) {
+            if (gifImage) {
+                gifImage.src = data;
+            }
             console.log(data);
             console.log(dataType);
         },

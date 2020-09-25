@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, abort, make_response, request
+from flask import Flask, jsonify, abort, make_response, request, send_file
 from flask_cors import CORS
 from PIL import Image, ImageDraw
 from natsort import natsorted
@@ -51,7 +51,8 @@ def returnGIF():
     shutil.rmtree("./FaceIcon/")
     result = {'result': '200'}
     return make_response(jsonify(result))
+    # return send_file("./face.gif", mimetype='image/gif', as_attachment=True, attachment_filename="face.gif")
 
 
 if __name__ == '__main__':
-    api.run(port=8080)
+    api.run(host='0.0.0.0', port=80)
