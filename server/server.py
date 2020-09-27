@@ -2,6 +2,8 @@ from flask import Flask, jsonify, abort, make_response, request, send_file
 from flask_cors import CORS
 from PIL import Image, ImageDraw
 from natsort import natsorted
+from google.cloud import storage
+import datetime
 import json
 import base64
 import io
@@ -49,9 +51,17 @@ def returnGIF():
                    )
 
     shutil.rmtree("./FaceIcon/")
+
+    # GCEの環境の場合は認証は不要
+    # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = './EmotionExpression-5c731e905750.json'
+    client = storage.Client()
+    # https://console.cloud.google.com/storage/browser/[bucket-id]/
+    bucket = client.get_bucket('faceicons')
+    blob = bucket.blob('face_{}.gif'.format(datetime.datetime.now()))
+    blob.upload_from_filename(filename='face.gif')
+
     result = {'result': '200'}
-    return make_response(jsonify(result))
-    # return send_file("./face.gif", mimetype='image/gif', as_attachment=True, attachment_filename="face.gif")
+    return result
 
 
 if __name__ == '__main__':

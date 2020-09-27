@@ -23,3 +23,6 @@
 /emotion-expressionyarn-error.log*
 
 /node_modules
+
+
+/server/EmotionExpression-5c731e905750.json

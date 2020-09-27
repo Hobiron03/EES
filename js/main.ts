@@ -460,11 +460,10 @@ const FormatImageData = (base64Images: string[]): string => {
   return imageDataLine;
 };
 
-const devUrl = "https://8080-dot-13572060-dot-devshell.appspot.com/createGif";
-const productionURL = "https://august-jigsaw-286205.df.r.appspot.com/createGif";
-const localURL = "http://0.0.0.0:5000/returnGIF";
+const GCE_URL = "http://34.84.42.0/returnGIF";
+const localURL = "http://0.0.0.0:80/returnGIF";
 const imgElement = document.getElementById("gif");
-const gifImage = <HTMLImageElement>imgElement;
+const gifDownload = <HTMLAnchorElement>imgElement;
 
 const PostImageData = (imageLine: string): void => {
   $.ajax({
@@ -472,12 +471,9 @@ const PostImageData = (imageLine: string): void => {
     type: "POST",
     // url: "http://localhost:8080/returnGIF",
     // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
-    url: localURL,
+    url: GCE_URL,
     data: { base64Images: imageLine },
     success: (data, dataType) => {
-      if (gifImage) {
-        gifImage.src = data;
-      }
       console.log(data);
       console.log(dataType);
     },

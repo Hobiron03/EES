@@ -358,23 +358,19 @@ var FormatImageData = function (base64Images) {
     var imageDataLine = images.reduce(function (str1, str2) { return str1 + str2; });
     return imageDataLine;
 };
-var devUrl = "https://8080-dot-13572060-dot-devshell.appspot.com/createGif";
-var productionURL = "https://august-jigsaw-286205.df.r.appspot.com/createGif";
-var localURL = "http://0.0.0.0:5000/returnGIF";
+var GCE_URL = "http://34.84.42.0/returnGIF";
+var localURL = "http://0.0.0.0:80/returnGIF";
 var imgElement = document.getElementById("gif");
-var gifImage = imgElement;
+var gifDownload = imgElement;
 var PostImageData = function (imageLine) {
     $.ajax({
         crossDomain: true,
         type: "POST",
         // url: "http://localhost:8080/returnGIF",
         // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
-        url: localURL,
+        url: GCE_URL,
         data: { base64Images: imageLine },
         success: function (data, dataType) {
-            if (gifImage) {
-                gifImage.src = data;
-            }
             console.log(data);
             console.log(dataType);
         },
