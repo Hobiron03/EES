@@ -38,6 +38,8 @@ var leftEye = {
     pos: 0,
     size: 0
 };
+var emotionFaceDiv = document.getElementById("emotion-face");
+var coordinateDiv = document.getElementById("coordinate");
 //座標部分のCanvas
 var coordinateCanvas = (document.getElementById("coordinate"));
 var cctx = coordinateCanvas.getContext("2d");
@@ -65,24 +67,17 @@ var DrawCoordinateImage = function () {
         }
     };
 };
-// const DrawBaseFaceImage = (): void => {
-//   let background: HTMLImageElement = new Image();
-//   const imageURL: string =
-//     "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
-//   background.src = imageURL;
-//   //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
-//   background.onload = () => {
-//     if (fpctx) {
-//       fpctx.drawImage(
-//         background,
-//         0,
-//         0,
-//         facialPartsCanvas.width,
-//         (background.height * facialPartsCanvas.width) / background.width
-//       );
-//     }
-//   };
-// };
+var DrawBaseFaceImage = function () {
+    var background = new Image();
+    var imageURL = "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
+    background.src = imageURL;
+    //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
+    background.onload = function () {
+        if (fpctx) {
+            fpctx.drawImage(background, 0, 0, facialPartsCanvas.width, (background.height * facialPartsCanvas.width) / background.width);
+        }
+    };
+};
 //顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
 var RenderMouth = function (x) {
     //x座標から口の傾きを計算する width400で-66から66くらい
@@ -259,7 +254,13 @@ coordinateCanvas.addEventListener("mousemove", function (e) {
         }
         pre = Date.now();
     }
+    if (emotionFaceDiv) {
+        emotionFaceDiv.style.backgroundColor = rgb(255, 140, 0);
+    }
 });
+function rgb(r, g, b) {
+    return 'rgb(' + [(r || 0), (g || 0), (b || 0)].join(',') + ')';
+}
 //ドラッグ終わり！
 coordinateCanvas.addEventListener("mouseup", function (e) {
     isMouseDrag = false;
@@ -276,8 +277,6 @@ coordinateCanvas.addEventListener("mouseup", function (e) {
     }
 });
 var InitFacialParts = function () {
-    var emotionFaceDiv = document.getElementById("emotion-face");
-    var coordinateDiv = document.getElementById("coordinate");
     if (!emotionFaceDiv) {
         console.log("ERR! emotion-face div-element does not exit");
         return;

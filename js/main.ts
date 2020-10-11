@@ -3,6 +3,31 @@ enum Color {
   BLUE = "#629BEAa",
   RED = "#FF5823",
 }
+
+const ANGRY = {
+  r: 255,
+  g: 0,
+  b: 0,
+};
+
+const HAPPY = {
+  r: 255,
+  g: 144,
+  b: 0,
+};
+
+const SAD = {
+  r: 128,
+  g: 128,
+  b: 128,
+};
+
+const PLEASURE = {
+  r: 128,
+  g: 128,
+  b: 128,
+};
+
 interface Mouse {
   startPosX: number;
   startPosY: number;
@@ -63,6 +88,13 @@ let leftEye: Eyes = {
   size: 0,
 };
 
+const emotionFaceDiv: HTMLElement | null = document.getElementById(
+    "emotion-face"
+);
+const coordinateDiv: HTMLElement | null = document.getElementById(
+    "coordinate"
+);
+
 //座標部分のCanvas
 const coordinateCanvas: HTMLCanvasElement = <HTMLCanvasElement>(
   document.getElementById("coordinate")
@@ -113,25 +145,25 @@ const DrawCoordinateImage = (): void => {
   };
 };
 
-// const DrawBaseFaceImage = (): void => {
-//   let background: HTMLImageElement = new Image();
-//   const imageURL: string =
-//     "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
+const DrawBaseFaceImage = (): void => {
+  let background: HTMLImageElement = new Image();
+  const imageURL: string =
+    "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
 
-//   background.src = imageURL;
-//   //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
-//   background.onload = () => {
-//     if (fpctx) {
-//       fpctx.drawImage(
-//         background,
-//         0,
-//         0,
-//         facialPartsCanvas.width,
-//         (background.height * facialPartsCanvas.width) / background.width
-//       );
-//     }
-//   };
-// };
+  background.src = imageURL;
+  //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
+  background.onload = () => {
+    if (fpctx) {
+      fpctx.drawImage(
+        background,
+        0,
+        0,
+        facialPartsCanvas.width,
+        (background.height * facialPartsCanvas.width) / background.width
+      );
+    }
+  };
+};
 
 //顔アイコンの口パーツを描画する。X座標の大きさによって口の傾き具合が変わる
 const RenderMouth = (x: number): void => {
@@ -339,7 +371,15 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
     }
     pre = Date.now();
   }
+
+  if(emotionFaceDiv){
+    emotionFaceDiv.style.backgroundColor = rgb(255, 140, 0);
+  }
 });
+
+function rgb(r: number,g: number,b: number) {
+    return 'rgb(' + [(r||0),(g||0),(b||0)].join(',') + ')';
+}
 
 //ドラッグ終わり！
 coordinateCanvas.addEventListener("mouseup", (e: MouseEvent) => {
@@ -358,12 +398,7 @@ coordinateCanvas.addEventListener("mouseup", (e: MouseEvent) => {
 });
 
 const InitFacialParts = (): void => {
-  const emotionFaceDiv: HTMLElement | null = document.getElementById(
-    "emotion-face"
-  );
-  const coordinateDiv: HTMLElement | null = document.getElementById(
-    "coordinate"
-  );
+
   if (!emotionFaceDiv) {
     console.log("ERR! emotion-face div-element does not exit");
     return;
