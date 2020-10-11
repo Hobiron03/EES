@@ -4,6 +4,51 @@ var Color;
     Color["BLUE"] = "#629BEAa";
     Color["RED"] = "#FF5823";
 })(Color || (Color = {}));
+var INITIAL_FACE_COLOR = {
+    r: 255,
+    g: 194,
+    b: 2
+};
+var ANGRY = {
+    r: 255,
+    g: 0,
+    b: 0
+};
+var HAPPY = {
+    r: 255,
+    g: 140,
+    b: 0
+};
+var SAD = {
+    r: 128,
+    g: 128,
+    b: 128
+};
+var PLEASURE = {
+    r: 0,
+    g: 255,
+    b: 0
+};
+var ANGRY_HAPPY = {
+    r: (ANGRY.r + HAPPY.r) / 2,
+    g: (ANGRY.g + HAPPY.g) / 2,
+    b: (ANGRY.b + HAPPY.b) / 2
+};
+var HAPPY_PLESSURE = {
+    r: (PLEASURE.r + HAPPY.r) / 2,
+    g: (PLEASURE.g + HAPPY.g) / 2,
+    b: (PLEASURE.b + HAPPY.b) / 2
+};
+var PLESSURE_SAD = {
+    r: (PLEASURE.r + SAD.r) / 2,
+    g: (PLEASURE.g + SAD.g) / 2,
+    b: (PLEASURE.b + SAD.b) / 2
+};
+var SAD_ANGRY = {
+    r: (ANGRY.r + SAD.r) / 2,
+    g: (ANGRY.g + SAD.g) / 2,
+    b: (ANGRY.b + SAD.b) / 2
+};
 var mouse = {
     startPosX: 0,
     startPosY: 0,
@@ -180,12 +225,75 @@ var ResetFacialParts = function () {
         fpctx.clearRect(0, 0, fpctx.canvas.clientWidth, fpctx.canvas.clientHeight);
     }
 };
-//x座標とy座標から喜怒哀楽のいずれかを返す
-var ReturnEmotion = function (x, y) {
-    // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
-    // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
-    // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
-    // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
+var CalculateColor = function (x, y, zone) {
+    var r = INITIAL_FACE_COLOR.r;
+    var g = INITIAL_FACE_COLOR.g;
+    var b = INITIAL_FACE_COLOR.b;
+    switch (zone) {
+        case 1:
+            var r_1 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * x / 200;
+            var r_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * y / 200;
+            if (r_1 == 0 && r_2 == 0) {
+                r = INITIAL_FACE_COLOR.r;
+            }
+            else {
+                r = r_1 + r_2 / 2;
+            }
+            var b_1 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * x / 200;
+            var b_2 = Math.abs(ANGRY.b - INITIAL_FACE_COLOR.b) * y / 200;
+            if (b_1 == 0 && b_2 == 0) {
+                b = INITIAL_FACE_COLOR.b;
+            }
+            else {
+                b = b_1 + b_2 / 2;
+            }
+            var g_1 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * x / 200;
+            var g_2 = Math.abs(ANGRY.g - INITIAL_FACE_COLOR.g) * y / 200;
+            if (g_1 == 0 && b_2 == 0) {
+                g = INITIAL_FACE_COLOR.g;
+            }
+            else {
+                g = g_1 + g_2 / 2;
+            }
+            break;
+        case 2:
+            break;
+        default:
+            break;
+    }
+    return { r: r, g: g, b: b };
+};
+//x座標とy座標から感情に対応した色人変化させる
+var SetEmotionColor = function (x, y) {
+    if (x >= 0 && x < 200 && y >= 0 && y <= 200) {
+        // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
+        console.log("怒り");
+        var faceColor = { r: 255, g: 255, b: 0 };
+        if (x > y) {
+            faceColor = CalculateColor(x, y, 1);
+        }
+        else {
+            faceColor = CalculateColor(x, y, 2);
+        }
+        if (emotionFaceDiv) {
+            emotionFaceDiv.style.backgroundColor = rgb(faceColor.r, faceColor.g, faceColor.b);
+        }
+    }
+    else if (x >= 0 && x <= 200 && y > 200 && y <= 400) {
+        // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
+        console.log("悲しみ");
+        if (emotionFaceDiv) {
+            emotionFaceDiv.style.backgroundColor = rgb(SAD.r, SAD.g, SAD.b);
+        }
+    }
+    else if (x >= 200 && x <= 400 && y > 200 && y <= 400) {
+        // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
+        console.log("喜び");
+    }
+    else {
+        // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
+        console.log("楽しみ");
+    }
 };
 var isMouseDrag = false;
 //前フレームの点を保持する変数
@@ -246,6 +354,7 @@ coordinateCanvas.addEventListener("mousemove", function (e) {
                     base64Images.push(facialPartsCanvas.toDataURL());
                     dataX.push(mousePosX);
                     dataY.push(mousePosY);
+                    SetEmotionColor(preMousePosX, preMousePosY);
                 }
             }
             preMousePosX = mousePosX;
@@ -253,9 +362,6 @@ coordinateCanvas.addEventListener("mousemove", function (e) {
             elapsedTime = 0;
         }
         pre = Date.now();
-    }
-    if (emotionFaceDiv) {
-        emotionFaceDiv.style.backgroundColor = rgb(255, 140, 0);
     }
 });
 function rgb(r, g, b) {
