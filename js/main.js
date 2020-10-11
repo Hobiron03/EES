@@ -15,9 +15,9 @@ var ANGRY = {
     b: 0
 };
 var HAPPY = {
-    r: 255,
-    g: 140,
-    b: 0
+    r: 217,
+    g: 127,
+    b: 255
 };
 var SAD = {
     r: 128,
@@ -45,9 +45,12 @@ var PLESSURE_SAD = {
     b: (PLEASURE.b + SAD.b) / 2
 };
 var SAD_ANGRY = {
-    r: (ANGRY.r + SAD.r) / 2,
-    g: (ANGRY.g + SAD.g) / 2,
-    b: (ANGRY.b + SAD.b) / 2
+    // r: (ANGRY.r + SAD.r) / 2,
+    // g: (ANGRY.g + SAD.g) / 2,
+    // b: (ANGRY.b + SAD.b) / 2,
+    r: 128,
+    g: 64,
+    b: 64
 };
 var mouse = {
     startPosX: 0,
@@ -226,41 +229,58 @@ var ResetFacialParts = function () {
     }
 };
 var CalculateColor = function (x, y, zone) {
-    var r = INITIAL_FACE_COLOR.r;
-    var g = INITIAL_FACE_COLOR.g;
-    var b = INITIAL_FACE_COLOR.b;
+    var r = 255;
+    var g = 255;
+    var b = 0;
     switch (zone) {
         case 1:
-            var r_1 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * x / 200;
-            var r_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * y / 200;
-            if (r_1 == 0 && r_2 == 0) {
-                r = INITIAL_FACE_COLOR.r;
-            }
-            else {
-                r = r_1 + r_2 / 2;
-            }
-            var b_1 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * x / 200;
-            var b_2 = Math.abs(ANGRY.b - INITIAL_FACE_COLOR.b) * y / 200;
-            if (b_1 == 0 && b_2 == 0) {
-                b = INITIAL_FACE_COLOR.b;
-            }
-            else {
-                b = b_1 + b_2 / 2;
-            }
-            var g_1 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * x / 200;
-            var g_2 = Math.abs(ANGRY.g - INITIAL_FACE_COLOR.g) * y / 200;
-            if (g_1 == 0 && b_2 == 0) {
-                g = INITIAL_FACE_COLOR.g;
-            }
-            else {
-                g = g_1 + g_2 / 2;
-            }
+            // 中心も考慮するパターン
+            // const r_1 = Math.floor(Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (x / 200));
+            // const r_2 = Math.floor(Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (y / 200));
+            // if(r_1 == 0 && r_2 == 0){
+            //   r = INITIAL_FACE_COLOR.r
+            // }
+            // else{
+            //   r = 255;
+            // }
+            // const b_1 = Math.floor(Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (x / 200));
+            // const b_2 = Math.floor(Math.abs(ANGRY.b - INITIAL_FACE_COLOR.b) * (y / 200));
+            // if(b_1 == 0 && b_2 == 0){
+            //   b = INITIAL_FACE_COLOR.b
+            // }
+            // else{
+            //   b =( b_1 + b_2 )/2;
+            // }
+            // const g_1 = Math.floor(Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (x / 200));
+            // const g_2 = Math.floor(Math.abs(ANGRY.g - INITIAL_FACE_COLOR.g) * (y / 200));
+            // if(g_1 == 0 && b_2 == 0){
+            //   g = INITIAL_FACE_COLOR.g
+            // }
+            // else{
+            //   g = (g_1 + g_2) /2;
+            // }
+            ///////////
+            var r_1 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (x / 200);
+            // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
+            r = Math.abs(ANGRY.r - r_1);
+            var b_1 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (x / 200);
+            b = Math.abs(ANGRY.b - b_1);
+            var g_1 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (x / 200);
+            g = Math.abs(ANGRY.g - g_1);
             break;
         case 2:
+            var r2_1 = Math.abs(ANGRY.r - SAD_ANGRY.r) * (y / 200);
+            // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
+            r = Math.abs(ANGRY.r - r2_1);
+            var b2_1 = Math.abs(ANGRY.b - SAD_ANGRY.b) * (y / 200);
+            b = Math.abs(ANGRY.b - b2_1);
+            var g2_1 = Math.abs(ANGRY.g - SAD_ANGRY.g) * (y / 200);
+            g = Math.abs(ANGRY.g - g2_1);
             break;
         default:
             break;
     }
+    console.log("r: " + r + ", g: " + g + ", b: " + b);
     return { r: r, g: g, b: b };
 };
 //x座標とy座標から感情に対応した色人変化させる
@@ -273,6 +293,7 @@ var SetEmotionColor = function (x, y) {
             faceColor = CalculateColor(x, y, 1);
         }
         else {
+            console.log("x < Y");
             faceColor = CalculateColor(x, y, 2);
         }
         if (emotionFaceDiv) {
