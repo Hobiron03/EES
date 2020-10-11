@@ -232,6 +232,7 @@ var CalculateColor = function (x, y, zone) {
     var r = 255;
     var g = 255;
     var b = 0;
+    console.log("angry: " + ANGRY.r);
     switch (zone) {
         case 1:
             // 中心も考慮するパターン
@@ -261,21 +262,31 @@ var CalculateColor = function (x, y, zone) {
             // }
             ///////////
             var r_1 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (x / 200);
+            var r_2 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (y / 200);
             // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
-            r = Math.abs(ANGRY.r - r_1);
+            r = Math.abs(ANGRY.r + r_1 - r_2);
             var b_1 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (x / 200);
-            b = Math.abs(ANGRY.b - b_1);
+            var b_2 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (y / 200);
+            // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
+            b = Math.abs(ANGRY.b + b_1 - b_2);
             var g_1 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (x / 200);
-            g = Math.abs(ANGRY.g - g_1);
+            var g_2 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (y / 200);
+            // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
+            g = Math.abs(ANGRY.g + g_1 - g_2);
             break;
         case 2:
+            //y成分
             var r2_1 = Math.abs(ANGRY.r - SAD_ANGRY.r) * (y / 200);
+            //x成分
+            var r2_2 = Math.abs(ANGRY.r - SAD_ANGRY.r) * (x / 200);
             // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
-            r = Math.abs(ANGRY.r - r2_1);
+            r = Math.abs(ANGRY.r - r2_1 + r2_2);
             var b2_1 = Math.abs(ANGRY.b - SAD_ANGRY.b) * (y / 200);
-            b = Math.abs(ANGRY.b - b2_1);
+            var b2_2 = Math.abs(ANGRY.b - SAD_ANGRY.b) * (x / 200);
+            b = Math.abs(ANGRY.b - b2_1 + b2_2);
             var g2_1 = Math.abs(ANGRY.g - SAD_ANGRY.g) * (y / 200);
-            g = Math.abs(ANGRY.g - g2_1);
+            var g2_2 = Math.abs(ANGRY.g - SAD_ANGRY.g) * (x / 200);
+            g = Math.abs(ANGRY.g - g2_1 + g2_2);
             break;
         default:
             break;

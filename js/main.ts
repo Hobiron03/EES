@@ -328,6 +328,7 @@ const CalculateColor = (x: number, y: number, zone: number): {r: number, g: numb
   let r = 255
   let g = 255
   let b = 0
+  console.log(`angry: ${ANGRY.r}`)
   switch (zone) {
     case 1:
       // 中心も考慮するパターン
@@ -360,26 +361,36 @@ const CalculateColor = (x: number, y: number, zone: number): {r: number, g: numb
 
       ///////////
       const r_1 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (x / 200);
+      const r_2 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (y / 200);
       // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
-      r = Math.abs(ANGRY.r - r_1);
+      r = Math.abs(ANGRY.r + r_1 - r_2);
 
       const b_1 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (x / 200);
-      b = Math.abs(ANGRY.b - b_1);
+      const b_2 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (y / 200);
+      // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
+      b = Math.abs(ANGRY.b + b_1 - b_2);
 
       const g_1 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (x / 200);
-      g = Math.abs(ANGRY.g - g_1);
+      const g_2 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (y / 200);
+      // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
+      g = Math.abs(ANGRY.g + g_1 - g_2);
 
       break;
     case 2:
+      //y成分
       const r2_1 = Math.abs(ANGRY.r - SAD_ANGRY.r) * (y / 200);
+      //x成分
+      const r2_2 = Math.abs(ANGRY.r - SAD_ANGRY.r) * (x / 200);
       // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
-      r = Math.abs(ANGRY.r - r2_1);
+      r = Math.abs(ANGRY.r - r2_1 + r2_2);
 
       const b2_1 = Math.abs(ANGRY.b - SAD_ANGRY.b) * (y / 200);
-      b = Math.abs(ANGRY.b - b2_1);
+      const b2_2 = Math.abs(ANGRY.b - SAD_ANGRY.b) * (x / 200);
+      b = Math.abs(ANGRY.b - b2_1 + b2_2);
 
       const g2_1 = Math.abs(ANGRY.g - SAD_ANGRY.g) * (y / 200);
-      g = Math.abs(ANGRY.g - g2_1);
+      const g2_2 = Math.abs(ANGRY.g - SAD_ANGRY.g) * (x / 200);
+      g = Math.abs(ANGRY.g - g2_1 + g2_2);
 
       break;
     default:
