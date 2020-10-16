@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Main Screen</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emotion Expression System</title>
+  </head>
+
   <body>
-    <h1 class="title">Emotion Expression</h1>
-    <img src="../images/Cordinate.png" alt="" width="400" height="400">
+    <div class="main">
+      <div class="make-face-field">
+        <div class="Top">
+          <div id="emotion-face">
+            <canvas id="facial-parts" width="200" height="200"> </canvas>
+          </div>
+        </div>
+        <div class="drag-corrdinate">
+          <canvas id="coordinate" width="400" height="400"> </canvas>
+        </div>
+        <button id="decide-button">OK!!</button>
+      </div>
+      <div class="result">
+        <p>結果</p>
+        <img src="" id="gif" />
+      </div>
+    </div>
   </body>
 </html>
