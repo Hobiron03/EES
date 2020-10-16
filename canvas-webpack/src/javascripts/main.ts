@@ -4,6 +4,7 @@ import Mouse from "../javascripts/@types/mouse";
 import Eyebrow from "../javascripts/@types/eyebrows";
 import Eye from "../javascripts/@types/eye";
 import coordinate from "../javascripts/@types/coordinate";
+import PostImageData from "./PostImageData";
 import {
   INITIAL_FACE_COLOR,
   ANGRY,
@@ -11,7 +12,6 @@ import {
   SAD,
   PLEASURE,
 } from "./emotionColor";
-
 import {
   ANGRY_HAPPY,
   HAPPY_PLESSURE,
@@ -585,35 +585,41 @@ const GCS_URL = "https://storage.googleapis.com/faceicons/";
 const imgElement = document.getElementById("gif");
 const gifDownload = <HTMLAnchorElement>imgElement;
 
-const PostImageData = (imageLine: string): void => {
-  $.ajax({
-    crossDomain: true,
-    type: "POST",
-    // url: "http://localhost:8080/returnGIF",
-    // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
-    url: localURL,
-    data: { base64Images: imageLine },
-    success: (data, dataType) => {
-      console.log(data.image_name);
-      console.log(dataType);
-      setGIF(data.image_name);
-    },
-    error: () => {
-      console.log("Err");
-    },
-  });
-};
+// const PostImageData = (imageLine: string): void => {
+//   $.ajax({
+//     crossDomain: true,
+//     type: "POST",
+//     // url: "http://localhost:8080/returnGIF",
+//     // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
+//     url: localURL,
+//     data: { base64Images: imageLine },
+//     success: (data, dataType) => {
+//       console.log(data.image_name);
+//       console.log(dataType);
+//       setGIF(data.image_name);
+//     },
+//     error: () => {
+//       console.log("Err");
+//     },
+//   });
+// };
 
 const okButton = document.getElementById("decide-button");
 if (okButton) {
-  okButton.onclick = () => {
+  okButton.onclick = async () => {
     //大体60fps
     pullDataX = dataX.concat();
     pullDataY = dataY.concat();
     faceAnimation = requestAnimationFrame(faceAnimationStep);
 
-    PostImageData(FormatImageData(base64Images));
-    // PostImageDataToFirebaseStorage();
+    let imageName = await PostImageData(FormatImageData(base64Images), localURL)
+      .then((image_name) => {
+        console.log(`${image_name}が届いたよ`);
+        setGIF(image_name);
+      })
+      .catch((err) => {
+        console.log("Hello");
+      });
   };
 }
 
