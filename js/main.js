@@ -15,9 +15,9 @@ var ANGRY = {
     b: 0
 };
 var HAPPY = {
-    r: 217,
-    g: 127,
-    b: 255
+    r: 255,
+    g: 194,
+    b: 2
 };
 var SAD = {
     r: 128,
@@ -321,10 +321,16 @@ var SetEmotionColor = function (x, y) {
     else if (x >= 200 && x <= 400 && y > 200 && y <= 400) {
         // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
         console.log("喜び");
+        if (emotionFaceDiv) {
+            emotionFaceDiv.style.backgroundColor = rgb(PLEASURE.r, PLEASURE.g, PLEASURE.b);
+        }
     }
     else {
         // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
         console.log("楽しみ");
+        if (emotionFaceDiv) {
+            emotionFaceDiv.style.backgroundColor = rgb(HAPPY.r, HAPPY.g, HAPPY.b);
+        }
     }
 };
 var isMouseDrag = false;
@@ -496,7 +502,9 @@ var FormatImageData = function (base64Images) {
     return imageDataLine;
 };
 var GCE_URL = "http://34.84.42.0/returnGIF";
+var GCE_2_URL = "http://35.200.88.160/returnGIF";
 var localURL = "http://0.0.0.0:80/returnGIF";
+var GCS_URL = "https://storage.googleapis.com/faceicons/";
 var imgElement = document.getElementById("gif");
 var gifDownload = imgElement;
 var PostImageData = function (imageLine) {
@@ -505,11 +513,12 @@ var PostImageData = function (imageLine) {
         type: "POST",
         // url: "http://localhost:8080/returnGIF",
         // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
-        url: GCE_URL,
+        url: localURL,
         data: { base64Images: imageLine },
         success: function (data, dataType) {
-            console.log(data);
+            console.log(data.image_name);
             console.log(dataType);
+            setGIF(data.image_name);
         },
         error: function () {
             console.log("Err");
@@ -543,3 +552,10 @@ if (okButton) {
         // PostImageDataToFirebaseStorage();
     };
 }
+var gif = document.getElementById("gif");
+var gifImage = gif;
+var setGIF = function (name) {
+    if (gif) {
+        gifImage.src = "" + GCS_URL + name;
+    }
+};

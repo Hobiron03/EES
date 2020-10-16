@@ -18,7 +18,7 @@ CORS(api)
 
 @api.route('/')
 def hello():
-    name = "Hello, world!"
+    name = "Hello, world"
     return name
 
 
@@ -53,14 +53,16 @@ def returnGIF():
     shutil.rmtree("./FaceIcon/")
 
     # GCEの環境の場合は認証は不要
-    # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = './EmotionExpression-5c731e905750.json'
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = './EmotionExpression-5c731e905750.json'
     client = storage.Client()
     # https://console.cloud.google.com/storage/browser/[bucket-id]/
     bucket = client.get_bucket('faceicons')
-    blob = bucket.blob('face_{}.gif'.format(datetime.datetime.now()))
+    gif_name = 'face_{}.gif'.format(
+        datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S.%f"))
+    blob = bucket.blob(gif_name)
     blob.upload_from_filename(filename='face.gif')
 
-    result = {'result': '200'}
+    result = {'result': '200', 'image_name': gif_name}
     return result
 
 

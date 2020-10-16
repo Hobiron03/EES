@@ -24,5 +24,6 @@
 
 /node_modules
 
+/canvas-webpack/node_modules
 
 /server/EmotionExpression-5c731e905750.json

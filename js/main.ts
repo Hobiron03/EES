@@ -17,9 +17,9 @@ const ANGRY = {
 };
 
 const HAPPY = {
-  r: 217,
-  g: 127,
-  b: 255,
+  r: 255,
+  g: 194,
+  b: 2,
 };
 
 const SAD = {
@@ -429,10 +429,16 @@ const SetEmotionColor = (x: number, y: number): void => {
   else if(x >= 200 && x <= 400 && y > 200 && y <= 400){
     // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
     console.log("喜び");
+    if(emotionFaceDiv){
+      emotionFaceDiv.style.backgroundColor = rgb(PLEASURE.r, PLEASURE.g, PLEASURE.b);
+    }
   } 
   else{
   // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
     console.log("楽しみ");
+    if(emotionFaceDiv){
+      emotionFaceDiv.style.backgroundColor = rgb(HAPPY.r, HAPPY.g, HAPPY.b);
+    }
   }
 };
 
@@ -632,7 +638,9 @@ const FormatImageData = (base64Images: string[]): string => {
 };
 
 const GCE_URL = "http://34.84.42.0/returnGIF";
+const GCE_2_URL = "http://35.200.88.160/returnGIF";
 const localURL = "http://0.0.0.0:80/returnGIF";
+const GCS_URL = "https://storage.googleapis.com/faceicons/";
 const imgElement = document.getElementById("gif");
 const gifDownload = <HTMLAnchorElement>imgElement;
 
@@ -642,11 +650,12 @@ const PostImageData = (imageLine: string): void => {
     type: "POST",
     // url: "http://localhost:8080/returnGIF",
     // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
-    url: GCE_URL,
+    url: localURL,
     data: { base64Images: imageLine },
     success: (data, dataType) => {
-      console.log(data);
+      console.log(data.image_name);
       console.log(dataType);
+      setGIF(data.image_name)
     },
     error: () => {
       console.log("Err");
@@ -683,4 +692,12 @@ if (okButton) {
     PostImageData(FormatImageData(base64Images));
     // PostImageDataToFirebaseStorage();
   };
+}
+
+const gif: HTMLElement | null = document.getElementById("gif");
+const gifImage = <HTMLImageElement>gif;
+const setGIF = (name: string) => {
+  if(gif){
+    gifImage.src = `${GCS_URL}${name}`;
+  }
 }

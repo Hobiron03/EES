@@ -5,24 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/main.css" />
     <title>Emotion Expression System</title>
-    <script src="./js/stoore.legacy.min.js"></script>
   </head>
   <body>
-    <div class="make-face-field">
-      <div class="Top">
-        <div id="emotion-face">
-          <canvas id="facial-parts" width="200" height="200"> </canvas>
+    <div class="main">
+      <div class="make-face-field">
+        <div class="Top">
+          <div id="emotion-face">
+            <canvas id="facial-parts" width="200" height="200"> </canvas>
+          </div>
         </div>
-        <div id="number">
-          <p>Emotion:</p>
+        <div class="drag-corrdinate">
+          <canvas id="coordinate" width="400" height="400"> </canvas>
         </div>
+        <button id="decide-button">OK!!</button>
       </div>
-      <div class="drag-corrdinate">
-        <canvas id="coordinate" width="400" height="400"> </canvas>
+      <div class="result">
+        <p>結果</p>
+        <img src="" id="gif">
       </div>
-      <button id="decide-button">OK!!</button>
     </div>
-    <a href="" id="gif">作った顔アイコン</a>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
