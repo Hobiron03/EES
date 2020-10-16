@@ -10,14 +10,14 @@ import {
   HAPPY,
   SAD,
   PLEASURE,
-} from "./emotionColor.ts";
+} from "./emotionColor";
 
 import {
   ANGRY_HAPPY,
   HAPPY_PLESSURE,
   PLESSURE_SAD,
   SAD_ANGRY,
-} from "./emotionColorCenter.ts";
+} from "./emotionColorCenter";
 
 enum Color {
   BLACK = "black",

@@ -11,6 +11,12 @@ module.exports = {
     path: path.resolve(__dirname, "./dist"),
     filename: "./javascripts/main.js",
   },
+  resolve: {
+    extensions: [
+      '.ts',
+      '.js'
+    ]
+  },
   module: {
     rules: [
       {

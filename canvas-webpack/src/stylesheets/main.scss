@@ -1,5 +1,44 @@
-$h1Color: red;
+body {
+  margin: 20px;
+}
 
-.title {
-  color: $h1Color;
+.main {
+  display: flex;
+}
+
+.result {
+  margin-left: 100px;
+}
+
+#emotion-face {
+  width: 200px;
+  height: 200px;
+  /* background-image: url("../Images/BaseFace.png"); */
+  /* background-color: rgb(247, 206, 27); */
+  border-radius: 100%;
+  background-size: cover;
+}
+
+.make-face-field {
+  width: 30%;
+}
+
+.Top {
+  display: flex;
+}
+
+#decide-button {
+  cursor: pointer;
+  margin: 20px;
+  padding: 20px 150px;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  background-color: #5b71f5;
+  border: none;
+  transition: all 0.2s;
+}
+
+#decide-button:hover {
+  background-color: #213fe9;
 }

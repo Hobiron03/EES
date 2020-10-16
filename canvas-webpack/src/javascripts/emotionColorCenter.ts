@@ -1,4 +1,4 @@
-import { ANGRY, HAPPY, SAD, PLEASURE } from "./emotionColor.ts";
+import { ANGRY, HAPPY, SAD, PLEASURE } from "./emotionColor";
 
 const EmotionColorCenter = {
   ANGRY_HAPPY: {
