@@ -5,13 +5,36 @@ const path = require("path");
 
 module.exports = {
   mode: 'development',
-  entry: "./src/javascripts/main.js",
+  entry: "./src/javascripts/main.ts",
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "./javascripts/main.js",
   },
   module: {
     rules: [
+      {
+        test: /\.(ts|tsx)/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+          }
+        ]
+      },
+      {
+        test: /\.js/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                ['@babel/preset-env', {'targets': '>0.25%, not dead'}],
+              ],
+            },
+          },
+        ],
+      },
       {
         test: /\.(css|sass|scss)/,
         use: [
