@@ -585,25 +585,6 @@ const GCS_URL = "https://storage.googleapis.com/faceicons/";
 const imgElement = document.getElementById("gif");
 const gifDownload = <HTMLAnchorElement>imgElement;
 
-// const PostImageData = (imageLine: string): void => {
-//   $.ajax({
-//     crossDomain: true,
-//     type: "POST",
-//     // url: "http://localhost:8080/returnGIF",
-//     // url: "http://localhost:5001/faceicon-db24d/us-central1/createGif",
-//     url: localURL,
-//     data: { base64Images: imageLine },
-//     success: (data, dataType) => {
-//       console.log(data.image_name);
-//       console.log(dataType);
-//       setGIF(data.image_name);
-//     },
-//     error: () => {
-//       console.log("Err");
-//     },
-//   });
-// };
-
 const okButton = document.getElementById("decide-button");
 if (okButton) {
   okButton.onclick = async () => {
@@ -612,7 +593,7 @@ if (okButton) {
     pullDataY = dataY.concat();
     faceAnimation = requestAnimationFrame(faceAnimationStep);
 
-    let imageName = await PostImageData(FormatImageData(base64Images), localURL)
+    await PostImageData(FormatImageData(base64Images), localURL)
       .then((image_name) => {
         console.log(`${image_name}が届いたよ`);
         setGIF(image_name);
