@@ -10,6 +10,7 @@ import io
 import glob
 import os
 import shutil
+import hashlib
 
 
 api = Flask(__name__)
@@ -55,10 +56,12 @@ def returnGIF():
     # GCEの環境の場合は認証は不要
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = './EmotionExpression-5c731e905750.json'
     client = storage.Client()
-    # https://console.cloud.google.com/storage/browser/[bucket-id]/
     bucket = client.get_bucket('faceicons')
-    gif_name = 'face_{}.gif'.format(
-        datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S.%f"))
+
+    gif_name = 'face-{}.gif'.format(
+        hashlib.sha224(datetime.datetime.now().strftime(
+            "%Y-%m-%d-%H:%M:%S.%f").encode('utf-8')).hexdigest()
+    )
     blob = bucket.blob(gif_name)
     blob.upload_from_filename(filename='face.gif')
 
