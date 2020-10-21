@@ -5,6 +5,7 @@ import Eyebrow from "../javascripts/@types/eyebrows";
 import Eye from "../javascripts/@types/eye";
 import coordinate from "../javascripts/@types/coordinate";
 import PostImageData from "./PostImageData";
+import ConvertRgbFormat from "./ConvertRgbFormat";
 import {
   INITIAL_FACE_COLOR,
   ANGRY,
@@ -108,26 +109,6 @@ const DrawCoordinateImage = (): void => {
         0,
         coordinateCanvas.width,
         (background.height * coordinateCanvas.width) / background.width
-      );
-    }
-  };
-};
-
-const DrawBaseFaceImage = (): void => {
-  let background: HTMLImageElement = new Image();
-  const imageURL: string =
-    "/Users/kawakamiyuudai/研究プロジェクト/EmotionExpressionSystem/canvas-project/Images/BaseFace.png";
-
-  background.src = imageURL;
-  //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
-  background.onload = () => {
-    if (fpctx) {
-      fpctx.drawImage(
-        background,
-        0,
-        0,
-        facialPartsCanvas.width,
-        (background.height * facialPartsCanvas.width) / background.width
       );
     }
   };
@@ -355,7 +336,7 @@ const SetEmotionColor = (x: number, y: number): void => {
     }
 
     if (emotionFaceDiv) {
-      emotionFaceDiv.style.backgroundColor = rgb(
+      emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
         faceColor.r,
         faceColor.g,
         faceColor.b
@@ -365,13 +346,17 @@ const SetEmotionColor = (x: number, y: number): void => {
     // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
     console.log("悲しみ");
     if (emotionFaceDiv) {
-      emotionFaceDiv.style.backgroundColor = rgb(SAD.r, SAD.g, SAD.b);
+      emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
+        SAD.r,
+        SAD.g,
+        SAD.b
+      );
     }
   } else if (x >= 200 && x <= 400 && y > 200 && y <= 400) {
     // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
     console.log("喜び");
     if (emotionFaceDiv) {
-      emotionFaceDiv.style.backgroundColor = rgb(
+      emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
         PLEASURE.r,
         PLEASURE.g,
         PLEASURE.b
@@ -381,7 +366,11 @@ const SetEmotionColor = (x: number, y: number): void => {
     // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
     console.log("楽しみ");
     if (emotionFaceDiv) {
-      emotionFaceDiv.style.backgroundColor = rgb(HAPPY.r, HAPPY.g, HAPPY.b);
+      emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
+        HAPPY.r,
+        HAPPY.g,
+        HAPPY.b
+      );
     }
   }
 };
@@ -460,10 +449,6 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
     pre = Date.now();
   }
 });
-
-function rgb(r: number, g: number, b: number) {
-  return "rgb(" + [r || 0, g || 0, b || 0].join(",") + ")";
-}
 
 //ドラッグ終わり！
 coordinateCanvas.addEventListener("mouseup", (e: MouseEvent) => {
