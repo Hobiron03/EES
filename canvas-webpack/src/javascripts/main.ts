@@ -6,6 +6,7 @@ import Eye from "../javascripts/@types/eye";
 import coordinate from "../javascripts/@types/coordinate";
 import PostImageData from "./PostImageData";
 import ConvertRgbFormat from "./ConvertRgbFormat";
+import html2canvas from "html2canvas";
 import {
   INITIAL_FACE_COLOR,
   ANGRY,
