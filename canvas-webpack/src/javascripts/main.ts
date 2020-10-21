@@ -437,10 +437,16 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
         if (fpctx) {
           DrawFace(mousePosX, mousePosY);
           //画像の64進数のデータにする
-          base64Images.push(facialPartsCanvas.toDataURL());
+          // base64Images.push(facialPartsCanvas.toDataURL());
+          html2canvas(emotionFaceDiv, {
+            scale: 0.25,
+          }).then((canvas) => {
+            base64Images.push(canvas.toDataURL());
+          });
           dataX.push(mousePosX);
           dataY.push(mousePosY);
-          SetEmotionColor(preMousePosX, preMousePosY);
+          //座標によって顔アイコンの顔を変化させる
+          //SetEmotionColor(preMousePosX, preMousePosY);
         }
       }
       preMousePosX = mousePosX;
