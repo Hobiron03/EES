@@ -439,9 +439,10 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
           //画像の64進数のデータにする
           // base64Images.push(facialPartsCanvas.toDataURL());
           html2canvas(emotionFaceDiv, {
-            scale: 0.25,
+            scale: 0.5,
           }).then((canvas) => {
             base64Images.push(canvas.toDataURL());
+            // console.log(canvas.toDataURL());
           });
           dataX.push(mousePosX);
           dataY.push(mousePosY);
