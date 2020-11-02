@@ -1,4 +1,6 @@
 import "../images/Cordinate.png";
+import "../images/BaseFace.png";
+import "../images/Beard.png";
 import "../stylesheets/main.scss";
 import Mouse from "../javascripts/@types/mouse";
 import Eyebrow from "../javascripts/@types/eyebrows";
@@ -437,10 +439,17 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
         if (fpctx) {
           DrawFace(mousePosX, mousePosY);
           //画像の64進数のデータにする
-          base64Images.push(facialPartsCanvas.toDataURL());
+          // base64Images.push(facialPartsCanvas.toDataURL());
+          html2canvas(emotionFaceDiv, {
+            scale: 0.5,
+          }).then((canvas) => {
+            base64Images.push(canvas.toDataURL());
+            // console.log(canvas.toDataURL());
+          });
           dataX.push(mousePosX);
           dataY.push(mousePosY);
-          SetEmotionColor(preMousePosX, preMousePosY);
+          //座標によって顔アイコンの顔を変化させる
+          //SetEmotionColor(preMousePosX, preMousePosY);
         }
       }
       preMousePosX = mousePosX;
@@ -472,6 +481,9 @@ const InitFacialParts = (): void => {
     console.log("ERR! emotion-face div-element does not exit");
     return;
   }
+  emotionFaceDiv.style.backgroundImage = "url(../images/Beard.png)";
+  //  $elementReference.style.backgroundImage = "url( " + $image + " )";
+
   if (!coordinateDiv) {
     console.log("ERR! coordinate div-element does not exit");
     return;

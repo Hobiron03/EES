@@ -45,7 +45,7 @@ def returnGIF():
     files = natsorted(glob.glob('./FaceIcon/*.png'))
     images = list(map(lambda file: Image.open(file), files))
     images[0].save('face.gif', save_all=True,
-                   optimize=False,
+                   optimize=True,
                    append_images=images[1:],
                    duration=(1/30) * 1000,
                    loop=0
