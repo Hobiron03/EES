@@ -1,4 +1,6 @@
 import "../images/Cordinate.png";
+import "../images/BaseFace.png";
+import "../images/Beard.png";
 import "../stylesheets/main.scss";
 import Mouse from "../javascripts/@types/mouse";
 import Eyebrow from "../javascripts/@types/eyebrows";
@@ -479,6 +481,9 @@ const InitFacialParts = (): void => {
     console.log("ERR! emotion-face div-element does not exit");
     return;
   }
+  emotionFaceDiv.style.backgroundImage = "url(../images/Beard.png)";
+  //  $elementReference.style.backgroundImage = "url( " + $image + " )";
+
   if (!coordinateDiv) {
     console.log("ERR! coordinate div-element does not exit");
     return;
