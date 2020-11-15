@@ -39,15 +39,24 @@ def returnGIF():
         background = Image.new("RGB", img.size, (255, 255, 255))
         background.paste(img, mask=img.split()[3])
 
-        background.save("./FaceIcon/{}.png".format(i), format="GIF")
+        background.save("./FaceIcon/{}.gif".format(i), format="GIF")
         im.append(background)
 
     files = natsorted(glob.glob('./FaceIcon/*.gif'))
     images = list(map(lambda file: Image.open(file), files))
+    # Animationの間隔設定：基本３０fpsで最後は少し時間を長く
+    durations = []
+    gif_interval = (1/30) * 1000
+    for i in range(len(images)):
+        if i == len(images) - 1:
+            durations.append(1000)
+        else:
+            durations.append(gif_interval)
+
     images[0].save('face.gif', save_all=True,
                    optimize=True,
                    append_images=images[1:],
-                   duration=(1/30) * 1000,
+                   duration=durations,
                    loop=0
                    )
 

@@ -481,7 +481,7 @@ const InitFacialParts = (): void => {
     console.log("ERR! emotion-face div-element does not exit");
     return;
   }
-  emotionFaceDiv.style.backgroundImage = "url(../images/Beard.png)";
+  emotionFaceDiv.style.backgroundImage = "url(../images/BaseFace.png)";
   //  $elementReference.style.backgroundImage = "url( " + $image + " )";
 
   if (!coordinateDiv) {
