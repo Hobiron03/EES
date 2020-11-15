@@ -609,3 +609,34 @@ const setGIF = (name: string) => {
     gifImage.src = `${GCS_URL}${name}`;
   }
 };
+
+const baseFaceSelectButtonNormal = document.getElementById(
+  "mask-select-area-normal"
+);
+if (baseFaceSelectButtonNormal) {
+  baseFaceSelectButtonNormal.style.backgroundImage = "url(../images/Beard.png)";
+
+  baseFaceSelectButtonNormal.onclick = () => {
+    console.log(baseFaceSelectButtonNormal);
+    emotionFaceDiv.style.backgroundImage = "url(../images/BaseFace.png)";
+  };
+}
+
+const baseFaceSelectButtonCat = document.getElementById("mask-select-area-cat");
+baseFaceSelectButtonCat.style.backgroundImage = "url(../images/Beard.png)";
+
+if (baseFaceSelectButtonCat) {
+  baseFaceSelectButtonCat.onclick = () => {
+    console.log(baseFaceSelectButtonCat);
+    emotionFaceDiv.style.backgroundImage = "url(../images/Beard.png)";
+  };
+}
+
+const baseFaceSelectButtonGlasses = document.getElementById(
+  "mask-select-area-glasses"
+);
+if (baseFaceSelectButtonGlasses) {
+  baseFaceSelectButtonGlasses.onclick = () => {
+    console.log(baseFaceSelectButtonGlasses);
+  };
+}
