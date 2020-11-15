@@ -1,6 +1,7 @@
 import "../images/Cordinate.png";
 import "../images/BaseFace.png";
 import "../images/Beard.png";
+import "../images/face.png";
 import "../stylesheets/main.scss";
 import Mouse from "../javascripts/@types/mouse";
 import Eyebrow from "../javascripts/@types/eyebrows";
@@ -639,4 +640,28 @@ if (baseFaceSelectButtonGlasses) {
   baseFaceSelectButtonGlasses.onclick = () => {
     console.log(baseFaceSelectButtonGlasses);
   };
+}
+
+const setFaceSize = () => {
+  console.log("Hello, setFace");
+};
+
+const sizeSelectAreaDiv = document.getElementById("size-select-area");
+if (sizeSelectAreaDiv) {
+  console.log("hello, sizeSelectIDv");
+  const normalSize = document.createElement("div");
+  normalSize.style.height = "200px";
+  normalSize.style.width = "200px";
+  normalSize.onclick = setFaceSize;
+  normalSize.style.backgroundImage = "url(../images/face.png)";
+  normalSize.style.backgroundSize = "cover";
+
+  const halfSize = document.createElement("div");
+  halfSize.style.height = "100px";
+  halfSize.style.width = "100px";
+  halfSize.style.backgroundImage = "url(../images/face.png)";
+  halfSize.style.backgroundSize = "cover";
+
+  sizeSelectAreaDiv.appendChild(normalSize);
+  sizeSelectAreaDiv.appendChild(halfSize);
 }
