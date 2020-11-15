@@ -414,6 +414,7 @@ let pre: any = 0;
 let cur: any = 0;
 let elapsedTime: number = 0;
 const fpsInterval: number = (1.0 / 60) * 1000; //60fps
+let faceScale: number = 1.0;
 coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
   //時刻の引き算をたす
   //60fpsにしたい
@@ -442,7 +443,7 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
           //画像の64進数のデータにする
           // base64Images.push(facialPartsCanvas.toDataURL());
           html2canvas(emotionFaceDiv, {
-            scale: 0.5,
+            scale: faceScale,
           }).then((canvas) => {
             base64Images.push(canvas.toDataURL());
             // console.log(canvas.toDataURL());
@@ -642,8 +643,10 @@ if (baseFaceSelectButtonGlasses) {
   };
 }
 
-const setFaceSize = () => {
-  console.log("Hello, setFace");
+let preDom: HTMLDivElement = undefined;
+const setFaceSize = (size: number, dom: HTMLDivElement) => {
+  dom.style.backgroundColor = "red";
+  faceScale = size / 200;
 };
 
 const sizeSelectAreaDiv = document.getElementById("size-select-area");
@@ -652,16 +655,48 @@ if (sizeSelectAreaDiv) {
   const normalSize = document.createElement("div");
   normalSize.style.height = "200px";
   normalSize.style.width = "200px";
-  normalSize.onclick = setFaceSize;
+  normalSize.style.cursor = "pointer";
+  normalSize.onclick = () => {
+    setFaceSize(200, normalSize);
+  };
   normalSize.style.backgroundImage = "url(../images/face.png)";
   normalSize.style.backgroundSize = "cover";
 
-  const halfSize = document.createElement("div");
-  halfSize.style.height = "100px";
-  halfSize.style.width = "100px";
-  halfSize.style.backgroundImage = "url(../images/face.png)";
-  halfSize.style.backgroundSize = "cover";
+  const size150 = document.createElement("div");
+  size150.style.height = "150px";
+  size150.style.width = "150px";
+  size150.style.cursor = "pointer";
+
+  size150.onclick = () => {
+    setFaceSize(150, size150);
+  };
+  size150.style.backgroundImage = "url(../images/face.png)";
+  size150.style.backgroundSize = "cover";
+
+  const size100 = document.createElement("div");
+  size100.style.height = "100px";
+  size100.style.width = "100px";
+  size100.style.cursor = "pointer";
+
+  size100.onclick = () => {
+    setFaceSize(100, size100);
+  };
+  size100.style.backgroundImage = "url(../images/face.png)";
+  size100.style.backgroundSize = "cover";
+
+  const size50 = document.createElement("div");
+  size50.style.height = "50px";
+  size50.style.width = "50px";
+  size50.style.cursor = "pointer";
+
+  size50.onclick = () => {
+    setFaceSize(50, size50);
+  };
+  size50.style.backgroundImage = "url(../images/face.png)";
+  size50.style.backgroundSize = "cover";
 
   sizeSelectAreaDiv.appendChild(normalSize);
-  sizeSelectAreaDiv.appendChild(halfSize);
+  sizeSelectAreaDiv.appendChild(size150);
+  sizeSelectAreaDiv.appendChild(size100);
+  sizeSelectAreaDiv.appendChild(size50);
 }
