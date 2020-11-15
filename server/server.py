@@ -39,10 +39,10 @@ def returnGIF():
         background = Image.new("RGB", img.size, (255, 255, 255))
         background.paste(img, mask=img.split()[3])
 
-        background.save("./FaceIcon/{}.png".format(i), format="PNG")
+        background.save("./FaceIcon/{}.png".format(i), format="GIF")
         im.append(background)
 
-    files = natsorted(glob.glob('./FaceIcon/*.png'))
+    files = natsorted(glob.glob('./FaceIcon/*.gif'))
     images = list(map(lambda file: Image.open(file), files))
     images[0].save('face.gif', save_all=True,
                    optimize=True,
