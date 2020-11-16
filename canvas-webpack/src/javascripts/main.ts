@@ -1,6 +1,7 @@
 import "../images/Cordinate.png";
 import "../images/BaseFace.png";
 import "../images/Beard.png";
+import "../images/BaseFaceGlasses.png";
 import "../images/face.png";
 import "../stylesheets/main.scss";
 import Mouse from "../javascripts/@types/mouse";
@@ -629,7 +630,6 @@ baseFaceSelectButtonCat.style.backgroundImage = "url(../images/Beard.png)";
 
 if (baseFaceSelectButtonCat) {
   baseFaceSelectButtonCat.onclick = () => {
-    console.log(baseFaceSelectButtonCat);
     emotionFaceDiv.style.backgroundImage = "url(../images/Beard.png)";
   };
 }
@@ -639,7 +639,7 @@ const baseFaceSelectButtonGlasses = document.getElementById(
 );
 if (baseFaceSelectButtonGlasses) {
   baseFaceSelectButtonGlasses.onclick = () => {
-    console.log(baseFaceSelectButtonGlasses);
+    emotionFaceDiv.style.backgroundImage = "url(../images/BaseFaceGlasses.png)";
   };
 }
 
