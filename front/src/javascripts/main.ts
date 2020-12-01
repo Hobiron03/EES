@@ -253,76 +253,33 @@ const CalculateColor = (
   let r = 255;
   let g = 255;
   let b = 0;
-  console.log(`angry: ${ANGRY.r}`);
   switch (zone) {
     case 1:
-      // 中心も考慮するパターン
-      // const r_1 = Math.floor(Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (x / 200));
-      // const r_2 = Math.floor(Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (y / 200));
-      // if(r_1 == 0 && r_2 == 0){
-      //   r = INITIAL_FACE_COLOR.r
-      // }
-      // else{
-      //   r = 255;
-      // }
+      //怒りx
+      console.log((ANGRY.g - INITIAL_FACE_COLOR.g) * (x / 160));
+      r =
+        INITIAL_FACE_COLOR.r +
+        (ANGRY.r - INITIAL_FACE_COLOR.r) * (1.0 - x / 160);
+      g =
+        INITIAL_FACE_COLOR.g +
+        (ANGRY.g - INITIAL_FACE_COLOR.g) * (1.0 - x / 160);
+      b =
+        INITIAL_FACE_COLOR.b +
+        (ANGRY.b - INITIAL_FACE_COLOR.b) * (1.0 - x / 160);
 
-      // const b_1 = Math.floor(Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (x / 200));
-      // const b_2 = Math.floor(Math.abs(ANGRY.b - INITIAL_FACE_COLOR.b) * (y / 200));
-      // if(b_1 == 0 && b_2 == 0){
-      //   b = INITIAL_FACE_COLOR.b
-      // }
-      // else{
-      //   b =( b_1 + b_2 )/2;
-      // }
-
-      // const g_1 = Math.floor(Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (x / 200));
-      // const g_2 = Math.floor(Math.abs(ANGRY.g - INITIAL_FACE_COLOR.g) * (y / 200));
-      // if(g_1 == 0 && b_2 == 0){
-      //   g = INITIAL_FACE_COLOR.g
-      // }
-      // else{
-      //   g = (g_1 + g_2) /2;
-      // }
-
-      ///////////
-      const r_1 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (x / 200);
-      const r_2 = Math.abs(ANGRY.r - ANGRY_HAPPY.r) * (y / 200);
-      // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
-      r = Math.abs(ANGRY.r + r_1 - r_2);
-
-      const b_1 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (x / 200);
-      const b_2 = Math.abs(ANGRY.b - ANGRY_HAPPY.b) * (y / 200);
-      // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
-      b = Math.abs(ANGRY.b + b_1 - b_2);
-
-      const g_1 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (x / 200);
-      const g_2 = Math.abs(ANGRY.g - ANGRY_HAPPY.g) * (y / 200);
-      // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
-      g = Math.abs(ANGRY.g + g_1 - g_2);
-
-      break;
     case 2:
-      //y成分
-      const r2_1 = Math.abs(ANGRY.r - SAD_ANGRY.r) * (y / 200);
-      //x成分
-      const r2_2 = Math.abs(ANGRY.r - SAD_ANGRY.r) * (x / 200);
-      // const r2_2 = Math.abs(ANGRY.r - INITIAL_FACE_COLOR.r) * (x / 200);
-      r = Math.abs(ANGRY.r - r2_1 + r2_2);
-
-      const b2_1 = Math.abs(ANGRY.b - SAD_ANGRY.b) * (y / 200);
-      const b2_2 = Math.abs(ANGRY.b - SAD_ANGRY.b) * (x / 200);
-      b = Math.abs(ANGRY.b - b2_1 + b2_2);
-
-      const g2_1 = Math.abs(ANGRY.g - SAD_ANGRY.g) * (y / 200);
-      const g2_2 = Math.abs(ANGRY.g - SAD_ANGRY.g) * (x / 200);
-      g = Math.abs(ANGRY.g - g2_1 + g2_2);
-
-      break;
-    default:
-      break;
+      //怒りy
+      r =
+        INITIAL_FACE_COLOR.r +
+        (ANGRY.r - INITIAL_FACE_COLOR.r) * (1.0 - y / 160);
+      g =
+        INITIAL_FACE_COLOR.g +
+        (ANGRY.g - INITIAL_FACE_COLOR.g) * (1.0 - y / 160);
+      b =
+        INITIAL_FACE_COLOR.b +
+        (ANGRY.b - INITIAL_FACE_COLOR.b) * (1.0 - y / 160);
   }
 
-  console.log(`r: ${r}, g: ${g}, b: ${b}`);
   return { r, g, b };
 };
 
@@ -331,14 +288,12 @@ const SetEmotionColor = (x: number, y: number): void => {
   if (x >= 0 && x < 160 && y >= 0 && y <= 160) {
     // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
     console.log("怒り");
-
     let faceColor = { r: 255, g: 0, b: 0 };
-    // if (x > y) {
-    //   faceColor = CalculateColor(x, y, 1);
-    // } else {
-    //   console.log("x < Y");
-    //   faceColor = CalculateColor(x, y, 2);
-    // }
+    if (x > y) {
+      faceColor = CalculateColor(x, y, 1);
+    } else {
+      faceColor = CalculateColor(x, y, 2);
+    }
 
     if (emotionFaceDiv) {
       emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
@@ -349,7 +304,6 @@ const SetEmotionColor = (x: number, y: number): void => {
     }
   } else if (x >= 0 && x <= 160 && y > 240 && y <= 400) {
     // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
-    console.log("悲しみ");
     if (emotionFaceDiv) {
       emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
         SAD.r,
@@ -359,7 +313,6 @@ const SetEmotionColor = (x: number, y: number): void => {
     }
   } else if (x >= 240 && x <= 400 && y > 240 && y <= 400) {
     // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
-    console.log("喜び");
     if (emotionFaceDiv) {
       emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
         PLEASURE.r,
@@ -369,7 +322,6 @@ const SetEmotionColor = (x: number, y: number): void => {
     }
   } else if (x >= 240 && x <= 400 && y >= 0 && y <= 160) {
     // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
-    console.log("楽しみ");
     if (emotionFaceDiv) {
       emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
         HAPPY.r,
