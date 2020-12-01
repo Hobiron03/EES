@@ -15,9 +15,9 @@ const EmotionColor = {
     b: 2,
   },
   SAD: {
-    r: 128,
-    g: 128,
-    b: 128,
+    r: 25,
+    g: 86,
+    b: 191,
   },
   PLEASURE: {
     r: 0,

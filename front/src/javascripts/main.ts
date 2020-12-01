@@ -266,9 +266,11 @@ const CalculateColor = (
       b =
         INITIAL_FACE_COLOR.b +
         (ANGRY.b - INITIAL_FACE_COLOR.b) * (1.0 - x / 160);
+      break;
 
     case 2:
       //怒りy
+      console.log("case 2");
       r =
         INITIAL_FACE_COLOR.r +
         (ANGRY.r - INITIAL_FACE_COLOR.r) * (1.0 - y / 160);
@@ -278,8 +280,31 @@ const CalculateColor = (
       b =
         INITIAL_FACE_COLOR.b +
         (ANGRY.b - INITIAL_FACE_COLOR.b) * (1.0 - y / 160);
+      break;
+
+    case 3:
+      console.log("case 3");
+      console.log("x:" + x);
+      console.log("y:" + y);
+      //悲しみx
+      r = INITIAL_FACE_COLOR.r + (SAD.r - INITIAL_FACE_COLOR.r) * (y / 160);
+      g = INITIAL_FACE_COLOR.g + (SAD.g - INITIAL_FACE_COLOR.g) * (y / 160);
+      b = INITIAL_FACE_COLOR.b + (SAD.b - INITIAL_FACE_COLOR.b) * (y / 160);
+      break;
+
+    case 4:
+      console.log("case 4");
+      //悲しみx
+      r =
+        INITIAL_FACE_COLOR.r + (SAD.r - INITIAL_FACE_COLOR.r) * (1.0 - x / 160);
+      g =
+        INITIAL_FACE_COLOR.g + (SAD.g - INITIAL_FACE_COLOR.g) * (1.0 - x / 160);
+      b =
+        INITIAL_FACE_COLOR.b + (SAD.b - INITIAL_FACE_COLOR.b) * (1.0 - x / 160);
+      break;
   }
 
+  console.log(r, g, b);
   return { r, g, b };
 };
 
@@ -304,11 +329,20 @@ const SetEmotionColor = (x: number, y: number): void => {
     }
   } else if (x >= 0 && x <= 160 && y > 240 && y <= 400) {
     // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
+    console.log("悲しみ");
+
+    let faceColor = { r: 255, g: 0, b: 0 };
+    if (160 - x > y - 240) {
+      faceColor = CalculateColor(160 - x, y - 240, 3);
+    } else {
+      faceColor = CalculateColor(x, y, 4);
+    }
+
     if (emotionFaceDiv) {
       emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
-        SAD.r,
-        SAD.g,
-        SAD.b
+        faceColor.r,
+        faceColor.g,
+        faceColor.b
       );
     }
   } else if (x >= 240 && x <= 400 && y > 240 && y <= 400) {
