@@ -328,17 +328,17 @@ const CalculateColor = (
 
 //x座標とy座標から感情に対応した色人変化させる
 const SetEmotionColor = (x: number, y: number): void => {
-  if (x >= 0 && x < 200 && y >= 0 && y <= 200) {
+  if (x >= 0 && x < 160 && y >= 0 && y <= 160) {
     // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
     console.log("怒り");
 
-    let faceColor = { r: 255, g: 255, b: 0 };
-    if (x > y) {
-      faceColor = CalculateColor(x, y, 1);
-    } else {
-      console.log("x < Y");
-      faceColor = CalculateColor(x, y, 2);
-    }
+    let faceColor = { r: 255, g: 0, b: 0 };
+    // if (x > y) {
+    //   faceColor = CalculateColor(x, y, 1);
+    // } else {
+    //   console.log("x < Y");
+    //   faceColor = CalculateColor(x, y, 2);
+    // }
 
     if (emotionFaceDiv) {
       emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
@@ -347,7 +347,7 @@ const SetEmotionColor = (x: number, y: number): void => {
         faceColor.b
       );
     }
-  } else if (x >= 0 && x <= 200 && y > 200 && y <= 400) {
+  } else if (x >= 0 && x <= 160 && y > 240 && y <= 400) {
     // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
     console.log("悲しみ");
     if (emotionFaceDiv) {
@@ -357,7 +357,7 @@ const SetEmotionColor = (x: number, y: number): void => {
         SAD.b
       );
     }
-  } else if (x >= 200 && x <= 400 && y > 200 && y <= 400) {
+  } else if (x >= 240 && x <= 400 && y > 240 && y <= 400) {
     // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
     console.log("喜び");
     if (emotionFaceDiv) {
@@ -367,7 +367,7 @@ const SetEmotionColor = (x: number, y: number): void => {
         PLEASURE.b
       );
     }
-  } else {
+  } else if (x >= 240 && x <= 400 && y >= 0 && y <= 160) {
     // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
     console.log("楽しみ");
     if (emotionFaceDiv) {
@@ -375,6 +375,14 @@ const SetEmotionColor = (x: number, y: number): void => {
         HAPPY.r,
         HAPPY.g,
         HAPPY.b
+      );
+    }
+  } else {
+    if (emotionFaceDiv) {
+      emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
+        INITIAL_FACE_COLOR.r,
+        INITIAL_FACE_COLOR.g,
+        INITIAL_FACE_COLOR.b
       );
     }
   }
@@ -414,7 +422,7 @@ coordinateCanvas.addEventListener("mousedown", (e: MouseEvent) => {
 let pre: any = 0;
 let cur: any = 0;
 let elapsedTime: number = 0;
-const fpsInterval: number = (1.0 / 60) * 1000; //60fps
+const fpsInterval: number = (1.0 / 30) * 1000; //60fps
 let faceScale: number = 1.0;
 coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
   //時刻の引き算をたす
@@ -457,6 +465,7 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
       }
       preMousePosX = mousePosX;
       preMousePosY = mousePosY;
+      SetEmotionColor(preMousePosX, preMousePosY);
       elapsedTime = 0;
     }
     pre = Date.now();
@@ -484,7 +493,8 @@ const InitFacialParts = (): void => {
     console.log("ERR! emotion-face div-element does not exit");
     return;
   }
-  emotionFaceDiv.style.backgroundImage = "url(../images/BaseFace.png)";
+  // emotionFaceDiv.style.backgroundImage = "url(../images/BaseFace.png)";
+  emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(255, 194, 0);
   //  $elementReference.style.backgroundImage = "url( " + $image + " )";
 
   if (!coordinateDiv) {

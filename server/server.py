@@ -46,7 +46,7 @@ def returnGIF():
     images = list(map(lambda file: Image.open(file), files))
     # Animationの間隔設定：基本３０fpsで最後は少し時間を長く
     durations = []
-    gif_interval = (1/30) * 1000
+    gif_interval = (1/15) * 1000
     for i in range(len(images)):
         if i == len(images) - 1:
             durations.append(1000)
