@@ -18,12 +18,6 @@ import {
   SAD,
   PLEASURE,
 } from "./emotionColor";
-import {
-  ANGRY_HAPPY,
-  HAPPY_PLESSURE,
-  PLESSURE_SAD,
-  SAD_ANGRY,
-} from "./emotionColorCenter";
 
 enum Color {
   BLACK = "black",
@@ -283,9 +277,6 @@ const CalculateColor = (
       break;
 
     case 3:
-      console.log("case 3");
-      console.log("x:" + x);
-      console.log("y:" + y);
       //悲しみx
       r = INITIAL_FACE_COLOR.r + (SAD.r - INITIAL_FACE_COLOR.r) * (y / 160);
       g = INITIAL_FACE_COLOR.g + (SAD.g - INITIAL_FACE_COLOR.g) * (y / 160);
@@ -293,7 +284,6 @@ const CalculateColor = (
       break;
 
     case 4:
-      console.log("case 4");
       //悲しみx
       r =
         INITIAL_FACE_COLOR.r + (SAD.r - INITIAL_FACE_COLOR.r) * (1.0 - x / 160);
@@ -301,6 +291,46 @@ const CalculateColor = (
         INITIAL_FACE_COLOR.g + (SAD.g - INITIAL_FACE_COLOR.g) * (1.0 - x / 160);
       b =
         INITIAL_FACE_COLOR.b + (SAD.b - INITIAL_FACE_COLOR.b) * (1.0 - x / 160);
+      break;
+
+    case 5:
+      //楽しみ
+      r =
+        INITIAL_FACE_COLOR.r + (PLEASURE.r - INITIAL_FACE_COLOR.r) * (x / 160);
+      g =
+        INITIAL_FACE_COLOR.g + (PLEASURE.g - INITIAL_FACE_COLOR.g) * (x / 160);
+      b =
+        INITIAL_FACE_COLOR.b + (PLEASURE.b - INITIAL_FACE_COLOR.b) * (x / 160);
+      break;
+
+    case 6:
+      //楽しみx>y:x画像するほど色に近く
+      r =
+        INITIAL_FACE_COLOR.r + (PLEASURE.r - INITIAL_FACE_COLOR.r) * (y / 160);
+      g =
+        INITIAL_FACE_COLOR.g + (PLEASURE.g - INITIAL_FACE_COLOR.g) * (y / 160);
+      b =
+        INITIAL_FACE_COLOR.b + (PLEASURE.b - INITIAL_FACE_COLOR.b) * (y / 160);
+      break;
+
+    case 7:
+      //happy x>y:x画像するほど色に近く
+      r = INITIAL_FACE_COLOR.r + (HAPPY.r - INITIAL_FACE_COLOR.r) * (x / 160);
+      g = INITIAL_FACE_COLOR.g + (HAPPY.g - INITIAL_FACE_COLOR.g) * (x / 160);
+      b = INITIAL_FACE_COLOR.b + (HAPPY.b - INITIAL_FACE_COLOR.b) * (x / 160);
+      break;
+
+    case 8:
+      //楽しみx>y:x画像するほど色に近く
+      r =
+        INITIAL_FACE_COLOR.r +
+        (PLEASURE.r - INITIAL_FACE_COLOR.r) * (1.0 - y / 160);
+      g =
+        INITIAL_FACE_COLOR.g +
+        (PLEASURE.g - INITIAL_FACE_COLOR.g) * (1.0 - y / 160);
+      b =
+        INITIAL_FACE_COLOR.b +
+        (PLEASURE.b - INITIAL_FACE_COLOR.b) * (1.0 - y / 160);
       break;
   }
 
@@ -347,20 +377,33 @@ const SetEmotionColor = (x: number, y: number): void => {
     }
   } else if (x >= 240 && x <= 400 && y > 240 && y <= 400) {
     // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
+    let faceColor = { r: 255, g: 0, b: 0 };
+    if (x > y) {
+      faceColor = CalculateColor(x - 240, y - 240, 6);
+    } else {
+      faceColor = CalculateColor(x - 240, y - 240, 5);
+    }
+
     if (emotionFaceDiv) {
       emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
-        PLEASURE.r,
-        PLEASURE.g,
-        PLEASURE.b
+        faceColor.r,
+        faceColor.g,
+        faceColor.b
       );
     }
   } else if (x >= 240 && x <= 400 && y >= 0 && y <= 160) {
     // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
+    let faceColor = { r: 255, g: 0, b: 0 };
+    if (x > y) {
+      faceColor = CalculateColor(x - 240, y, 7);
+    } else {
+      faceColor = CalculateColor(x - 240, y, 8);
+    }
     if (emotionFaceDiv) {
       emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(
-        HAPPY.r,
-        HAPPY.g,
-        HAPPY.b
+        faceColor.r,
+        faceColor.g,
+        faceColor.b
       );
     }
   } else {
