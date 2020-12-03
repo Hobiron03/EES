@@ -85,6 +85,8 @@ let dataY: number[] = [];
 //顔画像のBase64のデータ
 let base64Images: string[] = [];
 
+let isApplyFaceColor: boolean = false;
+
 // 顔アイコンの口を描画のCanvas
 const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>(
   document.getElementById("facial-parts")
@@ -494,7 +496,9 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
       }
       preMousePosX = mousePosX;
       preMousePosY = mousePosY;
-      SetEmotionColor(preMousePosX, preMousePosY);
+      if (isApplyFaceColor) {
+        SetEmotionColor(preMousePosX, preMousePosY);
+      }
       elapsedTime = 0;
     }
     pre = Date.now();
@@ -738,4 +742,17 @@ if (sizeSelectAreaDiv) {
   sizeSelectAreaDiv.appendChild(size150);
   sizeSelectAreaDiv.appendChild(size100);
   sizeSelectAreaDiv.appendChild(size50);
+}
+
+const settingFaceColorDom = document.getElementById("setting-face-color");
+const settingColorButton = <HTMLInputElement>settingFaceColorDom;
+if (settingColorButton) {
+  settingColorButton.onclick = () => {
+    if (settingColorButton.checked) {
+      console.log("cheked");
+      isApplyFaceColor = true;
+    } else {
+      isApplyFaceColor = false;
+    }
+  };
 }
