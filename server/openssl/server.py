@@ -79,5 +79,4 @@ def returnGIF():
 
 
 if __name__ == '__main__':
-    api.run(host='0.0.0.0', port=80, ssl_context=(
-        'openssl/server.crt', 'openssl/server.key'), threaded=True, debug=True)
+    api.run(host='0.0.0.0', port=80)
