@@ -4,6 +4,8 @@ import "../images/Beard.png";
 import "../images/BaseFaceGlasses.png";
 import "../images/face.png";
 import "../images/dangerman.png";
+import "../images/cat.png";
+import "../images/cheek.png";
 import "../stylesheets/main.scss";
 import Mouse from "../javascripts/@types/mouse";
 import Eyebrow from "../javascripts/@types/eyebrows";
@@ -665,7 +667,7 @@ baseFaceSelectButtonCat.style.backgroundImage = "url(../images/Beard.png)";
 
 if (baseFaceSelectButtonCat) {
   baseFaceSelectButtonCat.onclick = () => {
-    emotionFaceDiv.style.backgroundImage = "url(../images/Beard.png)";
+    emotionFaceDiv.style.backgroundImage = "url(../images/dangerman.png)";
   };
 }
 
