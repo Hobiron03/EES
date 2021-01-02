@@ -3,6 +3,7 @@ import "../images/BaseFace.png";
 import "../images/Beard.png";
 import "../images/BaseFaceGlasses.png";
 import "../images/face.png";
+import "../images/dangerman.png";
 import "../stylesheets/main.scss";
 import Mouse from "../javascripts/@types/mouse";
 import Eyebrow from "../javascripts/@types/eyebrows";
