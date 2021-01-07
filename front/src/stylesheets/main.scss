@@ -1,5 +1,9 @@
 body {
-  margin: 20px;
+}
+
+.title {
+  border-bottom: #242424 solid 1px;
+  padding-bottom: 20px;
 }
 
 .main {
@@ -45,9 +49,9 @@ body {
 
 #decide-button {
   cursor: pointer;
-  margin: 20px;
-  padding: 10px 120px;
-  font-size: 30px;
+  margin: 10px;
+  padding: 10px 100px;
+  font-size: 25px;
   font-weight: bold;
   color: white;
   background-color: #5b71f5;

@@ -6,6 +6,7 @@ import "../images/face.png";
 import "../images/dangerman.png";
 import "../images/cat.png";
 import "../images/cheek.png";
+import "../images/Glusses.png";
 import "../stylesheets/main.scss";
 import Mouse from "../javascripts/@types/mouse";
 import Eyebrow from "../javascripts/@types/eyebrows";
@@ -447,7 +448,7 @@ coordinateCanvas.addEventListener("mousedown", (e: MouseEvent) => {
 let pre: any = 0;
 let cur: any = 0;
 let elapsedTime: number = 0;
-const fpsInterval: number = (1.0 / 30) * 1000; //60fps
+const fpsInterval: number = (1.0 / 60) * 1000; //60fps
 let faceScale: number = 1.0;
 coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
   //時刻の引き算をたす
@@ -663,11 +664,11 @@ if (baseFaceSelectButtonNormal) {
 }
 
 const baseFaceSelectButtonCat = document.getElementById("mask-select-area-cat");
-baseFaceSelectButtonCat.style.backgroundImage = "url(../images/Beard.png)";
+baseFaceSelectButtonCat.style.backgroundImage = "url(../images/Glusses.png)";
 
 if (baseFaceSelectButtonCat) {
   baseFaceSelectButtonCat.onclick = () => {
-    emotionFaceDiv.style.backgroundImage = "url(../images/dangerman.png)";
+    emotionFaceDiv.style.backgroundImage = "url(../images/cat.png)";
   };
 }
 
@@ -676,7 +677,25 @@ const baseFaceSelectButtonGlasses = document.getElementById(
 );
 if (baseFaceSelectButtonGlasses) {
   baseFaceSelectButtonGlasses.onclick = () => {
-    emotionFaceDiv.style.backgroundImage = "url(../images/BaseFaceGlasses.png)";
+    emotionFaceDiv.style.backgroundImage = "url(../images/Glusses.png)";
+  };
+}
+
+const baseFaceSelectButtonCheek = document.getElementById(
+  "mask-select-area-cheek"
+);
+if (baseFaceSelectButtonCheek) {
+  baseFaceSelectButtonCheek.onclick = () => {
+    emotionFaceDiv.style.backgroundImage = "url(../images/cheek.png)";
+  };
+}
+
+const baseFaceSelectButtonDanger = document.getElementById(
+  "mask-select-area-danger"
+);
+if (baseFaceSelectButtonDanger) {
+  baseFaceSelectButtonDanger.onclick = () => {
+    emotionFaceDiv.style.backgroundImage = "url(../images/dangerman.png)";
   };
 }
 

@@ -7,6 +7,9 @@
   </head>
 
   <body>
+    <header>
+      <h2 class="title">Face AVAS</2>
+    </header>
     <div class="main">
       <div class="make-face-field">
         <div class="Top">
@@ -18,6 +21,7 @@
         <div class="drag-corrdinate">
           <canvas id="coordinate" width="400" height="400"> </canvas>
         </div>
+        <button id="decide-button">OK!!</button>
 
         <div>
           <h3>色変化</h3>
@@ -32,15 +36,16 @@
           <input type="button" value="普通の顔" id="mask-select-area-normal" />
           <input type="button" value="ねこ" id="mask-select-area-cat" />
           <input type="button" value="メガネ" id="mask-select-area-glasses" />
+          <input type="button" value="ほっぺ" id="mask-select-area-cheek" />
+          <input type="button" value="おじさん" id="mask-select-area-danger" />
         </div>
 
         <h3>サイズ選択</h3>
         <div id="size-select-area"></div>
 
-        <button id="decide-button">OK!!</button>
       </div>
       <div class="result">
-        <p>結果</p>
+        <h2>Result</h2>
         <img src="" id="gif" />
       </div>
     </div>
