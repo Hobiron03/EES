@@ -257,8 +257,7 @@ const CalculateColor = (
     case 1:
       //怒りx
       r =
-        INITIAL_FACE_COLOR.r +
-        (ANGRY.r - INITIAL_FACE_COLOR.r) * (1.0 - x / 160);
+        INITIAL_FACE_COLOR.r + (ANGRY.r - INITIAL_FACE_COLOR.r) * (1.0 - x / 1);
       g =
         INITIAL_FACE_COLOR.g +
         (ANGRY.g - INITIAL_FACE_COLOR.g) * (1.0 - x / 160);
@@ -448,7 +447,7 @@ coordinateCanvas.addEventListener("mousedown", (e: MouseEvent) => {
 let pre: any = 0;
 let cur: any = 0;
 let elapsedTime: number = 0;
-const fpsInterval: number = (1.0 / 60) * 1000; //60fps
+const fpsInterval: number = (1.0 / 30) * 1000; //60fps
 let faceScale: number = 1.0;
 coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
   //時刻の引き算をたす
