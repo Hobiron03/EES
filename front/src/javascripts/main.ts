@@ -633,7 +633,6 @@ if (okButton) {
 
     await PostImageData(FormatImageData(base64Images), GCE_URL)
       .then((image_name) => {
-        console.log(`${image_name}が届いたよ`);
         setGIF(image_name);
       })
       .catch((err) => {
@@ -837,5 +836,3 @@ for (let y = 0; y < height; ++y) {
 
 // 変更した内容をキャンバスに書き戻す
 cmctx.putImageData(imageData, 0, 0);
-
-console.log(colorMapCanvas.toDataURL());
