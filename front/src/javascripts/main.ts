@@ -618,7 +618,9 @@ const FormatImageData = (base64Images: string[]): string => {
 
 const GCE_URL = "//34.84.133.169/returnGIF";
 const GCE_2_URL = "http://35.200.88.160/returnGIF";
-const localURL = "http://0.0.0.0:80/returnGIF";
+const GCE_3_URL = "//34.84.124.211/returnGIF";
+const localURL = "http://127.0.0.1:5000/returnGIF";
+
 const GCS_URL = "https://storage.googleapis.com/faceicons/";
 const imgElement = document.getElementById("gif");
 const gifDownload = <HTMLAnchorElement>imgElement;
@@ -631,12 +633,13 @@ if (okButton) {
     pullDataY = dataY.concat();
     faceAnimation = requestAnimationFrame(faceAnimationStep);
 
-    await PostImageData(FormatImageData(base64Images), GCE_URL)
+    await PostImageData(FormatImageData(base64Images), localURL)
       .then((image_name) => {
         setGIF(image_name);
       })
       .catch((err) => {
         console.log("Hello");
+        console.log(err);
       });
   };
 }
