@@ -1,3 +1,4 @@
+//----画像のインポート（このファイル内で画像を使用する際には、imagesフォルダに画像を入れて読み込む必要がある）---
 import "../images/Cordinate.png";
 import "../images/BaseFace.png";
 import "../images/Beard.png";
@@ -7,14 +8,21 @@ import "../images/dangerman.png";
 import "../images/cat.png";
 import "../images/cheek.png";
 import "../images/Glusses.png";
-import "../stylesheets/main.scss";
+//----------------------------------------
+
+//----自分で定義した型をインポート---
 import Mouse from "../javascripts/@types/mouse";
 import Eyebrow from "../javascripts/@types/eyebrows";
 import Eye from "../javascripts/@types/eye";
 import coordinate from "../javascripts/@types/coordinate";
+//----------------------------------------
+
+//----自作した関数のインポート（srcのディレクトリに配置してある）---
 import PostImageData from "./PostImageData";
 import ConvertRgbFormat from "./ConvertRgbFormat";
-import html2canvas from "html2canvas";
+import CalculateColor from "./CalculateColor";
+//----------------------------------------
+
 import {
   INITIAL_FACE_COLOR,
   ANGRY,
@@ -22,6 +30,12 @@ import {
   SAD,
   PLEASURE,
 } from "./emotionColor";
+
+import "../stylesheets/main.scss";
+
+// 外部ツールの読み込み
+// html2canvas(https://qiita.com/7shi/items/ba7089e864fefac69808)
+import html2canvas from "html2canvas";
 
 enum Color {
   BLACK = "black",
@@ -82,13 +96,13 @@ let corrdinate: coordinate = {
   height: 0,
 };
 
-//顔の変化のデータを格納しておく。大体60fpsくらいで入る
+//顔の変化のデータを格納しておく。大体30fpsくらいで入る
 let dataX: number[] = [];
 let dataY: number[] = [];
-
 //顔画像のBase64のデータ
 let base64Images: string[] = [];
 
+//顔アイコン作成時に色を付与するかどうか
 let isApplyFaceColor: boolean = false;
 
 // 顔アイコンの口を描画のCanvas
@@ -166,7 +180,7 @@ const RenderEyebrows = (y: number): void => {
 
   //眉の描画
   if (fpctx) {
-    //left
+    //左側の眉の描画
     fpctx.beginPath();
     fpctx.strokeStyle = "black";
     fpctx.lineWidth = leftEyebrow.lineWidth;
@@ -179,7 +193,7 @@ const RenderEyebrows = (y: number): void => {
     fpctx.lineTo(leftEyebrow.endPosX, leftEyebrow.endPosY);
     fpctx.stroke();
 
-    //right
+    //右側の眉の描画
     fpctx.beginPath();
     fpctx.strokeStyle = "black";
     fpctx.lineWidth = rightEyebrow.lineWidth;
@@ -243,95 +257,6 @@ const ResetFacialParts = (): void => {
   if (fpctx) {
     fpctx.clearRect(0, 0, fpctx.canvas.clientWidth, fpctx.canvas.clientHeight);
   }
-};
-
-const CalculateColor = (
-  x: number,
-  y: number,
-  zone: number
-): { r: number; g: number; b: number } => {
-  let r = 255;
-  let g = 255;
-  let b = 255;
-  switch (zone) {
-    case 1:
-      //怒りx
-      r =
-        INITIAL_FACE_COLOR.r + (ANGRY.r - INITIAL_FACE_COLOR.r) * (1.0 - x / 1);
-      g =
-        INITIAL_FACE_COLOR.g +
-        (ANGRY.g - INITIAL_FACE_COLOR.g) * (1.0 - x / 160);
-      b =
-        INITIAL_FACE_COLOR.b +
-        (ANGRY.b - INITIAL_FACE_COLOR.b) * (1.0 - x / 160);
-      break;
-
-    case 2:
-      //怒りy
-      r =
-        INITIAL_FACE_COLOR.r +
-        (ANGRY.r - INITIAL_FACE_COLOR.r) * (1.0 - y / 160);
-      g =
-        INITIAL_FACE_COLOR.g +
-        (ANGRY.g - INITIAL_FACE_COLOR.g) * (1.0 - y / 160);
-      b =
-        INITIAL_FACE_COLOR.b +
-        (ANGRY.b - INITIAL_FACE_COLOR.b) * (1.0 - y / 160);
-      break;
-
-    case 3:
-      //悲しみx
-      r = INITIAL_FACE_COLOR.r + (SAD.r - INITIAL_FACE_COLOR.r) * (y / 160);
-      g = INITIAL_FACE_COLOR.g + (SAD.g - INITIAL_FACE_COLOR.g) * (y / 160);
-      b = INITIAL_FACE_COLOR.b + (SAD.b - INITIAL_FACE_COLOR.b) * (y / 160);
-      break;
-
-    case 4:
-      //悲しみx
-      r =
-        INITIAL_FACE_COLOR.r + (SAD.r - INITIAL_FACE_COLOR.r) * (1.0 - x / 160);
-      g =
-        INITIAL_FACE_COLOR.g + (SAD.g - INITIAL_FACE_COLOR.g) * (1.0 - x / 160);
-      b =
-        INITIAL_FACE_COLOR.b + (SAD.b - INITIAL_FACE_COLOR.b) * (1.0 - x / 160);
-      break;
-
-    case 5:
-      //楽しみ
-      r =
-        INITIAL_FACE_COLOR.r + (PLEASURE.r - INITIAL_FACE_COLOR.r) * (x / 160);
-      g =
-        INITIAL_FACE_COLOR.g + (PLEASURE.g - INITIAL_FACE_COLOR.g) * (x / 160);
-      b =
-        INITIAL_FACE_COLOR.b + (PLEASURE.b - INITIAL_FACE_COLOR.b) * (x / 160);
-      break;
-
-    case 6:
-      //楽しみx>y:xが増加するほど色に近く
-      r =
-        INITIAL_FACE_COLOR.r + (PLEASURE.r - INITIAL_FACE_COLOR.r) * (y / 160);
-      g =
-        INITIAL_FACE_COLOR.g + (PLEASURE.g - INITIAL_FACE_COLOR.g) * (y / 160);
-      b =
-        INITIAL_FACE_COLOR.b + (PLEASURE.b - INITIAL_FACE_COLOR.b) * (y / 160);
-      break;
-
-    case 7:
-      //happy x>y: yが減少するほど色に近く
-
-      r = INITIAL_FACE_COLOR.r + (HAPPY.r - INITIAL_FACE_COLOR.r) * (y / 160);
-      g = INITIAL_FACE_COLOR.g + (HAPPY.g - INITIAL_FACE_COLOR.g) * (y / 160);
-      b = INITIAL_FACE_COLOR.b + (HAPPY.b - INITIAL_FACE_COLOR.b) * (y / 160);
-      break;
-
-    case 8:
-      //happy x<y:x画像するほど色に近く
-      r = INITIAL_FACE_COLOR.r + (HAPPY.r - INITIAL_FACE_COLOR.r) * (x / 160);
-      g = INITIAL_FACE_COLOR.g + (HAPPY.g - INITIAL_FACE_COLOR.g) * (x / 160);
-      b = INITIAL_FACE_COLOR.b + (HAPPY.b - INITIAL_FACE_COLOR.b) * (x / 160);
-      break;
-  }
-  return { r, g, b };
 };
 
 //x座標とy座標から感情に対応した色人変化させる
@@ -447,11 +372,10 @@ coordinateCanvas.addEventListener("mousedown", (e: MouseEvent) => {
 let pre: any = 0;
 let cur: any = 0;
 let elapsedTime: number = 0;
-const fpsInterval: number = (1.0 / 30) * 1000; //60fps
 let faceScale: number = 1.0;
+const fpsInterval: number = (1.0 / 30) * 1000; //60fps
+
 coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
-  //時刻の引き算をたす
-  //60fpsにしたい
   if (isMouseDrag) {
     cur = Date.now();
     elapsedTime += cur - pre;
@@ -499,7 +423,7 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
   }
 });
 
-//ドラッグ終わり！
+//ドラッグが終わり、クリックをやめた瞬間の処理
 coordinateCanvas.addEventListener("mouseup", (e: MouseEvent) => {
   isMouseDrag = false;
   //終点の描画
@@ -588,8 +512,6 @@ const main = (() => {
   Init();
 })();
 
-window.onload = () => {};
-
 let faceAnimation: any;
 let pullDataX: number[] = [];
 let pullDataY: number[] = [];
@@ -620,7 +542,6 @@ const GCE_URL = "//34.84.133.169/returnGIF";
 const GCE_2_URL = "http://35.200.88.160/returnGIF";
 const GCE_3_URL = "//34.84.124.211/returnGIF";
 const localURL = "http://127.0.0.1:5000/returnGIF";
-
 const GCS_URL = "https://storage.googleapis.com/faceicons/";
 const imgElement = document.getElementById("gif");
 const gifDownload = <HTMLAnchorElement>imgElement;
@@ -628,7 +549,7 @@ const gifDownload = <HTMLAnchorElement>imgElement;
 const okButton = document.getElementById("decide-button");
 if (okButton) {
   okButton.onclick = async () => {
-    //大体60fps
+    //大体30fps
     pullDataX = dataX.concat();
     pullDataY = dataY.concat();
     faceAnimation = requestAnimationFrame(faceAnimationStep);

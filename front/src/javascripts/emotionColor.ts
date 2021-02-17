@@ -1,3 +1,5 @@
+//感情に紐づいている色を定義している関数。ここで色を変えられる
+
 const EmotionColor = {
   INITIAL_FACE_COLOR: {
     r: 255,
