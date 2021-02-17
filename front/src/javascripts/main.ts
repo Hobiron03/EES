@@ -1,3 +1,5 @@
+//処理の順番 main
+
 //----画像のインポート（このファイル内で画像を使用する際には、imagesフォルダに画像を入れて読み込む必要がある）---
 import "../images/Cordinate.png";
 import "../images/BaseFace.png";
@@ -21,6 +23,7 @@ import coordinate from "../javascripts/@types/coordinate";
 import PostImageData from "./PostImageData";
 import ConvertRgbFormat from "./ConvertRgbFormat";
 import CalculateColor from "./CalculateColor";
+import FormatImageData from "./FormatImageData";
 //----------------------------------------
 
 import {
@@ -33,9 +36,10 @@ import {
 
 import "../stylesheets/main.scss";
 
-// 外部ツールの読み込み
+// -----------外部ツールの読み込み-----------------
 // html2canvas(https://qiita.com/7shi/items/ba7089e864fefac69808)
 import html2canvas from "html2canvas";
+// ----------------------------
 
 enum Color {
   BLACK = "black",
@@ -368,13 +372,12 @@ coordinateCanvas.addEventListener("mousedown", (e: MouseEvent) => {
   }
 });
 
-//ドラッグ中
+//----------ドラッグ中----------------------
 let pre: any = 0;
 let cur: any = 0;
 let elapsedTime: number = 0;
 let faceScale: number = 1.0;
 const fpsInterval: number = (1.0 / 30) * 1000; //60fps
-
 coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
   if (isMouseDrag) {
     cur = Date.now();
@@ -444,14 +447,14 @@ const InitFacialParts = (): void => {
     console.log("ERR! emotion-face div-element does not exit");
     return;
   }
-  // emotionFaceDiv.style.backgroundImage = "url(../images/BaseFace.png)";
-  emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(255, 194, 0);
-  //  $elementReference.style.backgroundImage = "url( " + $image + " )";
 
   if (!coordinateDiv) {
     console.log("ERR! coordinate div-element does not exit");
     return;
   }
+
+  //顔アイコンの初期の色を設定
+  emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(255, 194, 0);
 
   corrdinate.width = coordinateDiv.clientWidth;
   corrdinate.height = coordinateDiv.clientHeight;
@@ -502,16 +505,16 @@ const InitFacialParts = (): void => {
   DrawFace(corrdinate.height / 2, corrdinate.height / 2);
 };
 
-//初期設定
+//初期設定(顔変化に使用する座標の描画、顔アイコンの設定をここで行う)
 const Init = (): void => {
   DrawCoordinateImage();
   InitFacialParts();
 };
-
 const main = (() => {
   Init();
 })();
 
+//---------顔アイコンのアニメーション処理------------
 let faceAnimation: any;
 let pullDataX: number[] = [];
 let pullDataY: number[] = [];
@@ -527,16 +530,7 @@ const faceAnimationStep = (): void => {
     cancelAnimationFrame(faceAnimation);
   }
 };
-
-//画像データをpostように１行の文字列に変換する
-const FormatImageData = (base64Images: string[]): string => {
-  const images: string[] = base64Images.map((imageWithInfo) => {
-    return imageWithInfo.split(",")[1] + ",";
-  });
-
-  const imageDataLine: string = images.reduce((str1, str2) => str1 + str2);
-  return imageDataLine;
-};
+//----------------------------------------------
 
 const GCE_URL = "//34.84.133.169/returnGIF";
 const GCE_2_URL = "http://35.200.88.160/returnGIF";
