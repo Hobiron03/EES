@@ -1,5 +1,3 @@
-//処理の順番 main
-
 //----画像のインポート（このファイル内で画像を使用する際には、imagesフォルダに画像を入れて読み込む必要がある）---
 import "../images/Cordinate.png";
 import "../images/BaseFace.png";
