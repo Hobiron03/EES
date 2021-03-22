@@ -16,4 +16,6 @@
 - natsort==7.0.1
 - google-cloud-storage==1.31.2
 
-### 環境
+### other
+
+https://qiita.com/mk185/items/7ad004bf202f400daea1
