@@ -1,21 +1,21 @@
 /* eslint-disable no-undef */
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  mode: 'development',
-  entry: "./src/javascripts/main.ts",
+  mode: "development",
+  entry: {
+    entry: "./src/javascripts/main.ts",
+    index: "./src/javascripts/index.tsx",
+  },
   output: {
     path: path.resolve(__dirname, "./dist"),
-    filename: "./javascripts/main.js",
+    filename: "./javascripts/[name].bundle.js",
   },
   resolve: {
-    extensions: [
-      '.ts',
-      '.js'
-    ]
+    extensions: [".ts", ".js", ".tsx", ".jsx"],
   },
   module: {
     rules: [
@@ -24,20 +24,18 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'ts-loader',
-          }
-        ]
+            loader: "ts-loader",
+          },
+        ],
       },
       {
         test: /\.js/,
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: [
-                ['@babel/preset-env', {'targets': '>0.25%, not dead'}],
-              ],
+              presets: [["@babel/preset-env", { targets: ">0.25%, not dead" }]],
             },
           },
         ],
@@ -49,10 +47,10 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
           },
           {
-            loader: 'sass-loader',
+            loader: "sass-loader",
           },
         ],
       },
@@ -60,10 +58,10 @@ module.exports = {
         test: /\.(png|jpe?g|gif)/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
               name: "images/[name].[ext]",
-            }
+            },
           },
         ],
       },
