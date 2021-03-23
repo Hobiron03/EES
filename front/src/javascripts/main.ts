@@ -115,7 +115,7 @@ const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext(
   "2d"
 );
 
-// 顔アイコン作成Canvasの背景画像を描画
+// 顔アイコン作成Canvasの背景画像を描画する
 const DrawCoordinateImage = (): void => {
   let background: HTMLImageElement = new Image();
   const imageURL: string = "../images/Cordinate.png";
@@ -405,7 +405,6 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
             scale: faceScale,
           }).then((canvas) => {
             base64Images.push(canvas.toDataURL());
-            // console.log(canvas.toDataURL());
           });
           dataX.push(mousePosX);
           dataY.push(mousePosY);
