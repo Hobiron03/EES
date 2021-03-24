@@ -1,9 +1,10 @@
-body {
-}
-
 .title {
   border-bottom: #242424 solid 1px;
   padding-bottom: 20px;
+}
+
+.reviews-table {
+  display: flex;
 }
 
 .main {
@@ -33,9 +34,6 @@ body {
 
 .Top {
   display: flex;
-}
-
-#setting-face-color {
 }
 
 #setting-face-color:hover {

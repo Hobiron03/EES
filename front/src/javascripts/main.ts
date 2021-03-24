@@ -24,13 +24,7 @@ import CalculateColor from "./CalculateColor";
 import FormatImageData from "./FormatImageData";
 //----------------------------------------
 
-import {
-  INITIAL_FACE_COLOR,
-  ANGRY,
-  HAPPY,
-  SAD,
-  PLEASURE,
-} from "./emotionColor";
+import { INITIAL_FACE_COLOR } from "./emotionColor";
 
 import "../stylesheets/main.scss";
 
@@ -574,5 +568,29 @@ if (settingColorButton) {
     } else {
       isApplyFaceColor = false;
     }
+  };
+}
+
+const appImgDom = document.getElementById("app-img");
+const appImg = <HTMLImageElement>appImgDom;
+if (appImg) {
+  console.log("appimg");
+}
+
+//レビュー追加ボタンの制御
+const addReiviewButtonDOM = document.getElementById("add-review");
+const addReiviewButton = <HTMLButtonElement>addReiviewButtonDOM;
+if (addReiviewButton) {
+  addReiviewButton.onclick = () => {
+    //レビューテーブルに顔を追加
+    const reviewsTableDiv = <HTMLDivElement>(
+      document.getElementById("reviews-table")
+    );
+
+    const a = document.createElement("a");
+    const img = document.createElement("img");
+    img.src = "https://wired.jp/app/uploads/2018/01/GettyImages-522585140.webp";
+    a.appendChild(img);
+    reviewsTableDiv.appendChild(a);
   };
 }
