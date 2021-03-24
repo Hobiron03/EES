@@ -433,6 +433,7 @@ coordinateCanvas.addEventListener("mouseup", (e: MouseEvent) => {
   }
 });
 
+const faceSizeRatio: number = 0.75;
 const InitFacialParts = (): void => {
   if (!emotionFaceDiv) {
     console.log("ERR! emotion-face div-element does not exit");
@@ -470,28 +471,29 @@ const InitFacialParts = (): void => {
   mouse.endPosX = centerPosX + offsetMouseWidth;
   mouse.endPosY = centerPosY + offsetMouseHeight;
   mouse.maxUShapePos = faceWidth / 3;
-  mouse.lineWidth = 4;
+  mouse.lineWidth = 4 * faceSizeRatio;
 
   //眉の相対的な場所を求める
-  leftEyebrow.lineWidth = 4;
-  leftEyebrow.startPosX = centerPosX - 45;
-  leftEyebrow.startPosY = centerPosY - 33;
-  leftEyebrow.endPosX = centerPosX - 20;
-  leftEyebrow.endPosY = centerPosY - 33;
-  leftEyebrow.maxEndHeight = faceHeight / 13;
+  //左眉
+  leftEyebrow.lineWidth = 4 * faceSizeRatio;
+  leftEyebrow.startPosX = centerPosX - 45 * faceSizeRatio;
+  leftEyebrow.startPosY = centerPosY - 33 * faceSizeRatio;
+  leftEyebrow.endPosX = centerPosX - 20 * faceSizeRatio;
+  leftEyebrow.endPosY = centerPosY - 33 * faceSizeRatio;
+  leftEyebrow.maxEndHeight = (faceHeight / 13) * faceSizeRatio;
   //右眉
-  rightEyebrow.lineWidth = 4;
-  rightEyebrow.startPosX = centerPosX + 45;
-  rightEyebrow.startPosY = centerPosY - 33;
-  rightEyebrow.endPosX = centerPosX + 20;
-  rightEyebrow.endPosY = centerPosY - 33;
-  rightEyebrow.maxEndHeight = faceHeight / 13;
+  rightEyebrow.lineWidth = 4 * faceSizeRatio;
+  rightEyebrow.startPosX = centerPosX + 45 * faceSizeRatio;
+  rightEyebrow.startPosY = centerPosY - 33 * faceSizeRatio;
+  rightEyebrow.endPosX = centerPosX + 20 * faceSizeRatio;
+  rightEyebrow.endPosY = centerPosY - 33 * faceSizeRatio;
+  rightEyebrow.maxEndHeight = faceHeight / (13 * faceSizeRatio);
 
   //目の設定
-  rightEye.size = 25;
-  rightEye.pos = 35;
-  leftEye.size = 25;
-  leftEye.pos = 35;
+  rightEye.size = 25 * faceSizeRatio;
+  rightEye.pos = 35 * faceSizeRatio;
+  leftEye.size = 25 * faceSizeRatio;
+  leftEye.pos = 35 * faceSizeRatio;
 
   DrawFace(corrdinate.height / 2, corrdinate.height / 2);
 };
@@ -577,6 +579,7 @@ if (appImg) {
   console.log("appimg");
 }
 
+/////////////////////////////////レビューシステム関連//////////////////////////////////////////
 //レビュー追加ボタンの制御
 const addReiviewButtonDOM = document.getElementById("add-review");
 const addReiviewButton = <HTMLButtonElement>addReiviewButtonDOM;
@@ -586,7 +589,6 @@ if (addReiviewButton) {
     const reviewsTableDiv = <HTMLDivElement>(
       document.getElementById("reviews-table")
     );
-
     const a = document.createElement("a");
     const img = document.createElement("img");
     img.src = "https://wired.jp/app/uploads/2018/01/GettyImages-522585140.webp";
@@ -594,3 +596,19 @@ if (addReiviewButton) {
     reviewsTableDiv.appendChild(a);
   };
 }
+
+// ウィンドウを開く
+$(".js-modal-open").each(function () {
+  $(this).on("click", function () {
+    var target = $(this).data("target");
+    var modal = document.getElementById(target);
+    $(modal).fadeIn(300);
+    return false;
+  });
+});
+
+// ウィンドウを閉じる
+$(".js-modal-close").on("click", function () {
+  $(".js-modal").fadeOut(300);
+  return false;
+});

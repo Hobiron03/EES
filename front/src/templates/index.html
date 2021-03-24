@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Emotion Expression System</title>
   </head>
 
@@ -11,39 +12,53 @@
     <div id="root"></div>
 
     <div id="reviews-table">
-      <a href="">
-      <img src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif" alt="" width="100">
-      </a>
-
-      <a href="">
-      <img src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif" alt="" width="100">
+      <a class="js-modal-open" href="" data-target="modal01">
+        <img
+          src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
+          alt=""
+          width="100"
+        />
       </a>
     </div>
-
     <button id="add-review">Add review</button>
+
+    <div id="modal01" class="c-modal js-modal">
+      <div class="c-modal_bg js-modal-close"></div>
+      <div class="c-modal_content _lg">
+        <div class="c-modal_content_inner">
+          <a class="js-modal-close c-modal_close" href=""
+            ><span>閉じる</span></a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- review area -->
     <div class="main">
       <div class="make-face-field">
         <div class="Top">
           <div id="emotion-face">
-            <canvas id="facial-parts" width="200" height="200"> </canvas>
+            <canvas id="facial-parts" width="150" height="150"> </canvas>
           </div>
         </div>
         <div class="drag-corrdinate">
-          <canvas id="coordinate" width="400" height="400"> </canvas>
+          <canvas id="coordinate" width="300" height="300"> </canvas>
         </div>
         <button id="decide-button">OK!!</button>
         <div>
           <h3>色変化</h3>
           <input type="checkbox" id="setting-face-color" class="checkbox" />
           <label class="text" for="setting-face-color"
-            >色の変化を追加する</label>
+            >色の変化を追加する</label
+          >
         </div>
         <div class="result">
           <img src="" id="gif" />
         </div>
+      </div>
     </div>
 
-        <!-- <div id="mask-select-area">
+    <!-- <div id="mask-select-area">
           <h3>背景画像選択</h3>
           <input type="button" value="普通の顔" id="mask-select-area-normal" />
           <input type="button" value="ねこ" id="mask-select-area-cat" />
@@ -53,7 +68,7 @@
         </div>
 
         <h3>サイズ選択</h3> -->
-        <!-- <div id="size-select-area"></div>
+    <!-- <div id="size-select-area"></div>
 
       </div>
     <div id="color-map-area">
