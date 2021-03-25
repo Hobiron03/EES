@@ -1,3 +1,7 @@
+body {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
 .title {
   border-bottom: #242424 solid 1px;
   padding-bottom: 20px;
@@ -5,17 +9,48 @@
 
 .reviews-table {
   display: flex;
+  border-bottom: 1px solid rgb(71, 71, 71);
 }
 
-.main {
+#add-review {
+  margin-bottom: 40px;
+  border-bottom: solid 1px black;
+}
+
+.review-area {
+  margin-top: 50px;
+  padding-top: 30px;
+
   display: flex;
+  width: 100%;
+  border-top: 1px solid rgb(104, 104, 104);
+  &__main {
+    &__make-face-field {
+      width: 30%;
+
+      &__drag-crrdinate {
+        margin-top: 30px;
+      }
+    }
+  }
+
+  &__result {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    &__img {
+      width: 170px;
+      height: 170px;
+      border: solid 1px rgb(80, 80, 80);
+
+      img {
+      }
+    }
+  }
 }
 
-.result {
-  margin-left: 100px;
-}
-
-#emotion-face {
+#review-area__main__make-face-field__Top__emotion-face {
   width: 150px;
   height: 150px;
   // background-image: url("../images/BaseFace.png");
@@ -28,19 +63,12 @@
   margin-top: 30px;
 }
 
-.make-face-field {
-  width: 30%;
-}
-
 .Top {
   display: flex;
 }
 
 #setting-face-color:hover {
   cursor: pointer;
-}
-
-#mask-select-area-cat {
 }
 
 #size-select-area {

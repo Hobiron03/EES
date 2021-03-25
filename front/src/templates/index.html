@@ -4,14 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <title>Emotion Expression System</title>
   </head>
 
   <body>
     <h1>レビューサイト</h1>
-    <div id="root"></div>
-
     <div id="reviews-table">
+      <h2>レビュー一覧</h2>
       <a class="js-modal-open" href="" data-target="modal01">
         <img
           src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
@@ -20,7 +24,6 @@
         />
       </a>
     </div>
-    <button id="add-review">Add review</button>
 
     <div id="modal01" class="c-modal js-modal">
       <div class="c-modal_bg js-modal-close"></div>
@@ -34,30 +37,57 @@
     </div>
 
     <!-- review area -->
-    <div class="main">
-      <div class="make-face-field">
-        <div class="Top">
-          <div id="emotion-face">
-            <canvas id="facial-parts" width="150" height="150"> </canvas>
+    <div class="review-area">
+      <div class="review-area__main">
+        <div class="review-area__main__make-face-field">
+          <div class="review-area__main__make-face-field__Top">
+            <div id="review-area__main__make-face-field__Top__emotion-face">
+              <canvas id="facial-parts" width="150" height="150"> </canvas>
+            </div>
+          </div>
+          <div class="review-area__main__make-face-field__drag-corrdinate">
+            <canvas id="coordinate" width="300" height="300"> </canvas>
+          </div>
+          <button id="decide-button">OK!!</button>
+          <div>
+            <input type="checkbox" id="setting-face-color" class="checkbox" />
+            <label class="text" for="setting-face-color">色を追加</label>
           </div>
         </div>
-        <div class="drag-corrdinate">
-          <canvas id="coordinate" width="300" height="300"> </canvas>
-        </div>
-        <button id="decide-button">OK!!</button>
-        <div>
-          <h3>色変化</h3>
-          <input type="checkbox" id="setting-face-color" class="checkbox" />
-          <label class="text" for="setting-face-color"
-            >色の変化を追加する</label
-          >
-        </div>
-        <div class="result">
+      </div>
+
+      <div class="review-area__result">
+        <p>顔アイコン作成結果</p>
+        <div class="review-area__result__img">
           <img src="" id="gif" />
+        </div>
+      </div>
+
+      <!-- review write area -->
+      <div class="review-area__write">
+        <div class="review-area__write__element">
+          <img src="" alt="" width="100" height="100" />
+          <textarea name="" id="" cols="40" rows="6"></textarea>
+        </div>
+
+        <div class="review-area__write__element">
+          <img src="" alt="" width="100" height="100" />
+          <textarea name="" id="" cols="40" rows="6"></textarea>
+        </div>
+
+        <div class="review-area__write__element">
+          <img src="" alt="" width="100" height="100" />
+          <textarea name="" id="" cols="40" rows="6"></textarea>
+        </div>
+
+        <div class="review-area__write__element">
+          <img src="" alt="" width="100" height="100" />
+          <textarea name="" id="" cols="40" rows="6"></textarea>
         </div>
       </div>
     </div>
 
+    <!-- <button id="add-review">Add review</button> -->
     <!-- <div id="mask-select-area">
           <h3>背景画像選択</h3>
           <input type="button" value="普通の顔" id="mask-select-area-normal" />

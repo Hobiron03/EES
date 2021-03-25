@@ -77,7 +77,7 @@ let leftEye: Eye = {
 };
 
 const emotionFaceDiv: HTMLElement | null = document.getElementById(
-  "emotion-face"
+  "review-area__main__make-face-field__Top__emotion-face"
 );
 const coordinateDiv: HTMLElement | null = document.getElementById("coordinate");
 
