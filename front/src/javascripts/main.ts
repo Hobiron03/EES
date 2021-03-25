@@ -595,8 +595,8 @@ const InsertImageToWriteReviewArea = () => {
     imageDOMs.push(<HTMLImageElement>reviewAreaWriteImages.item(index));
   }
 
-  //base64Imagesの4つぐらい等間隔で分割する
-  imageDOMs[0].src = base64Images[0];
+  //base64Imagesの4つぐらい等間隔で分割する（今は力こそパワーでやっています）
+  imageDOMs[0].src = base64Images[0 + 2];
   imageDOMs[1].src = base64Images[(base64Images.length * 0.25) | 0];
   imageDOMs[2].src = base64Images[(base64Images.length * 0.75) | 0];
   imageDOMs[3].src = base64Images[base64Images.length - 1];
