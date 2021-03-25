@@ -394,7 +394,6 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
         if (fpctx) {
           DrawFace(mousePosX, mousePosY);
           //画像の64進数のデータにする
-          // base64Images.push(facialPartsCanvas.toDataURL());
           html2canvas(emotionFaceDiv, {
             scale: faceScale,
           }).then((canvas) => {
@@ -417,7 +416,7 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
   }
 });
 
-//ドラッグが終わり、クリックをやめた瞬間の処理
+//----------クリックをやめた瞬間の処理----------
 coordinateCanvas.addEventListener("mouseup", (e: MouseEvent) => {
   isMouseDrag = false;
   //終点の描画
@@ -549,6 +548,8 @@ if (okButton) {
         console.log("Hello");
         console.log(err);
       });
+
+    InsertImageToWriteReviewArea();
   };
 }
 
@@ -580,6 +581,27 @@ if (appImg) {
 }
 
 /////////////////////////////////レビューシステム関連//////////////////////////////////////////
+
+//感情を4つに分割してwrite-areaのimgに挿入する
+const InsertImageToWriteReviewArea = () => {
+  //4つのレビューを書くエリアの取得をする
+  const reviewAreaWriteImages = <HTMLCollection>(
+    document.getElementsByClassName("InsertedFaceIcon")
+  );
+
+  //それぞれのエリアに顔アイコンを挿入する
+  let imageDOMs = [];
+  for (let index = 0; index < 4; index++) {
+    imageDOMs.push(<HTMLImageElement>reviewAreaWriteImages.item(index));
+  }
+
+  //base64Imagesの4つぐらい等間隔で分割する
+  imageDOMs[0].src = base64Images[0];
+  imageDOMs[1].src = base64Images[(base64Images.length * 0.25) | 0];
+  imageDOMs[2].src = base64Images[(base64Images.length * 0.75) | 0];
+  imageDOMs[3].src = base64Images[base64Images.length - 1];
+};
+
 //レビュー追加ボタンの制御
 const addReiviewButtonDOM = document.getElementById("add-review");
 const addReiviewButton = <HTMLButtonElement>addReiviewButtonDOM;
