@@ -545,11 +545,15 @@ if (okButton) {
         setGIF(image_name);
       })
       .catch((err) => {
-        console.log("Hello");
         console.log(err);
       });
 
     InsertImageToWriteReviewArea();
+
+    //reset
+    dataX = [];
+    dataY = [];
+    base64Images = [];
   };
 }
 
