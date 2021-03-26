@@ -14,9 +14,9 @@
 
   <body>
     <h1>レビューサイト</h1>
+    <div class="root"></div>
     <div id="reviews-table">
-      <h2>レビュー一覧</h2>
-      <a class="js-modal-open" href="" data-target="modal01">
+      <a class="js-modal-open" data-target="modal01">
         <img
           src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
           alt=""
@@ -129,7 +129,7 @@
       </div>
 
       <!-- review write area -->
-      <div class="review-area__write">
+      <div class="review-area__write" id="review-elements">
         <div class="review-area__write__element">
           <img
             src=""
@@ -140,7 +140,13 @@
           />
           <div class="review-area__write__element__comment">
             <p>Comment</p>
-            <textarea name="" id="" cols="50" rows="4"></textarea>
+            <textarea
+              name=""
+              id=""
+              cols="50"
+              rows="4"
+              class="comments"
+            ></textarea>
           </div>
         </div>
 
@@ -154,7 +160,13 @@
           />
           <div class="review-area__write__element__comment">
             <p>Comment</p>
-            <textarea name="" id="" cols="50" rows="4"></textarea>
+            <textarea
+              name=""
+              id=""
+              cols="50"
+              rows="4"
+              class="comments"
+            ></textarea>
           </div>
         </div>
 
@@ -168,7 +180,13 @@
           />
           <div class="review-area__write__element__comment">
             <p>Comment</p>
-            <textarea name="" id="" cols="50" rows="4"></textarea>
+            <textarea
+              name=""
+              id=""
+              cols="50"
+              rows="4"
+              class="comments"
+            ></textarea>
           </div>
         </div>
 
@@ -182,9 +200,17 @@
           />
           <div class="review-area__write__element__comment">
             <p>Comment</p>
-            <textarea name="" id="" cols="50" rows="4"></textarea>
+            <textarea
+              name=""
+              id=""
+              cols="50"
+              rows="4"
+              class="comments"
+            ></textarea>
           </div>
         </div>
+
+        <button id="post-review">これでOK</button>
       </div>
     </div>
     <!-- review write area end-->
