@@ -24,8 +24,12 @@ import CalculateColor from "./CalculateColor";
 import FormatImageData from "./FormatImageData";
 //----------------------------------------
 
-import { INITIAL_FACE_COLOR } from "./emotionColor";
+//firebase関連（レビューアプリに使用）
+import db from "../../Firebase";
+import firebase from "../../Firebase";
+//----------------------------------------
 
+import { INITIAL_FACE_COLOR } from "./emotionColor";
 import "../stylesheets/main.scss";
 
 // -----------外部ツールの読み込み-----------------
@@ -672,7 +676,7 @@ const postReviewButtonDOM = <HTMLButtonElement>(
   document.getElementById("post-review")
 );
 if (postReviewButtonDOM) {
-  postReviewButtonDOM.onclick = () => {
+  postReviewButtonDOM.onclick = async () => {
     const data: ReivewData = {
       dynamicFaceIcon: "",
       title: "first title",
@@ -706,30 +710,13 @@ if (postReviewButtonDOM) {
       data.comments.push(comments.value);
     }
 
-    //DOMを作成してレビュー一覧に格納する
-    //  <a class="js-modal-open" href="" data-target="modal01">
-    //   <img
-    //     src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-    //     alt=""
-    //     width="100"
-    //   />
-    // </a>
-    let a = document.createElement("a");
-    a.setAttribute("class", "js-modal-open");
-    a.setAttribute("data-target", "modal01");
-    $(a).fadeIn(300);
+    //firebaseにレビューデータを送信
+    const reviewsCollectionReference = firebase
+      .firestore()
+      .collection("reviews");
 
-    let img = document.createElement("img");
-    img.setAttribute("src", data.dynamicFaceIcon);
-    img.setAttribute("width", "100");
+    await reviewsCollectionReference.add(data);
 
-    a.appendChild(img);
-
-    const ReviewsTable = <HTMLDivElement>(
-      document.getElementById("reviews-table")
-    );
-    ReviewsTable.appendChild(a);
-
-    console.log(data);
+    window.location.reload();
   };
 }

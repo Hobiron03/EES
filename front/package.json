@@ -33,6 +33,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@firebase/firestore-types": "^2.2.0",
     "@types/jquery": "^3.5.5",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
