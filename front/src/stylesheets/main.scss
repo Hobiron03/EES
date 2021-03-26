@@ -152,7 +152,47 @@ body {
 }
 
 .c-modal_content_inner {
-  padding: 24px;
+  padding: 14px;
+
+  &__header {
+    display: flex;
+    justify-content: center;
+
+    &__faceicon {
+      img {
+        width: 130px;
+        height: 130px;
+      }
+    }
+
+    &__title {
+      margin-left: 20px;
+      align-self: center;
+    }
+  }
+
+  &__content {
+    &__columns {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+
+      &__faceicon {
+        img {
+          width: 100px;
+          height: 100px;
+        }
+      }
+
+      &__comment {
+        padding: 10px;
+        margin-left: 10px;
+        border: solid 1px rgb(145, 145, 145);
+        border-radius: 5px;
+        width: 600px;
+      }
+    }
+  }
 }
 
 // 閉じるボタン
