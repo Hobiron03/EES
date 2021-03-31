@@ -102,7 +102,7 @@ let dataY: number[] = [];
 //顔画像のBase64のデータ
 let base64Images: string[] = [];
 
-//顔アイコン作成時に色を付与するかどうか
+//顔アイコン作成時に色を付与するかどうか。trueにすると色がつきます。
 let isApplyFaceColor: boolean = false;
 
 // 顔アイコンの口を描画のCanvas
@@ -117,7 +117,6 @@ const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext(
 const DrawCoordinateImage = (): void => {
   let background: HTMLImageElement = new Image();
   const imageURL: string = "../images/Cordinate.png";
-
   background.src = imageURL;
   //画像をCanvasのサイズに合わせて等倍して画像をcanvasに貼り付ける.
   background.onload = () => {
@@ -411,6 +410,7 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
       }
       preMousePosX = mousePosX;
       preMousePosY = mousePosY;
+
       if (isApplyFaceColor) {
         SetEmotionColor(preMousePosX, preMousePosY);
       }
@@ -466,7 +466,7 @@ const InitFacialParts = (): void => {
   const offsetMouseHeight: number = faceHeight / 4;
 
   //顔アイコンにおける口の相対的な場所を求める
-  //顔アイコンの大きさに変化があっても良いように
+  //顔アイコンの大きさに変化があっても良いように...!
   mouse.startPosX = centerPosX - offsetMouseWidth;
   mouse.startPosY = centerPosY + offsetMouseHeight;
   mouse.bezierControlPosX = centerPosX;
