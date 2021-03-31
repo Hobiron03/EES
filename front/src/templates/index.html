@@ -17,80 +17,6 @@
     <div id="root"></div>
     <div id="reviews-table"></div>
 
-    <div id="modal01" class="c-modal js-modal">
-      <div class="c-modal_bg js-modal-close"></div>
-      <div class="c-modal_content _lg">
-        <div class="c-modal_content_inner">
-          <div class="c-modal_content_inner__header">
-            <div class="c-modal_content_inner__header__faceicon">
-              <img
-                src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                alt=""
-              />
-            </div>
-            <div class="c-modal_content_inner__header__title">
-              <h2>もう二度と買わへん！ウソ...また買います</h2>
-            </div>
-          </div>
-
-          <div class="c-modal_content_inner__content">
-            <div class="c-modal_content_inner__content__columns">
-              <div class="c-modal_content_inner__content__columns__faceicon">
-                <img
-                  src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                  alt=""
-                />
-              </div>
-              <div class="c-modal_content_inner__content__columns__comment">
-                <p>
-                  スマホカバーの返品をお願いした所、メール便で届いたにも関わらず返品料こちら負担で何故か1,000円以上キャンセル料を取られました。腹が立ちました。
-                </p>
-              </div>
-            </div>
-            <div class="c-modal_content_inner__content__columns">
-              <div class="c-modal_content_inner__content__columns__faceicon">
-                <img
-                  src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                  alt=""
-                />
-              </div>
-              <div class="c-modal_content_inner__content__columns__comment">
-                <p>
-                  スマホカバーの返品をお願いした所、メール便で届いたにも関わらず返品料こちら負担で何故か1,000円以上キャンセル料を取られました。腹が立ちました。
-                </p>
-              </div>
-            </div>
-            <div class="c-modal_content_inner__content__columns">
-              <div class="c-modal_content_inner__content__columns__faceicon">
-                <img
-                  src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                  alt=""
-                />
-              </div>
-              <div class="c-modal_content_inner__content__columns__comment">
-                <p>
-                  スマホカバーの返品をお願いした所、メール便で届いたにも関わらず返品料こちら負担で何故か1,000円以上キャンセル料を取られました。腹が立ちました。
-                </p>
-              </div>
-            </div>
-            <div class="c-modal_content_inner__content__columns">
-              <div class="c-modal_content_inner__content__columns__faceicon">
-                <img
-                  src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                  alt=""
-                />
-              </div>
-              <div class="c-modal_content_inner__content__columns__comment">
-                <p>
-                  スマホカバーの返品をお願いした所、メール便で届いたにも関わらず返品料こちら負担で何故か1,000円以上キャンセル料を取られました。腹が立ちました。
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- review area -->
     <div class="review-area">
       <!-- 顔アイコン作成UI -->
@@ -102,7 +28,7 @@
             </div>
           </div>
           <div class="review-area__main__make-face-field__drag-corrdinate">
-            <canvas id="coordinate" width="300" height="300"> </canvas>
+            <canvas id="coordinate" width="400" height="400"> </canvas>
           </div>
           <button id="decide-button">OK!!</button>
           <div>
@@ -122,6 +48,8 @@
 
       <!-- review write area -->
       <div class="review-area__write" id="review-elements">
+        <p>タイトル</p>
+        <input type="text" name="" id="review-title" />
         <div class="review-area__write__element">
           <img
             src=""
