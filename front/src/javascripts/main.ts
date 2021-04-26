@@ -35,6 +35,7 @@ import "../stylesheets/main.scss";
 // -----------外部ツールの読み込み-----------------
 // html2canvas(https://qiita.com/7shi/items/ba7089e864fefac69808)
 import html2canvas from "html2canvas";
+import { IconButton } from "@material-ui/core";
 // ----------------------------
 
 enum Color {
@@ -112,6 +113,20 @@ const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>(
 const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext(
   "2d"
 );
+
+interface ReivewData {
+  dynamicFaceIcon: string;
+  title: string;
+  EmotionalFaceIcon: Array<string>;
+  comments: Array<string>;
+}
+
+const postDataToFirebase: ReivewData = {
+  dynamicFaceIcon: "",
+  title: "",
+  EmotionalFaceIcon: [],
+  comments: [],
+};
 
 // 顔アイコン作成Canvasの背景画像を描画する
 const DrawCoordinateImage = (): void => {
@@ -207,38 +222,69 @@ const RenderEyebrows = (y: number): void => {
   }
 };
 
-const RenderEye = (): void => {
+const RenderEye = (x: number): void => {
   if (fpctx) {
-    //左目
-    fpctx.beginPath();
-    fpctx.strokeStyle = "black";
-    fpctx.lineWidth = leftEye.size;
-    fpctx.lineCap = "round";
-    fpctx.globalCompositeOperation = "source-over";
-    fpctx.lineTo(
-      facialPartsCanvas.clientWidth / 2 - leftEye.pos,
-      facialPartsCanvas.clientHeight / 2
-    );
-    fpctx.stroke();
+    // //左目
+    // fpctx.beginPath();
+    // fpctx.strokeStyle = "black";
+    // fpctx.lineWidth = leftEye.size;
+    // fpctx.lineCap = "round";
+    // fpctx.globalCompositeOperation = "source-over";
+    // fpctx.lineTo(
+    //   facialPartsCanvas.clientWidth / 2 - leftEye.pos,
+    //   facialPartsCanvas.clientHeight / 2
+    // );
+    // fpctx.stroke();
 
-    //右目
-    fpctx.beginPath();
-    fpctx.strokeStyle = "black";
-    fpctx.lineWidth = rightEye.size;
-    fpctx.lineCap = "round";
-    fpctx.globalCompositeOperation = "source-over";
-    fpctx.lineTo(
+    // //右目
+    // fpctx.beginPath();
+    // fpctx.strokeStyle = "black";
+    // fpctx.lineWidth = rightEye.size;
+    // fpctx.lineCap = "round";
+    // fpctx.globalCompositeOperation = "source-over";
+    // fpctx.lineTo(
+    //   facialPartsCanvas.clientWidth / 2 + rightEye.pos,
+    //   facialPartsCanvas.clientHeight / 2
+    // );
+    // fpctx.stroke();
+
+    ///////////////////////////////////////////////////////////////
+    /* コンテキスト設定 */
+    fpctx.strokeStyle = "#333"; // 塗りつぶしは暗めの色
+    fpctx.fillStyle = "#000"; // 線は赤色
+    // 線の幅は5px
+
+    /* 円の描画 */
+    fpctx.beginPath(); // パスの初期化
+    fpctx.arc(
       facialPartsCanvas.clientWidth / 2 + rightEye.pos,
-      facialPartsCanvas.clientHeight / 2
-    );
-    fpctx.stroke();
+      facialPartsCanvas.clientHeight / 2,
+      10,
+      0,
+      2 * Math.PI
+    ); // (100, 50)の位置に半径30pxの円
+    fpctx.closePath(); // パスを閉じる
+    fpctx.fill(); // 軌跡の範囲を塗りつぶす
+
+    /* 円の描画 */
+    fpctx.beginPath(); // パスの初期化
+    fpctx.arc(
+      facialPartsCanvas.clientWidth / 2 - leftEye.pos,
+      facialPartsCanvas.clientHeight / 2,
+      10,
+      0,
+      2 * Math.PI
+    ); // (100, 50)の位置に半径30pxの円
+    fpctx.closePath(); // パスを閉じる
+    fpctx.fill(); // 軌跡の範囲を塗りつぶす
+    ///////////////////////////////////////////////////////////////
   }
 };
 
 const DrawFace = (x: number, y: number): void => {
   ResetFacialParts();
   RenderMouth(x);
-  RenderEye();
+  RenderEye(x);
   RenderEyebrows(y);
 };
 
@@ -343,8 +389,6 @@ let preMousePosX: number;
 let preMousePosY: number;
 //ドラッグ開始
 coordinateCanvas.addEventListener("mousedown", (e: MouseEvent) => {
-  console.log("mousedown");
-
   //前の軌跡を消去
   ResetCoordinate();
   isMouseDrag = true;
@@ -378,9 +422,11 @@ coordinateCanvas.addEventListener(
     //前の軌跡を消去
     ResetCoordinate();
     isMouseDrag = true;
-    //canvasの原点は左上
-    preMousePosX = e.changedTouches[0].pageX;
-    preMousePosY = e.changedTouches[0].pageY - 300;
+
+    const node = e.target as HTMLElement;
+    const bounds = node.getBoundingClientRect();
+    preMousePosX = e.changedTouches[0].clientX - bounds.left;
+    preMousePosY = e.changedTouches[0].clientY - bounds.top;
 
     //始点の描画
     if (cctx) {
@@ -465,9 +511,11 @@ coordinateCanvas.addEventListener(
       cur = Date.now();
       elapsedTime += cur - pre;
       if (elapsedTime > fpsInterval) {
+        const node = e.target as HTMLElement;
+        const bounds = node.getBoundingClientRect();
         //canvasの原点は左上
-        const touchPosX: number = e.changedTouches[0].pageX;
-        const touchPosY: number = e.changedTouches[0].pageY - 300;
+        const touchPosX: number = e.changedTouches[0].pageX - bounds.left;
+        const touchPosY: number = e.changedTouches[0].pageY - bounds.top;
 
         //軌跡の描画
         if (cctx) {
@@ -531,6 +579,12 @@ coordinateCanvas.addEventListener(
   (e: TouchEvent) => {
     e.preventDefault();
 
+    const node = e.target as HTMLElement;
+    const bounds = node.getBoundingClientRect();
+    //canvasの原点は左上
+    const touchPosX: number = e.changedTouches[0].pageX - bounds.left;
+    const touchPosY: number = e.changedTouches[0].pageY - bounds.top;
+
     isMouseDrag = false;
     //終点の描画
     if (cctx) {
@@ -540,7 +594,7 @@ coordinateCanvas.addEventListener(
       cctx.lineCap = "round";
       cctx.globalCompositeOperation = "source-over";
       //全フレームの点と結ぶ
-      cctx.lineTo(e.changedTouches[0].pageX, e.changedTouches[0].pageY - 300);
+      cctx.lineTo(touchPosX, touchPosY);
       cctx.stroke();
     }
   },
@@ -613,10 +667,11 @@ const InitFacialParts = (): void => {
 };
 
 //初期設定(顔変化に使用する座標の描画、顔アイコンの設定をここで行う)
-const Init = (): void => {
+const Init = async () => {
   DrawCoordinateImage();
   InitFacialParts();
 };
+
 const main = (() => {
   Init();
 })();
@@ -639,13 +694,10 @@ const faceAnimationStep = (): void => {
 };
 //----------------------------------------------
 
-const GCE_URL = "//34.84.133.169/returnGIF";
-const GCE_2_URL = "http://35.200.88.160/returnGIF";
-const GCE_3_URL = "//34.84.124.211/returnGIF";
-const localURL = "http://127.0.0.1:5000/returnGIF";
 const GCS_URL = "https://storage.googleapis.com/faceicons/";
 const imgElement = document.getElementById("gif");
 const gifDownload = <HTMLAnchorElement>imgElement;
+const herokuURL = "https://emoemoface.herokuapp.com/returnGIF";
 
 const okButton = document.getElementById("decide-button");
 if (okButton) {
@@ -654,10 +706,12 @@ if (okButton) {
     pullDataX = dataX.concat();
     pullDataY = dataY.concat();
     faceAnimation = requestAnimationFrame(faceAnimationStep);
-
-    await PostImageData(FormatImageData(base64Images), localURL)
+    await PostImageData(FormatImageData(base64Images), herokuURL)
       .then((image_name) => {
+        const name = `${GCS_URL}${image_name}`;
+        data.dynamicFaceIcon = name;
         setGIF(image_name);
+        setImageToresultImage(name);
       })
       .catch((err) => {
         console.log(err);
@@ -685,7 +739,6 @@ const settingColorButton = <HTMLInputElement>settingFaceColorDom;
 if (settingColorButton) {
   settingColorButton.onclick = () => {
     if (settingColorButton.checked) {
-      console.log("cheked");
       isApplyFaceColor = true;
     } else {
       isApplyFaceColor = false;
@@ -693,54 +746,89 @@ if (settingColorButton) {
   };
 }
 
-const appImgDom = document.getElementById("app-img");
-const appImg = <HTMLImageElement>appImgDom;
-if (appImg) {
-  console.log("appimg");
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////レビューシステム関連//////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-interface ReivewData {
-  dynamicFaceIcon: string;
-  title: string;
-  EmotionalFaceIcon: Array<string>;
-  comments: Array<string>;
+const resultImage = <HTMLImageElement>document.getElementById("result-image");
+const setImageToresultImage = (name: string) => {
+  if (resultImage) {
+    resultImage.src = name;
+  }
+};
+
+let title: string = "";
+let dynamicFaceIcon: string = "";
+let emotionalFaceIcons: Array<string> = [];
+let reviews: Array<string> = [];
+const data: ReivewData = {
+  dynamicFaceIcon: "",
+  title: "",
+  EmotionalFaceIcon: [],
+  comments: [],
+};
+
+const reviewTitle = <HTMLHeadingElement>document.getElementById("title");
+const reviewComment = <HTMLTextAreaElement>(
+  document.getElementById("review-comment")
+);
+const nextButton = <HTMLButtonElement>document.getElementById("next-button");
+let count: number = 0;
+if (nextButton) {
+  nextButton.onclick = async () => {
+    if (count < 4) {
+      //TODO: レビュー内容を配列に保存しておく
+      if (count === 0) {
+        const comment = reviewComment.value;
+        data.title = comment;
+      }
+      const comment = reviewComment.value;
+      reviews.push(comment);
+
+      //TODO: タイトルを変更 -> 例：review 1, review 2
+      reviewTitle.innerHTML = `レビュー ${count + 1} (${count + 1}/4)`;
+
+      //TODO: 顔画像の変更
+      setImageToresultImage(emotionalFaceIcons[count]);
+
+      //TODO: データの初期化
+      reviewComment.value = "";
+      count += 1;
+
+      //TODO: ４つ目のレビューになるとボタンのラベルを完了にする。
+      if (count === 4) {
+        console.log("完了");
+        nextButton.textContent = "DONE";
+      }
+    } else {
+      //TODO: firebaseにデータを送信する（gif, 4つの動く顔, textareaの内容）
+      const comment = reviewComment.value;
+      reviews.push(comment);
+
+      data.comments = reviews;
+      data.EmotionalFaceIcon = emotionalFaceIcons;
+
+      //firebaseにレビューデータを送信
+      const reviewsCollectionReference = firebase
+        .firestore()
+        .collection("reviews");
+
+      await reviewsCollectionReference.add(data);
+
+      window.location.reload();
+    }
+  };
 }
 
 //感情を4つに分割してwrite-areaのimgに挿入する
+
 const InsertImageToWriteReviewArea = () => {
-  //4つのレビューを書くエリアの取得をする
-  const reviewAreaWriteImages = <HTMLCollection>(
-    document.getElementsByClassName("InsertedFaceIcon")
-  );
-
-  //それぞれのエリアに顔アイコンを挿入する
-  let imageDOMs = [];
-  for (let index = 0; index < 4; index++) {
-    imageDOMs.push(<HTMLImageElement>reviewAreaWriteImages.item(index));
-  }
-
   //base64Imagesの4つぐらい等間隔で分割する（今は力こそパワーでやっています）
-  imageDOMs[0].src = base64Images[0 + 2];
-  imageDOMs[1].src = base64Images[(base64Images.length * 0.25) | 0];
-  imageDOMs[2].src = base64Images[(base64Images.length * 0.75) | 0];
-  imageDOMs[3].src = base64Images[base64Images.length - 1];
+  emotionalFaceIcons[0] = base64Images[0 + 2];
+  emotionalFaceIcons[1] = base64Images[(base64Images.length * 0.25) | 0];
+  emotionalFaceIcons[2] = base64Images[(base64Images.length * 0.75) | 0];
+  emotionalFaceIcons[3] = base64Images[base64Images.length - 1];
 };
-
-// ウィンドウを開く
-//顔アイコンのURLにレビューデータが紐づいている方が良い？
-$(".js-modal-open").each(function () {
-  $(this).on("click", function (d) {
-    let target = $(this).data("target");
-    let modal = document.getElementById(target);
-
-    $(modal).fadeIn(300);
-    return false;
-  });
-});
 
 const postReviewButtonDOM = <HTMLButtonElement>(
   document.getElementById("post-review")
@@ -796,3 +884,15 @@ if (postReviewButtonDOM) {
     window.location.reload();
   };
 }
+
+// ウィンドウを開く
+//顔アイコンのURLにレビューデータが紐づいている方が良い？
+$(".js-modal-open").each(function () {
+  $(this).on("click", function (d) {
+    let target = $(this).data("target");
+    let modal = document.getElementById(target);
+
+    $(modal).fadeIn(300);
+    return false;
+  });
+});

@@ -1,11 +1,11 @@
 import * as React from "react";
 import ReviewTable from "./ReviewTable";
+import ReviewInputModal from "./ReviewInputModal";
 
 const App = () => {
   return (
     <div className="App">
-      <h2>レビュー一覧</h2>
-      <ReviewTable></ReviewTable>
+      <ReviewInputModal></ReviewInputModal>
     </div>
   );
 };

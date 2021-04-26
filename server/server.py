@@ -2,9 +2,12 @@ from flask import Flask, jsonify, abort, make_response, request, send_file
 from flask_cors import CORS
 from PIL import Image, ImageDraw
 from natsort import natsorted
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+# from firebase_admin import storage
 from google.cloud import storage
 import datetime
-import json
 import base64
 import io
 import glob
@@ -62,15 +65,15 @@ def returnGIF():
 
     shutil.rmtree("./FaceIcon/")
 
-    # GCEの環境の場合は認証は不要
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = './EmotionExpression-5c731e905750.json'
-    client = storage.Client()
-    bucket = client.get_bucket('faceicons')
-
     gif_name = 'face-{}.gif'.format(
         hashlib.sha224(datetime.datetime.now().strftime(
             "%Y-%m-%d-%H:%M:%S.%f").encode('utf-8')).hexdigest()
     )
+
+    # GCEの環境の場合は認証は不要
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = './EmotionExpression-5c731e905750.json'
+    client = storage.Client()
+    bucket = client.get_bucket('faceicons')
     blob = bucket.blob(gif_name)
     blob.upload_from_filename(filename='face.gif')
 
@@ -79,6 +82,6 @@ def returnGIF():
 
 
 if __name__ == '__main__':
-    # api.run(host='0.0.0.0', port=30, ssl_context=(
-    #     'openssl/server.crt', 'openssl/server.key'), threaded=True, debug=True)
-    api.run()
+    host = os.getenv('HOST', '0.0.0.0')
+    port = int(os.getenv('PORT', '5000'))
+    api.run(host=host, port=port)
