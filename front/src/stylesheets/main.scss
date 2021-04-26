@@ -2,203 +2,401 @@ body {
   font-family: "Noto Sans JP", sans-serif;
 }
 
-.title {
-  border-bottom: #242424 solid 1px;
-  padding-bottom: 20px;
-}
-
-.reviews-table {
-  display: flex;
-  border-bottom: 1px solid rgb(71, 71, 71);
-}
-
-#add-review {
-  margin-bottom: 40px;
-  border-bottom: solid 1px black;
-}
-
-.review-area {
-  margin-top: 70px;
-  padding-top: 30px;
-  display: flex;
-  width: 100%;
-  border-top: 1px solid rgb(104, 104, 104);
-  &__main {
-    &__make-face-field {
-      width: 30%;
-
-      &__drag-crrdinate {
-        margin-top: 30px;
-      }
-    }
+@media screen and (min-width: 481px) {
+  .title {
+    border-bottom: #242424 solid 1px;
+    padding-bottom: 20px;
   }
 
-  &__result {
+  .reviews-table {
     display: flex;
-    flex-direction: column;
-    text-align: center;
-
-    &__img {
-      width: 170px;
-      height: 170px;
-      border: solid 1px rgb(80, 80, 80);
-
-      img {
-      }
-    }
+    border-bottom: 1px solid rgb(71, 71, 71);
   }
 
-  &__write {
-    margin-left: 50px;
-    &__element {
+  #add-review {
+    margin-bottom: 40px;
+    border-bottom: solid 1px black;
+  }
+
+  .review-area {
+    // background-color: red;
+    margin-top: 70px;
+    padding-top: 30px;
+    display: flex;
+    width: 100%;
+    border-top: 1px solid rgb(104, 104, 104);
+    &__main {
+      &__make-face-field {
+        width: 30%;
+
+        &__drag-crrdinate {
+          margin-top: 30px;
+        }
+      }
+    }
+
+    &__result {
       display: flex;
-      margin-top: 10px;
-      p {
-        color: #868686;
-        font-size: 15px;
-        margin-bottom: 2px;
-      }
+      flex-direction: column;
+      text-align: center;
 
-      &__comment {
-        margin-left: 10px;
+      &__img {
+        width: 170px;
+        height: 170px;
+        border: solid 1px rgb(80, 80, 80);
+
+        img {
+        }
+      }
+    }
+
+    &__write {
+      margin-left: 50px;
+      &__element {
+        display: flex;
+        margin-top: 10px;
+        p {
+          color: #868686;
+          font-size: 15px;
+          margin-bottom: 2px;
+        }
+
+        &__comment {
+          margin-left: 10px;
+        }
       }
     }
   }
-}
 
-#review-area__main__make-face-field__Top__emotion-face {
-  width: 150px;
-  height: 150px;
-  // background-image: url("../images/BaseFace.png");
-  // background-color: rgb(247, 206, 27);
-  border-radius: 100%;
-  background-size: cover;
-}
-
-.drag-corrdinate {
-  margin-top: 30px;
-}
-
-.Top {
-  display: flex;
-}
-
-#setting-face-color:hover {
-  cursor: pointer;
-}
-
-#size-select-area {
-  width: 1000px;
-  display: flex;
-  align-items: center;
-}
-
-#decide-button {
-  cursor: pointer;
-  margin: 10px;
-  padding: 10px 100px;
-  font-size: 25px;
-  font-weight: bold;
-  color: white;
-  background-color: #5b71f5;
-  border: none;
-  transition: all 0.2s;
-}
-
-#decide-button:hover {
-  background-color: #213fe9;
-}
-
-////////////////////////////////////////////////////////
-// モーダルウィンドウ全体のレイアウト（画面いっぱいに表示）
-.c-modal {
-  display: none;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-
-// 黒背景の設定
-.c-modal_bg {
-  background: rgba(0, 0, 0, 0.6);
-  height: 100vh;
-  width: 100%;
-}
-
-// ウィンドウの設定
-.c-modal_content {
-  background: #fff;
-  left: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 5px;
-
-  &._sm {
-    width: 30%;
+  #review-area__main__make-face-field__Top__emotion-face {
+    width: 150px;
+    height: 150px;
+    // background-image: url("../images/BaseFace.png");
+    // background-color: rgb(247, 206, 27);
+    border-radius: 100%;
+    background-size: cover;
   }
 
-  &._md {
-    width: 50%;
+  .drag-corrdinate {
+    margin-top: 30px;
   }
 
-  &._lg {
-    width: 70%;
-  }
-}
-
-.c-modal_content_inner {
-  padding: 14px;
-
-  &__header {
+  .Top {
     display: flex;
-    justify-content: center;
+  }
 
-    &__faceicon {
-      img {
-        width: 130px;
-        height: 130px;
-      }
+  #setting-face-color:hover {
+    cursor: pointer;
+  }
+
+  #size-select-area {
+    width: 1000px;
+    display: flex;
+    align-items: center;
+  }
+
+  #decide-button {
+    cursor: pointer;
+    margin: 10px;
+    padding: 10px 100px;
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    background-color: #5b71f5;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  #decide-button:hover {
+    background-color: #213fe9;
+  }
+
+  ////////////////////////////////////////////////////////
+  // モーダルウィンドウ全体のレイアウト（画面いっぱいに表示）
+  .c-modal {
+    display: none;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+
+  // 黒背景の設定
+  .c-modal_bg {
+    background: rgba(0, 0, 0, 0.6);
+    height: 100vh;
+    width: 100%;
+  }
+
+  // ウィンドウの設定
+  .c-modal_content {
+    background: #fff;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+
+    &._sm {
+      width: 30%;
     }
 
-    &__title {
-      margin-left: 20px;
-      align-self: center;
+    &._md {
+      width: 50%;
+    }
+
+    &._lg {
+      width: 70%;
     }
   }
 
-  &__content {
-    &__columns {
+  .c-modal_content_inner {
+    padding: 14px;
+
+    &__header {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
 
       &__faceicon {
         img {
-          width: 100px;
-          height: 100px;
+          width: 130px;
+          height: 130px;
         }
       }
 
-      &__comment {
-        padding: 10px;
-        margin-left: 10px;
-        border: solid 1px rgb(145, 145, 145);
-        border-radius: 5px;
-        width: 600px;
+      &__title {
+        margin-left: 20px;
+        align-self: center;
+      }
+    }
+
+    &__content {
+      &__columns {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+
+        &__faceicon {
+          img {
+            width: 100px;
+            height: 100px;
+          }
+        }
+
+        &__comment {
+          padding: 10px;
+          margin-left: 10px;
+          border: solid 1px rgb(145, 145, 145);
+          border-radius: 5px;
+          width: 600px;
+        }
       }
     }
   }
 }
 
-// 閉じるボタン
-.c-modal_close {
-  position: absolute;
-  top: 13px;
-  right: 10px;
-}
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+@media screen and (max-width: 480px) {
+  .title {
+    border-bottom: #242424 solid 1px;
+    padding-bottom: 20px;
+  }
+
+  .review-area {
+    display: flex;
+    width: 100%;
+    &__main {
+      margin: 0 auto;
+      &__make-face-field {
+        width: 30%;
+
+        &__Top {
+          display: flex;
+
+          margin: 10px auto;
+        }
+
+        &__drag-crrdinate {
+          margin-top: 30px;
+        }
+
+        &__decide-button {
+          cursor: pointer;
+          margin-left: 55px;
+          padding: 10px 100px;
+          font-size: 22px;
+          font-weight: bold;
+          color: white;
+          background-color: #5b71f5;
+          border: none;
+          transition: all 0.2s;
+        }
+      }
+    }
+
+    &__result {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+
+      &__img {
+        width: 170px;
+        height: 170px;
+        border: solid 1px rgb(80, 80, 80);
+      }
+    }
+
+    &__write {
+      margin-left: 50px;
+      &__element {
+        display: flex;
+        margin-top: 10px;
+        p {
+          color: #868686;
+          font-size: 15px;
+          margin-bottom: 2px;
+        }
+
+        &__comment {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+
+  #review-area__main__make-face-field__Top__emotion-face {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    background-size: cover;
+  }
+
+  #setting-face-color:hover {
+    cursor: pointer;
+  }
+
+  #size-select-area {
+    width: 1000px;
+    display: flex;
+    align-items: center;
+  }
+
+  #decide-button:hover {
+    background-color: #213fe9;
+  }
+
+  ////////////////////////////////////////////////////////
+  // モーダルウィンドウ全体のレイアウト（画面いっぱいに表示）
+  .c-modal {
+    display: none;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+
+  // 黒背景の設定
+  .c-modal_bg {
+    background: rgba(0, 0, 0, 0.6);
+    height: 900px;
+    width: 100%;
+  }
+
+  // ウィンドウの設定
+  .c-modal_content {
+    background: #fff;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+
+    &._sm {
+      width: 40%;
+    }
+
+    &._md {
+      width: 60%;
+    }
+
+    &._lg {
+      width: 80%;
+    }
+  }
+
+  .c-modal_content_inner {
+    padding: 14px;
+    h3 {
+      text-align: center;
+    }
+
+    &__review {
+      display: flex;
+      flex-direction: column;
+
+      &__face-img {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+      }
+
+      &__comment {
+        h4 {
+          margin-bottom: 5px;
+        }
+
+        textarea {
+          width: 90%;
+          font-size: 15px;
+        }
+      }
+      &__footer {
+        button {
+          cursor: pointer;
+          padding: 8px 12px;
+          font-size: 12px;
+          font-weight: bold;
+          color: white;
+          background-color: #5b71f5;
+          border: none;
+          transition: all 0.2s;
+          float: right;
+        }
+      }
+    } //__review
+  }
+}
+
+#facial-parts {
+  z-index: 9999;
+}

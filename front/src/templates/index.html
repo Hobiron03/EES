@@ -13,83 +13,9 @@
   </head>
 
   <body>
-    <h1>レビューサイト</h1>
+    <!-- <h1>今日の１日を振り返る</h1> -->
     <div id="root"></div>
-    <div id="reviews-table"></div>
-
-    <div id="modal01" class="c-modal js-modal">
-      <div class="c-modal_bg js-modal-close"></div>
-      <div class="c-modal_content _lg">
-        <div class="c-modal_content_inner">
-          <div class="c-modal_content_inner__header">
-            <div class="c-modal_content_inner__header__faceicon">
-              <img
-                src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                alt=""
-              />
-            </div>
-            <div class="c-modal_content_inner__header__title">
-              <h2>もう二度と買わへん！ウソ...また買います</h2>
-            </div>
-          </div>
-
-          <div class="c-modal_content_inner__content">
-            <div class="c-modal_content_inner__content__columns">
-              <div class="c-modal_content_inner__content__columns__faceicon">
-                <img
-                  src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                  alt=""
-                />
-              </div>
-              <div class="c-modal_content_inner__content__columns__comment">
-                <p>
-                  スマホカバーの返品をお願いした所、メール便で届いたにも関わらず返品料こちら負担で何故か1,000円以上キャンセル料を取られました。腹が立ちました。
-                </p>
-              </div>
-            </div>
-            <div class="c-modal_content_inner__content__columns">
-              <div class="c-modal_content_inner__content__columns__faceicon">
-                <img
-                  src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                  alt=""
-                />
-              </div>
-              <div class="c-modal_content_inner__content__columns__comment">
-                <p>
-                  スマホカバーの返品をお願いした所、メール便で届いたにも関わらず返品料こちら負担で何故か1,000円以上キャンセル料を取られました。腹が立ちました。
-                </p>
-              </div>
-            </div>
-            <div class="c-modal_content_inner__content__columns">
-              <div class="c-modal_content_inner__content__columns__faceicon">
-                <img
-                  src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                  alt=""
-                />
-              </div>
-              <div class="c-modal_content_inner__content__columns__comment">
-                <p>
-                  スマホカバーの返品をお願いした所、メール便で届いたにも関わらず返品料こちら負担で何故か1,000円以上キャンセル料を取られました。腹が立ちました。
-                </p>
-              </div>
-            </div>
-            <div class="c-modal_content_inner__content__columns">
-              <div class="c-modal_content_inner__content__columns__faceicon">
-                <img
-                  src="https://storage.googleapis.com/faceicons/face-efc6c1c5e7b78d4e753ed8d4c18bf2bf38d0b08c1701fbbd90c114bf.gif"
-                  alt=""
-                />
-              </div>
-              <div class="c-modal_content_inner__content__columns__comment">
-                <p>
-                  スマホカバーの返品をお願いした所、メール便で届いたにも関わらず返品料こちら負担で何故か1,000円以上キャンセル料を取られました。腹が立ちました。
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- <div id="reviews-table"></div> -->
 
     <!-- review area -->
     <div class="review-area">
@@ -102,9 +28,9 @@
             </div>
           </div>
           <div class="review-area__main__make-face-field__drag-corrdinate">
-            <canvas id="coordinate" width="300" height="300"> </canvas>
+            <canvas id="coordinate" width="400" height="400"> </canvas>
           </div>
-          <button id="decide-button">OK!!</button>
+          <button id="decide-button" class="review-area__main__make-face-field__decide-button js-modal-open" data-target="modal01">OK!!</button>
           <div>
             <input type="checkbox" id="setting-face-color" class="checkbox" />
             <label class="text" for="setting-face-color">色を追加</label>
@@ -113,15 +39,40 @@
       </div>
       <!-- 顔アイコン作成UI end-->
 
-      <div class="review-area__result">
+      <!-- <div class="review-area__result">
         <p>顔アイコン作成結果</p>
         <div class="review-area__result__img">
           <img src="" id="gif" />
         </div>
+      </div> -->
+
+
+      <!-- modal -->
+      <div id="modal01" class="c-modal js-modal">
+          <div class="c-modal_bg js-modal-close"></div>
+          <div class="c-modal_content _lg">
+              <div class="c-modal_content_inner">
+                  <h3 class="c-modal_content_inner__title">レビューの作成</h3>
+                  <div class="c-modal_content_inner__review">
+                    <img id="result-image" alt="" class="c-modal_content_inner__review__face-img" src="" >
+                    <div class="c-modal_content_inner__review__comment">
+                      <h4 id="title">タイトル</h4>
+                      <textarea name="" id="review-comment" cols="5" rows="4"></textarea>
+                    </div>
+                    <div class="c-modal_content_inner__review__footer">
+                      <button id="next-button" class="c-modal_content_inner__review__footer__next-button">Next</button>
+                    </div>
+                  </div>
+                  <a class="js-modal-close c-modal_close" href=""><span>閉じる</span></a>
+              </div>
+          </div>
       </div>
+      <!-- ./modal -->
 
       <!-- review write area -->
-      <div class="review-area__write" id="review-elements">
+      <!-- <div class="review-area__write" id="review-elements">
+        <p>タイトル</p>
+        <input type="text" name="" id="review-title" />
         <div class="review-area__write__element">
           <img
             src=""
@@ -142,69 +93,7 @@
           </div>
         </div>
 
-        <div class="review-area__write__element">
-          <img
-            src=""
-            alt=""
-            width="120"
-            height="120"
-            class="InsertedFaceIcon"
-          />
-          <div class="review-area__write__element__comment">
-            <p>Comment</p>
-            <textarea
-              name=""
-              id=""
-              cols="50"
-              rows="4"
-              class="comments"
-            ></textarea>
-          </div>
-        </div>
-
-        <div class="review-area__write__element">
-          <img
-            src=""
-            alt=""
-            width="120"
-            height="120"
-            class="InsertedFaceIcon"
-          />
-          <div class="review-area__write__element__comment">
-            <p>Comment</p>
-            <textarea
-              name=""
-              id=""
-              cols="50"
-              rows="4"
-              class="comments"
-            ></textarea>
-          </div>
-        </div>
-
-        <div class="review-area__write__element">
-          <img
-            src=""
-            alt=""
-            width="120"
-            height="120"
-            class="InsertedFaceIcon"
-          />
-          <div class="review-area__write__element__comment">
-            <p>Comment</p>
-            <textarea
-              name=""
-              id=""
-              cols="50"
-              rows="4"
-              class="comments"
-            ></textarea>
-          </div>
-        </div>
-
-        <button id="post-review">これでOK</button>
-      </div>
-    </div>
+    </div> -->
     <!-- review write area end-->
 
     <!-- <button id="add-review">Add review</button> -->
