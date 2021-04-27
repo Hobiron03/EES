@@ -119,6 +119,9 @@ interface ReivewData {
   title: string;
   EmotionalFaceIcon: Array<string>;
   comments: Array<string>;
+  dataX: Array<number>;
+  dataY: Array<number>;
+  emotions: Array<string>;
 }
 
 const postDataToFirebase: ReivewData = {
@@ -126,6 +129,9 @@ const postDataToFirebase: ReivewData = {
   title: "",
   EmotionalFaceIcon: [],
   comments: [],
+  dataX: [],
+  dataY: [],
+  emotions: [],
 };
 
 // 顔アイコン作成Canvasの背景画像を描画する
@@ -301,6 +307,25 @@ const ResetCoordinate = (): void => {
 const ResetFacialParts = (): void => {
   if (fpctx) {
     fpctx.clearRect(0, 0, fpctx.canvas.clientWidth, fpctx.canvas.clientHeight);
+  }
+};
+
+//x座標とy座標から対応する感情を返却する（喜怒哀楽）
+const ReturnEmotion = (x: number, y: number): string => {
+  if (x >= 0 && x < 200 && y >= 0 && y <= 200) {
+    // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
+    return "Angry";
+  } else if (x >= 0 && x <= 200 && y > 200 && y <= 400) {
+    // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
+    return "Sad";
+  } else if (x >= 200 && x <= 400 && y > 200 && y <= 400) {
+    // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
+    return "Pleasure";
+  } else if (x >= 200 && x <= 400 && y >= 0 && y <= 200) {
+    // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
+    return "Happy";
+  } else {
+    return "NONE";
   }
 };
 
@@ -717,11 +742,9 @@ if (okButton) {
         console.log(err);
       });
 
-    InsertImageToWriteReviewArea();
+    SplitImage();
 
     //reset
-    dataX = [];
-    dataY = [];
     base64Images = [];
   };
 }
@@ -760,12 +783,16 @@ const setImageToresultImage = (name: string) => {
 let title: string = "";
 let dynamicFaceIcon: string = "";
 let emotionalFaceIcons: Array<string> = [];
+let emotions: Array<string> = [];
 let reviews: Array<string> = [];
 const data: ReivewData = {
   dynamicFaceIcon: "",
   title: "",
   EmotionalFaceIcon: [],
   comments: [],
+  dataX: [],
+  dataY: [],
+  emotions: [],
 };
 
 const reviewTitle = <HTMLHeadingElement>document.getElementById("title");
@@ -781,6 +808,11 @@ if (nextButton) {
       if (count === 0) {
         const comment = reviewComment.value;
         data.title = comment;
+
+        //軌跡データの保存
+        data.dataX = dataX;
+        data.dataY = dataY;
+        data.emotions = emotions;
       }
       const comment = reviewComment.value;
       reviews.push(comment);
@@ -812,7 +844,6 @@ if (nextButton) {
       const reviewsCollectionReference = firebase
         .firestore()
         .collection("reviews");
-
       await reviewsCollectionReference.add(data);
 
       window.location.reload();
@@ -822,12 +853,24 @@ if (nextButton) {
 
 //感情を4つに分割してwrite-areaのimgに挿入する
 
-const InsertImageToWriteReviewArea = () => {
+const SplitImage = () => {
   //base64Imagesの4つぐらい等間隔で分割する（今は力こそパワーでやっています）
   emotionalFaceIcons[0] = base64Images[0 + 2];
   emotionalFaceIcons[1] = base64Images[(base64Images.length * 0.25) | 0];
   emotionalFaceIcons[2] = base64Images[(base64Images.length * 0.75) | 0];
   emotionalFaceIcons[3] = base64Images[base64Images.length - 1];
+
+  //ここでそれぞれの感情を求める（座標入れたら感情を返してくれる）
+  emotions[0] = ReturnEmotion(dataX[0 + 2], dataY[0 + 2]);
+  emotions[1] = ReturnEmotion(
+    dataX[(dataX.length * 0.25) | 0],
+    dataY[(dataY.length * 0.25) | 0]
+  );
+  emotions[2] = ReturnEmotion(
+    dataX[(dataX.length * 0.75) | 0],
+    dataY[(dataY.length * 0.75) | 0]
+  );
+  emotions[3] = ReturnEmotion(dataX[dataX.length - 1], dataY[dataY.length - 1]);
 };
 
 const postReviewButtonDOM = <HTMLButtonElement>(
@@ -840,6 +883,9 @@ if (postReviewButtonDOM) {
       title: "first title",
       EmotionalFaceIcon: [],
       comments: [],
+      dataX: [],
+      dataY: [],
+      emotions: [],
     };
 
     //gifのセット
@@ -881,7 +927,7 @@ if (postReviewButtonDOM) {
 
     await reviewsCollectionReference.add(data);
 
-    window.location.reload();
+    // window.location.reload();
   };
 }
 
