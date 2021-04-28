@@ -98,21 +98,31 @@ const ReviewTable = () => {
 
   return (
     <div className={classes.reviewTable}>
-      {state.filterEmotion}
+      {state.filterFaceIcon}
       {reviews.map((review, index) => {
         if (
           review.emotions.includes(state.filterEmotion) ||
           state.filterEmotion === ""
-        )
-          return (
-            <div key={index}>
-              <Review
-                title={review.title}
-                faceIconURL={review.dynamicFaceIcon}
-                onClick={() => OpenReviewModal(review)}
-              ></Review>
-            </div>
-          );
+        ) {
+          let emotion = [review.emotions[0], review.emotions[3]];
+          if (
+            (state.filterFaceIcon[0] === emotion[0] &&
+              state.filterFaceIcon[1] === emotion[1]) ||
+            state.filterFaceIcon.length === 0
+          ) {
+            return (
+              <div key={index}>
+                {emotion}
+
+                <Review
+                  title={review.title}
+                  faceIconURL={review.dynamicFaceIcon}
+                  onClick={() => OpenReviewModal(review)}
+                ></Review>
+              </div>
+            );
+          }
+        }
       })}
       {ReivewModal()}
     </div>

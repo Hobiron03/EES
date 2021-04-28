@@ -3,8 +3,9 @@ import { createContext } from "react";
 interface IProps {
   state: {
     filterEmotion: any;
+    filterFaceIcon: any;
   };
-  dispatch: ({ type }: { type: string }) => void;
+  dispatch: any;
 }
 
 const AppContext = createContext({} as IProps);

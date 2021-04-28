@@ -1,6 +1,8 @@
 import * as React from "React";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import AppContext from "../contexts/AppContext";
+import { FILTER_BY_FACEICON, FILTER_BY_EMOTION } from "../actions";
 
 //----自分で定義した型をインポート---
 import Mouse from "../../javascripts/@types/mouse";
@@ -66,6 +68,7 @@ let corrdinate: coordinate = {
 
 const CoordinateArea = () => {
   const classes = useStyles();
+  const { state, dispatch } = useContext(AppContext);
 
   // Coordinate
   const [cctx, setContext] = useState(null);
@@ -142,6 +145,25 @@ const CoordinateArea = () => {
     }
   }, [loaded]);
 
+  //x座標とy座標から対応する感情を返却する（喜怒哀楽）
+  const ReturnEmotion = (x: number, y: number): string => {
+    if (x >= 0 && x < 200 && y >= 0 && y <= 200) {
+      // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
+      return "Angry";
+    } else if (x >= 0 && x <= 200 && y > 200 && y <= 400) {
+      // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
+      return "Sad";
+    } else if (x >= 200 && x <= 400 && y > 200 && y <= 400) {
+      // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
+      return "Pleasure";
+    } else if (x >= 200 && x <= 400 && y >= 0 && y <= 200) {
+      // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
+      return "Happy";
+    } else {
+      return "NONE";
+    }
+  };
+
   // 顔アイコン作成Canvasの背景画像を描画する
   const DrawCoordinateImage = (): void => {
     let background: HTMLImageElement = new Image();
@@ -176,6 +198,9 @@ const CoordinateArea = () => {
   //前フレームの点を保持する変数
   let preMousePosX: number;
   let preMousePosY: number;
+
+  let startPosX: number;
+  let startPosY: number;
   const HandleMouseDown = (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
@@ -199,6 +224,8 @@ const CoordinateArea = () => {
 
       if (fpctx) {
         DrawFace(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        startPosX = e.nativeEvent.offsetX;
+        startPosY = e.nativeEvent.offsetY;
       }
     }
   };
@@ -258,6 +285,8 @@ const CoordinateArea = () => {
     }
   };
 
+  let endPosX: number = 0;
+  let endPosY: number = 0;
   const HandleMouseUp = (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
@@ -273,6 +302,17 @@ const CoordinateArea = () => {
       cctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
       cctx.stroke();
     }
+
+    //フィルター
+    let startEmotion = ReturnEmotion(startPosX, startPosY);
+    let endEmotion = ReturnEmotion(
+      e.nativeEvent.offsetX,
+      e.nativeEvent.offsetY
+    );
+    dispatch({
+      type: FILTER_BY_FACEICON,
+      filterFaceIcon: [startEmotion, endEmotion],
+    });
   };
 
   const ResetFacialParts = (): void => {
@@ -487,7 +527,8 @@ const CoordinateArea = () => {
 const useStyles = makeStyles((theme) => ({
   coordinate: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
 }));
 

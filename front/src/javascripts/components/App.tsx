@@ -1,24 +1,75 @@
 import * as React from "react";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import AppContext from "../contexts/AppContext";
 import reducer from "../reducers";
-import { FILTER_BY_EMOTION } from "../actions";
+import { FILTER_BY_EMOTION, FILTER_BY_FACEICON } from "../actions";
 
 import ReviewTable from "./ReviewTable";
 import Button from "@material-ui/core/Button";
+import Modal from "@material-ui/core/Modal";
+import { makeStyles } from "@material-ui/core/styles";
+
 import CoordinateArea from "./CoordinateArea";
 
 const App = () => {
   const initialState = {
     filterEmotion: "",
+    filterFaceIcon: [],
   };
   const [state, dispatch] = useReducer(reducer, initialState);
+  const classes = useStyles();
+
+  const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
 
   const HandleFilterByEmotionButtonOnClick = (emotion) => {
     dispatch({
       type: FILTER_BY_EMOTION,
       filterEmotion: emotion,
     });
+  };
+
+  const HandleFilterByFaceIconOkButtonClick = () => {
+    CloseReviewModal();
+  };
+
+  const OpenReviewModal = () => {
+    setIsOpenReviewModal(true);
+  };
+
+  const CloseReviewModal = () => {
+    setIsOpenReviewModal(false);
+  };
+
+  const ReivewContent = () => {
+    return (
+      <div>
+        <CoordinateArea></CoordinateArea>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => HandleFilterByFaceIconOkButtonClick()}
+        >
+          オッケー
+        </Button>
+      </div>
+    );
+  };
+
+  const ModalBody = <div className={classes.paper}>{ReivewContent()}</div>;
+
+  const ReivewModal = () => {
+    if (isOpenReviewModal) {
+      return (
+        <Modal
+          open={isOpenReviewModal}
+          onClose={CloseReviewModal}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          {ModalBody}
+        </Modal>
+      );
+    }
   };
 
   return (
@@ -55,14 +106,32 @@ const App = () => {
             >
               楽しみ
             </Button>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={() => OpenReviewModal()}
+            >
+              顔検索
+            </Button>
           </div>
-          {state.filterEmotion}
-          <CoordinateArea></CoordinateArea>
+          {ReivewModal()}
+
           <ReviewTable></ReviewTable>
         </div>
       </div>
     </AppContext.Provider>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    width: 800,
+    margin: "30px auto",
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 
 export default App;
