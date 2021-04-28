@@ -1,0 +1,1 @@
+export const FILTER_BY_EMOTION = "FILTER_BY_EMOTION";

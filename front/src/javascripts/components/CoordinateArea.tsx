@@ -1,5 +1,6 @@
 import * as React from "React";
 import { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 
 //----自分で定義した型をインポート---
 import Mouse from "../../javascripts/@types/mouse";
@@ -64,6 +65,8 @@ let corrdinate: coordinate = {
 };
 
 const CoordinateArea = () => {
+  const classes = useStyles();
+
   // Coordinate
   const [cctx, setContext] = useState(null);
   const [coordinateCanvas, setCoordinateCanvas] = useState(null);
@@ -464,7 +467,7 @@ const CoordinateArea = () => {
   };
 
   return (
-    <div>
+    <div className={classes.coordinate}>
       <div id="review-area__main__make-face-field__Top__emotion-face">
         <canvas id="facial-parts" width="150" height="150"></canvas>
       </div>
@@ -480,5 +483,12 @@ const CoordinateArea = () => {
     </div>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  coordinate: {
+    display: "flex",
+    justifyContent: "center",
+  },
+}));
 
 export default CoordinateArea;

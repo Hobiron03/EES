@@ -1,35 +1,32 @@
 import * as React from "React";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import Review from "./Review";
+import CoordinateArea from "./CoordinateArea";
 import firebase from "../../../Firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
+
+import AppContext from "../contexts/AppContext";
 
 interface ReivewData {
   dynamicFaceIcon: string;
   title: string;
   EmotionalFaceIcon: Array<string>;
   comments: Array<string>;
+  emotions: Array<string>;
 }
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    width: 800,
-    margin: "30px auto",
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
 
 const ReviewTable = () => {
   const classes = useStyles();
+  const { state, dispatch } = useContext(AppContext);
+
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState<ReivewData>({
     dynamicFaceIcon: "",
     title: "",
     EmotionalFaceIcon: [],
     comments: [],
+    emotions: [],
   });
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
 
@@ -100,21 +97,44 @@ const ReviewTable = () => {
   };
 
   return (
-    <div className="review-table">
+    <div className={classes.reviewTable}>
+      {state.filterEmotion}
       {reviews.map((review, index) => {
-        return (
-          <img
-            src={review.dynamicFaceIcon}
-            alt=""
-            key={index}
-            width={100}
-            onClick={() => OpenReviewModal(review)}
-          />
-        );
+        if (
+          review.emotions.includes(state.filterEmotion) ||
+          state.filterEmotion === ""
+        )
+          return (
+            <div key={index}>
+              <Review
+                title={review.title}
+                faceIconURL={review.dynamicFaceIcon}
+                onClick={() => OpenReviewModal(review)}
+              ></Review>
+            </div>
+          );
       })}
       {ReivewModal()}
     </div>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    width: 800,
+    margin: "30px auto",
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  reviewTable: {
+    margin: "0 auto",
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    width: 1300,
+  },
+}));
 
 export default ReviewTable;
