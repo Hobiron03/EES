@@ -107,17 +107,9 @@ const ReviewTable = () => {
           review.emotions.includes(state.filterEmotion) ||
           state.filterEmotion === ""
         ) {
-          let emotion = [review.emotions[0], review.emotions[3]];
-          if (
-            (state.filterFaceIcon[0] === emotion[0] &&
-              state.filterFaceIcon[1] === emotion[1]) ||
-            state.filterFaceIcon.length === 0
-          ) {
-            //DTW8000くらいで見てみる？？
+          if (state.filterDTW.timeSeriesDataX.length === 0) {
             return (
               <div key={index}>
-                {emotion}
-
                 <Review
                   title={review.title}
                   faceIconURL={review.dynamicFaceIcon}
@@ -125,6 +117,27 @@ const ReviewTable = () => {
                 ></Review>
               </div>
             );
+          } else {
+            let costX = dtw.compute(
+              state.filterDTW.timeSeriesDataX,
+              review.dataX
+            );
+            let costY = dtw.compute(
+              state.filterDTW.timeSeriesDataY,
+              review.dataY
+            );
+            console.log(costX + costY);
+            if (costX + costY <= 90000) {
+              return (
+                <div key={index}>
+                  <Review
+                    title={review.title}
+                    faceIconURL={review.dynamicFaceIcon}
+                    onClick={() => OpenReviewModal(review)}
+                  ></Review>
+                </div>
+              );
+            }
           }
         }
       })}
