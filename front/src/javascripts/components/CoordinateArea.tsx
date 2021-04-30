@@ -2,7 +2,11 @@ import * as React from "React";
 import { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppContext from "../contexts/AppContext";
-import { FILTER_BY_FACEICON, FILTER_BY_EMOTION } from "../actions";
+import {
+  FILTER_BY_FACEICON,
+  FILTER_BY_EMOTION,
+  FILTER_BY_DTW,
+} from "../actions";
 
 //----自分で定義した型をインポート---
 import Mouse from "../../javascripts/@types/mouse";
@@ -65,6 +69,9 @@ let corrdinate: coordinate = {
   width: 0,
   height: 0,
 };
+
+let dataX: number[] = [];
+let dataY: number[] = [];
 
 const CoordinateArea = () => {
   const classes = useStyles();
@@ -267,8 +274,8 @@ const CoordinateArea = () => {
             // }).then((canvas) => {
             //   base64Images.push(canvas.toDataURL());
             // });
-            // dataX.push(mousePosX);
-            // dataY.push(mousePosY);
+            dataX.push(mousePosX);
+            dataY.push(mousePosY);
             //座標によって顔アイコンの顔を変化させる
             //SetEmotionColor(preMousePosX, preMousePosY);
           }
@@ -303,16 +310,24 @@ const CoordinateArea = () => {
       cctx.stroke();
     }
 
-    //フィルター
-    let startEmotion = ReturnEmotion(startPosX, startPosY);
-    let endEmotion = ReturnEmotion(
-      e.nativeEvent.offsetX,
-      e.nativeEvent.offsetY
-    );
+    //視点と終点のみを見る際に使用するフィルター
+    // let startEmotion = ReturnEmotion(startPosX, startPosY);
+    // let endEmotion = ReturnEmotion(
+    //   e.nativeEvent.offsetX,
+    //   e.nativeEvent.offsetY
+    // );
+    // dispatch({
+    //   type: FILTER_BY_FACEICON,
+    //   filterFaceIcon: [startEmotion, endEmotion],
+    // });
+
+    //DTWの計算で使用する、検索用の軌跡データを保存しておく。
     dispatch({
-      type: FILTER_BY_FACEICON,
-      filterFaceIcon: [startEmotion, endEmotion],
+      type: FILTER_BY_DTW,
+      timeSeriesData: { timeSeriesDataX: dataX, timeSeriesDataY: dataY },
     });
+    dataX = [];
+    dataY = [];
   };
 
   const ResetFacialParts = (): void => {

@@ -10,11 +10,13 @@ import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CoordinateArea from "./CoordinateArea";
+import DTW from "dtw";
 
 const App = () => {
   const initialState = {
     filterEmotion: "",
     filterFaceIcon: [],
+    filterDTW: { timeSeriesDataX: [], timeSeriesDataY: [] },
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   const classes = useStyles();
@@ -29,6 +31,7 @@ const App = () => {
   };
 
   const HandleFilterByFaceIconOkButtonClick = () => {
+    console.log(state.filterDTW.timeSeriesDataX);
     CloseReviewModal();
   };
 

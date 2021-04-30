@@ -4,6 +4,7 @@ interface IProps {
   state: {
     filterEmotion: any;
     filterFaceIcon: any;
+    filterDTW: any;
   };
   dispatch: any;
 }

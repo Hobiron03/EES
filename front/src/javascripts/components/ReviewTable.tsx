@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 
 import AppContext from "../contexts/AppContext";
+import DTW from "dtw";
 
 interface ReivewData {
   dynamicFaceIcon: string;
@@ -15,6 +16,8 @@ interface ReivewData {
   comments: Array<string>;
   emotions: Array<string>;
 }
+
+let dtw = new DTW();
 
 const ReviewTable = () => {
   const classes = useStyles();
@@ -110,6 +113,7 @@ const ReviewTable = () => {
               state.filterFaceIcon[1] === emotion[1]) ||
             state.filterFaceIcon.length === 0
           ) {
+            //DTW8000くらいで見てみる？？
             return (
               <div key={index}>
                 {emotion}
