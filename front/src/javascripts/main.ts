@@ -110,29 +110,19 @@ let isApplyFaceColor: boolean = false;
 const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>(
   document.getElementById("facial-parts")
 );
-const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext(
-  "2d"
-);
+const fpctx: CanvasRenderingContext2D | null =
+  facialPartsCanvas.getContext("2d");
 
 interface ReivewData {
   dynamicFaceIcon: string;
   title: string;
+  canvasImage: string;
   EmotionalFaceIcon: Array<string>;
   comments: Array<string>;
   dataX: Array<number>;
   dataY: Array<number>;
   emotions: Array<string>;
 }
-
-const postDataToFirebase: ReivewData = {
-  dynamicFaceIcon: "",
-  title: "",
-  EmotionalFaceIcon: [],
-  comments: [],
-  dataX: [],
-  dataY: [],
-  emotions: [],
-};
 
 // 顔アイコン作成Canvasの背景画像を描画する
 const DrawCoordinateImage = (): void => {
@@ -782,12 +772,14 @@ const setImageToresultImage = (name: string) => {
 
 let title: string = "";
 let dynamicFaceIcon: string = "";
+let canvasImage = "";
 let emotionalFaceIcons: Array<string> = [];
 let emotions: Array<string> = [];
 let reviews: Array<string> = [];
 const data: ReivewData = {
   dynamicFaceIcon: "",
   title: "",
+  canvasImage: "",
   EmotionalFaceIcon: [],
   comments: [],
   dataX: [],
@@ -839,6 +831,7 @@ if (nextButton) {
 
       data.comments = reviews;
       data.EmotionalFaceIcon = emotionalFaceIcons;
+      data.canvasImage = coordinateCanvas.toDataURL();
 
       //firebaseにレビューデータを送信
       const reviewsCollectionReference = firebase
@@ -881,6 +874,7 @@ if (postReviewButtonDOM) {
     const data: ReivewData = {
       dynamicFaceIcon: "",
       title: "first title",
+      canvasImage: "no url",
       EmotionalFaceIcon: [],
       comments: [],
       dataX: [],
@@ -937,7 +931,6 @@ $(".js-modal-open").each(function () {
   $(this).on("click", function (d) {
     let target = $(this).data("target");
     let modal = document.getElementById(target);
-
     $(modal).fadeIn(300);
     return false;
   });

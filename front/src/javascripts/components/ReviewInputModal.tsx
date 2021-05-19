@@ -7,6 +7,7 @@ import Modal from "@material-ui/core/Modal";
 interface ReivewData {
   dynamicFaceIcon: string;
   title: string;
+  canvasImage: string;
   EmotionalFaceIcon: Array<string>;
   comments: Array<string>;
 }
@@ -28,6 +29,7 @@ const ReviewReviewInputModalTable = () => {
   const [review, setReview] = useState<ReivewData>({
     dynamicFaceIcon: "",
     title: "",
+    canvasImage: "",
     EmotionalFaceIcon: [],
     comments: [],
   });
@@ -104,7 +106,7 @@ const ReviewReviewInputModalTable = () => {
       {reviews.map((review, index) => {
         return (
           <img
-            src={review.dynamicFaceIcon}
+            src={review.canvasImage}
             alt=""
             key={index}
             width={100}

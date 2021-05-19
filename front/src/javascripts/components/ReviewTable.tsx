@@ -12,6 +12,7 @@ import DTW from "dtw";
 interface ReivewData {
   dynamicFaceIcon: string;
   title: string;
+  canvasImage: string;
   EmotionalFaceIcon: Array<string>;
   comments: Array<string>;
   emotions: Array<string>;
@@ -27,6 +28,7 @@ const ReviewTable = () => {
   const [review, setReview] = useState<ReivewData>({
     dynamicFaceIcon: "",
     title: "",
+    canvasImage: "",
     EmotionalFaceIcon: [],
     comments: [],
     emotions: [],
@@ -112,7 +114,7 @@ const ReviewTable = () => {
               <div key={index}>
                 <Review
                   title={review.title}
-                  faceIconURL={review.dynamicFaceIcon}
+                  faceIconURL={review.canvasImage}
                   onClick={() => OpenReviewModal(review)}
                 ></Review>
               </div>
@@ -132,7 +134,7 @@ const ReviewTable = () => {
                 <div key={index}>
                   <Review
                     title={review.title}
-                    faceIconURL={review.dynamicFaceIcon}
+                    faceIconURL={review.canvasImage}
                     onClick={() => OpenReviewModal(review)}
                   ></Review>
                 </div>
