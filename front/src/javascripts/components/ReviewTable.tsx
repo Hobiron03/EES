@@ -74,7 +74,8 @@ const ReviewTable = () => {
                   <img src={faceIcon} alt="" />
                 </div>
                 <div className="c-modal_content_inner__content__columns__comment">
-                  <p>{review.comments[index]}</p>
+                  {/* index = 0はタイトルの文章が入っている */}
+                  <p>{review.comments[index + 1]}</p>
                 </div>
               </div>
             </div>

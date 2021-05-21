@@ -1,4 +1,4 @@
-//画像データをpostように１行の文字列に変換する
+//画像データを1行の文字列に変換する
 const FormatImageData = (base64Images: string[]): string => {
   const images: string[] = base64Images.map((imageWithInfo) => {
     return imageWithInfo.split(",")[1] + ",";
