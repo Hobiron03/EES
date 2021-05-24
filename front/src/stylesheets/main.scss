@@ -137,6 +137,7 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 5px;
+    width: 200px;
 
     &._sm {
       width: 30%;
@@ -193,6 +194,54 @@ body {
         }
       }
     }
+  }
+  .c-modal_content_inner {
+    padding: 14px;
+    h3 {
+      text-align: center;
+    }
+
+    &__review {
+      display: flex;
+      flex-direction: column;
+
+      &__face-img {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+      }
+
+      &__comment {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        h4 {
+          margin-bottom: 5px;
+        }
+
+        textarea {
+          width: 640px;
+          height: 260px;
+          font-size: 15px;
+        }
+      }
+      &__footer {
+        display: flex;
+        flex-direction: row-reverse;
+        button {
+          cursor: pointer;
+          padding: 0px 12px;
+          font-size: 18px;
+          font-weight: bold;
+          color: white;
+          background-color: #5b71f5;
+          border: none;
+          transition: all 0.2s;
+          width: 100px;
+          height: 40px;
+        }
+      }
+    } //__review
   }
 }
 
