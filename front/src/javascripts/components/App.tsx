@@ -31,7 +31,6 @@ const App = () => {
   };
 
   const HandleFilterByFaceIconOkButtonClick = () => {
-    console.log(state.filterDTW.timeSeriesDataX);
     CloseReviewModal();
   };
 
