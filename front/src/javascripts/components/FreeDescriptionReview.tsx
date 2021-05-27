@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import firebase from "../../../Firebase";
 
 interface ReviewData {
+  reviewerName: string;
   movieTitle: string;
   reviewTitle: string;
   reviewContent: string;
@@ -14,6 +15,7 @@ const FreeDescriptionReview = () => {
   const classes = useStyles();
 
   const [isPostReivew, setIsPostReview] = useState(false);
+  const [reviewerName, setReviewerName] = useState("");
   const [movieTitle, setMovieTitle] = useState("");
   const [reviewTitle, setReviewTitle] = useState("");
   const [reviewContent, setReviewContent] = useState("");
@@ -22,6 +24,7 @@ const FreeDescriptionReview = () => {
     //firebaseにレビューデータを送信
 
     const postData: ReviewData = {
+      reviewerName,
       movieTitle,
       reviewTitle,
       reviewContent,
@@ -34,6 +37,10 @@ const FreeDescriptionReview = () => {
     await reviewsCollectionReference.add(postData);
 
     setIsPostReview(true);
+  };
+
+  const HandleReviewerNameOnChange = (e) => {
+    setReviewerName(e.target.value);
   };
 
   const HandleMovieTitleOnChange = (e) => {
@@ -61,6 +68,15 @@ const FreeDescriptionReview = () => {
         <div>
           <h2>レビューの作成</h2>
           <div className={classes.review}>
+            <div className={classes.review__title}>
+              <h3>名前</h3>
+              <input
+                className={classes.review__title__input}
+                type="text"
+                onChange={(e) => HandleReviewerNameOnChange(e)}
+                placeholder="氏名を入力してください"
+              />
+            </div>
             <div className={classes.review__title}>
               <h3>作品名</h3>
               <input
