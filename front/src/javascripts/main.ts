@@ -114,6 +114,8 @@ const fpctx: CanvasRenderingContext2D | null =
   facialPartsCanvas.getContext("2d");
 
 interface ReivewData {
+  name: string;
+  movieTitle: string;
   dynamicFaceIcon: string;
   title: string;
   canvasImage: string;
@@ -490,8 +492,6 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
         cctx.stroke();
 
         if (fpctx) {
-          console.log("fpctx");
-          console.log(e.offsetX);
           DrawFace(mousePosX, mousePosY);
           //画像の64進数のデータにする
           html2canvas(emotionFaceDiv, {
@@ -777,6 +777,8 @@ let emotionalFaceIcons: Array<string> = [];
 let emotions: Array<string> = [];
 let reviews: Array<string> = [];
 const data: ReivewData = {
+  name: "",
+  movieTitle: "",
   dynamicFaceIcon: "",
   title: "",
   canvasImage: "",
@@ -833,7 +835,17 @@ if (nextButton) {
       data.EmotionalFaceIcon = emotionalFaceIcons;
       data.canvasImage = coordinateCanvas.toDataURL();
 
-      //firebaseにレビューデータを送信
+      const name = <HTMLInputElement>(
+        document.getElementById("review-area__main__input__name__form")
+      );
+      data.name = name.value;
+
+      const movieTitle = <HTMLInputElement>(
+        document.getElementById("review-area__main__input__movie-title__form")
+      );
+      data.movieTitle = movieTitle.value;
+
+      // firebaseにレビューデータを送信
       const reviewsCollectionReference = firebase
         .firestore()
         .collection("reviews");
@@ -872,6 +884,8 @@ const postReviewButtonDOM = <HTMLButtonElement>(
 if (postReviewButtonDOM) {
   postReviewButtonDOM.onclick = async () => {
     const data: ReivewData = {
+      name: "",
+      movieTitle: "",
       dynamicFaceIcon: "",
       title: "first title",
       canvasImage: "no url",

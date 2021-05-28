@@ -26,6 +26,31 @@ body {
     width: 100%;
     border-top: 1px solid rgb(104, 104, 104);
     &__main {
+      &__input {
+        display: flex;
+
+        &__name {
+          margin-left: 20px;
+          display: flex;
+          align-items: center;
+
+          &__form {
+            height: 15px;
+          }
+        }
+
+        &__movie-title {
+          margin-left: 20px;
+          display: flex;
+          align-items: center;
+
+          &__form {
+            height: 15px;
+          }
+        }
+        margin-bottom: 20px;
+      }
+
       &__make-face-field {
         width: 30%;
 
@@ -44,9 +69,6 @@ body {
         width: 170px;
         height: 170px;
         border: solid 1px rgb(80, 80, 80);
-
-        img {
-        }
       }
     }
 
