@@ -26,6 +26,31 @@ body {
     width: 100%;
     border-top: 1px solid rgb(104, 104, 104);
     &__main {
+      &__input {
+        display: flex;
+
+        &__name {
+          margin-left: 20px;
+          display: flex;
+          align-items: center;
+
+          &__form {
+            height: 15px;
+          }
+        }
+
+        &__movie-title {
+          margin-left: 20px;
+          display: flex;
+          align-items: center;
+
+          &__form {
+            height: 15px;
+          }
+        }
+        margin-bottom: 20px;
+      }
+
       &__make-face-field {
         width: 30%;
 
@@ -44,9 +69,6 @@ body {
         width: 170px;
         height: 170px;
         border: solid 1px rgb(80, 80, 80);
-
-        img {
-        }
       }
     }
 
@@ -71,8 +93,6 @@ body {
   #review-area__main__make-face-field__Top__emotion-face {
     width: 150px;
     height: 150px;
-    // background-image: url("../images/BaseFace.png");
-    // background-color: rgb(247, 206, 27);
     border-radius: 100%;
     background-size: cover;
   }
@@ -139,6 +159,7 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 5px;
+    width: 200px;
 
     &._sm {
       width: 30%;
@@ -195,6 +216,54 @@ body {
         }
       }
     }
+  }
+  .c-modal_content_inner {
+    padding: 14px;
+    h3 {
+      text-align: center;
+    }
+
+    &__review {
+      display: flex;
+      flex-direction: column;
+
+      &__face-img {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+      }
+
+      &__comment {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        h4 {
+          margin-bottom: 5px;
+        }
+
+        textarea {
+          width: 640px;
+          height: 260px;
+          font-size: 15px;
+        }
+      }
+      &__footer {
+        display: flex;
+        flex-direction: row-reverse;
+        button {
+          cursor: pointer;
+          padding: 0px 12px;
+          font-size: 18px;
+          font-weight: bold;
+          color: white;
+          background-color: #5b71f5;
+          border: none;
+          transition: all 0.2s;
+          width: 100px;
+          height: 40px;
+        }
+      }
+    } //__review
   }
 }
 

@@ -110,23 +110,21 @@ let isApplyFaceColor: boolean = false;
 const facialPartsCanvas: HTMLCanvasElement = <HTMLCanvasElement>(
   document.getElementById("facial-parts")
 );
-const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext(
-  "2d"
-);
+const fpctx: CanvasRenderingContext2D | null =
+  facialPartsCanvas.getContext("2d");
 
 interface ReivewData {
+  name: string;
+  movieTitle: string;
   dynamicFaceIcon: string;
   title: string;
+  canvasImage: string;
   EmotionalFaceIcon: Array<string>;
   comments: Array<string>;
+  dataX: Array<number>;
+  dataY: Array<number>;
+  emotions: Array<string>;
 }
-
-const postDataToFirebase: ReivewData = {
-  dynamicFaceIcon: "",
-  title: "",
-  EmotionalFaceIcon: [],
-  comments: [],
-};
 
 // 顔アイコン作成Canvasの背景画像を描画する
 const DrawCoordinateImage = (): void => {
@@ -304,6 +302,25 @@ const ResetFacialParts = (): void => {
   }
 };
 
+//x座標とy座標から対応する感情を返却する（喜怒哀楽）
+const ReturnEmotion = (x: number, y: number): string => {
+  if (x >= 0 && x < 200 && y >= 0 && y <= 200) {
+    // x: 0 ~ 200 && y: 0 ~ 200 -> 怒り
+    return "Angry";
+  } else if (x >= 0 && x <= 200 && y > 200 && y <= 400) {
+    // x: 0 ~ 200 && y: 200 ~ 400 -> 悲しみ
+    return "Sad";
+  } else if (x >= 200 && x <= 400 && y > 200 && y <= 400) {
+    // x: 200 ~ 400 && y: 0 ~ 200 -> 喜び
+    return "Pleasure";
+  } else if (x >= 200 && x <= 400 && y >= 0 && y <= 200) {
+    // x: 200 ~ 400 && y: 200 ~ 400 -> 楽しみ
+    return "Happy";
+  } else {
+    return "NONE";
+  }
+};
+
 //x座標とy座標から感情に対応した色人変化させる
 const SetEmotionColor = (x: number, y: number): void => {
   if (x >= 0 && x < 160 && y >= 0 && y <= 160) {
@@ -475,8 +492,6 @@ coordinateCanvas.addEventListener("mousemove", (e: MouseEvent) => {
         cctx.stroke();
 
         if (fpctx) {
-          console.log("fpctx");
-          console.log(e.offsetX);
           DrawFace(mousePosX, mousePosY);
           //画像の64進数のデータにする
           html2canvas(emotionFaceDiv, {
@@ -717,11 +732,9 @@ if (okButton) {
         console.log(err);
       });
 
-    InsertImageToWriteReviewArea();
+    SplitImage();
 
     //reset
-    dataX = [];
-    dataY = [];
     base64Images = [];
   };
 }
@@ -759,13 +772,21 @@ const setImageToresultImage = (name: string) => {
 
 let title: string = "";
 let dynamicFaceIcon: string = "";
+let canvasImage = "";
 let emotionalFaceIcons: Array<string> = [];
+let emotions: Array<string> = [];
 let reviews: Array<string> = [];
 const data: ReivewData = {
+  name: "",
+  movieTitle: "",
   dynamicFaceIcon: "",
   title: "",
+  canvasImage: "",
   EmotionalFaceIcon: [],
   comments: [],
+  dataX: [],
+  dataY: [],
+  emotions: [],
 };
 
 const reviewTitle = <HTMLHeadingElement>document.getElementById("title");
@@ -781,6 +802,11 @@ if (nextButton) {
       if (count === 0) {
         const comment = reviewComment.value;
         data.title = comment;
+
+        //軌跡データの保存
+        data.dataX = dataX;
+        data.dataY = dataY;
+        data.emotions = emotions;
       }
       const comment = reviewComment.value;
       reviews.push(comment);
@@ -807,12 +833,22 @@ if (nextButton) {
 
       data.comments = reviews;
       data.EmotionalFaceIcon = emotionalFaceIcons;
+      data.canvasImage = coordinateCanvas.toDataURL();
 
-      //firebaseにレビューデータを送信
+      const name = <HTMLInputElement>(
+        document.getElementById("review-area__main__input__name__form")
+      );
+      data.name = name.value;
+
+      const movieTitle = <HTMLInputElement>(
+        document.getElementById("review-area__main__input__movie-title__form")
+      );
+      data.movieTitle = movieTitle.value;
+
+      // firebaseにレビューデータを送信
       const reviewsCollectionReference = firebase
         .firestore()
         .collection("reviews");
-
       await reviewsCollectionReference.add(data);
 
       window.location.reload();
@@ -822,12 +858,24 @@ if (nextButton) {
 
 //感情を4つに分割してwrite-areaのimgに挿入する
 
-const InsertImageToWriteReviewArea = () => {
+const SplitImage = () => {
   //base64Imagesの4つぐらい等間隔で分割する（今は力こそパワーでやっています）
   emotionalFaceIcons[0] = base64Images[0 + 2];
   emotionalFaceIcons[1] = base64Images[(base64Images.length * 0.25) | 0];
   emotionalFaceIcons[2] = base64Images[(base64Images.length * 0.75) | 0];
   emotionalFaceIcons[3] = base64Images[base64Images.length - 1];
+
+  //ここでそれぞれの感情を求める（座標入れたら感情を返してくれる）
+  emotions[0] = ReturnEmotion(dataX[0 + 2], dataY[0 + 2]);
+  emotions[1] = ReturnEmotion(
+    dataX[(dataX.length * 0.25) | 0],
+    dataY[(dataY.length * 0.25) | 0]
+  );
+  emotions[2] = ReturnEmotion(
+    dataX[(dataX.length * 0.75) | 0],
+    dataY[(dataY.length * 0.75) | 0]
+  );
+  emotions[3] = ReturnEmotion(dataX[dataX.length - 1], dataY[dataY.length - 1]);
 };
 
 const postReviewButtonDOM = <HTMLButtonElement>(
@@ -836,10 +884,16 @@ const postReviewButtonDOM = <HTMLButtonElement>(
 if (postReviewButtonDOM) {
   postReviewButtonDOM.onclick = async () => {
     const data: ReivewData = {
+      name: "",
+      movieTitle: "",
       dynamicFaceIcon: "",
       title: "first title",
+      canvasImage: "no url",
       EmotionalFaceIcon: [],
       comments: [],
+      dataX: [],
+      dataY: [],
+      emotions: [],
     };
 
     //gifのセット
@@ -881,7 +935,7 @@ if (postReviewButtonDOM) {
 
     await reviewsCollectionReference.add(data);
 
-    window.location.reload();
+    // window.location.reload();
   };
 }
 
@@ -891,7 +945,6 @@ $(".js-modal-open").each(function () {
   $(this).on("click", function (d) {
     let target = $(this).data("target");
     let modal = document.getElementById(target);
-
     $(modal).fadeIn(300);
     return false;
   });
