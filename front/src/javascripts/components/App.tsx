@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useReducer, useState } from "react";
 import AppContext from "../contexts/AppContext";
 import reducer from "../reducers";
@@ -16,10 +9,11 @@ import ReviewTable from "./ReviewTable";
 import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
-import firebase from "../../../Firebase";
 
 import CoordinateArea from "./CoordinateArea";
 import FreeDescriptionReview from "./FreeDescriptionReview";
+import B3Reviews from "./B3Reviews";
+import ReviewsResult from "./ReviewsResult";
 
 const App = () => {
   const initialState = {
@@ -139,7 +133,10 @@ const App = () => {
           <Route path="/free-review">
             <FreeDescriptionReview></FreeDescriptionReview>
           </Route>
-          <Route path="/"></Route>
+          <Route path="/">
+            {/* <ReviewsResult></ReviewsResult> */}
+            <CoordinateArea></CoordinateArea>
+          </Route>
         </Switch>
       </Router>
     </AppContext.Provider>

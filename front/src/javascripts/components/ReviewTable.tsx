@@ -115,7 +115,7 @@ const ReviewTable = () => {
               <div key={index}>
                 <Review
                   title={review.title}
-                  faceIconURL={review.canvasImage}
+                  faceIconURL={review.dynamicFaceIcon}
                   onClick={() => OpenReviewModal(review)}
                 ></Review>
               </div>
@@ -135,7 +135,7 @@ const ReviewTable = () => {
                 <div key={index}>
                   <Review
                     title={review.title}
-                    faceIconURL={review.canvasImage}
+                    faceIconURL={review.dynamicFaceIcon}
                     onClick={() => OpenReviewModal(review)}
                   ></Review>
                 </div>

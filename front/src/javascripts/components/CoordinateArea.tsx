@@ -96,9 +96,8 @@ const CoordinateArea = () => {
     ) as HTMLCanvasElement;
     setCoordinateCanvas(coordinateCanvas);
 
-    const cctx: CanvasRenderingContext2D | null = coordinateCanvas.getContext(
-      "2d"
-    );
+    const cctx: CanvasRenderingContext2D | null =
+      coordinateCanvas.getContext("2d");
     setContext(cctx);
 
     // 顔アイコンの口を描画のCanvas
@@ -107,9 +106,8 @@ const CoordinateArea = () => {
     ) as HTMLCanvasElement;
     setFacialPartsCanvas(facialPartsCanvas);
 
-    const fpctx: CanvasRenderingContext2D | null = facialPartsCanvas.getContext(
-      "2d"
-    );
+    const fpctx: CanvasRenderingContext2D | null =
+      facialPartsCanvas.getContext("2d");
     setFaceIconContext(fpctx);
 
     const emotionFaceDiv: HTMLElement | null = document.getElementById(
@@ -117,9 +115,8 @@ const CoordinateArea = () => {
     );
     setEmotionFaceDiv(emotionFaceDiv);
 
-    const coordinateDiv: HTMLElement | null = document.getElementById(
-      "coordinate"
-    );
+    const coordinateDiv: HTMLElement | null =
+      document.getElementById("coordinate");
     setCoordinateDiv(coordinateDiv);
   }, []);
 
@@ -452,7 +449,7 @@ const CoordinateArea = () => {
   const DrawFace = (x: number, y: number): void => {
     ResetFacialParts();
     RenderMouth(x);
-    RenderEye(x);
+    // RenderEye(x);
     RenderEyebrows(y);
   };
 
@@ -469,7 +466,10 @@ const CoordinateArea = () => {
     }
 
     //顔アイコンの初期の色を設定
-    emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(255, 194, 0);
+    // emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(255, 194, 0);
+    // emotionFaceDiv.style.backgroundColor = ConvertRgbFormat(30, 30, 30);
+
+    emotionFaceDiv.style.backgroundImage = "url(../../images/gankotyan.png)";
 
     corrdinate.width = coordinateDiv.clientWidth;
     corrdinate.height = coordinateDiv.clientHeight;
@@ -498,18 +498,18 @@ const CoordinateArea = () => {
 
     //眉の相対的な場所を求める
     //左眉
-    leftEyebrow.lineWidth = 4 * faceSizeRatio;
+    leftEyebrow.lineWidth = 3 * faceSizeRatio;
     leftEyebrow.startPosX = centerPosX - 45 * faceSizeRatio;
-    leftEyebrow.startPosY = centerPosY - 33 * faceSizeRatio;
+    leftEyebrow.startPosY = centerPosY - 20 * faceSizeRatio;
     leftEyebrow.endPosX = centerPosX - 20 * faceSizeRatio;
-    leftEyebrow.endPosY = centerPosY - 33 * faceSizeRatio;
+    leftEyebrow.endPosY = centerPosY - 20 * faceSizeRatio;
     leftEyebrow.maxEndHeight = (faceHeight / 13) * faceSizeRatio;
     //右眉
-    rightEyebrow.lineWidth = 4 * faceSizeRatio;
+    rightEyebrow.lineWidth = 3 * faceSizeRatio;
     rightEyebrow.startPosX = centerPosX + 45 * faceSizeRatio;
-    rightEyebrow.startPosY = centerPosY - 33 * faceSizeRatio;
+    rightEyebrow.startPosY = centerPosY - 20 * faceSizeRatio;
     rightEyebrow.endPosX = centerPosX + 20 * faceSizeRatio;
-    rightEyebrow.endPosY = centerPosY - 33 * faceSizeRatio;
+    rightEyebrow.endPosY = centerPosY - 20 * faceSizeRatio;
     rightEyebrow.maxEndHeight = faceHeight / (13 * faceSizeRatio);
 
     //目の設定

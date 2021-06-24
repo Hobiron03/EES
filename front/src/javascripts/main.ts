@@ -793,6 +793,7 @@ const reviewTitle = <HTMLHeadingElement>document.getElementById("title");
 const reviewComment = <HTMLTextAreaElement>(
   document.getElementById("review-comment")
 );
+
 const nextButton = <HTMLButtonElement>document.getElementById("next-button");
 let count: number = 0;
 if (nextButton) {
@@ -807,12 +808,20 @@ if (nextButton) {
         data.dataX = dataX;
         data.dataY = dataY;
         data.emotions = emotions;
+
+        // firebaseにレビューデータを送信B3用
+        const reviewsCollectionReference = firebase
+          .firestore()
+          .collection("reviewsB3");
+        await reviewsCollectionReference.add(data);
       }
       const comment = reviewComment.value;
       reviews.push(comment);
 
       //TODO: タイトルを変更 -> 例：review 1, review 2
-      reviewTitle.innerHTML = `レビュー ${count + 1} (${count + 1}/4)`;
+      reviewTitle.innerHTML = `その他 ${count + 1} (${
+        count + 1
+      }/4) さらに感想があればここに書いてください！ なければ飛ばしてください！`;
 
       //TODO: 顔画像の変更
       setImageToresultImage(emotionalFaceIcons[count]);
@@ -838,19 +847,18 @@ if (nextButton) {
       const name = <HTMLInputElement>(
         document.getElementById("review-area__main__input__name__form")
       );
-      data.name = name.value;
+      // data.name = name.value;
 
       const movieTitle = <HTMLInputElement>(
         document.getElementById("review-area__main__input__movie-title__form")
       );
-      data.movieTitle = movieTitle.value;
+      // data.movieTitle = movieTitle.value;
 
       // firebaseにレビューデータを送信
       const reviewsCollectionReference = firebase
         .firestore()
         .collection("reviews");
       await reviewsCollectionReference.add(data);
-
       window.location.reload();
     }
   };
@@ -935,7 +943,7 @@ if (postReviewButtonDOM) {
 
     await reviewsCollectionReference.add(data);
 
-    // window.location.reload();
+    window.location.reload();
   };
 }
 
